@@ -1,0 +1,72 @@
+User
+    ident Text
+    password Text Maybe
+    UniqueUser ident
+    deriving Typeable
+Email
+    email Text
+    userId UserId Maybe
+    verkey Text Maybe
+    UniqueEmail email
+Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived.
+    message Text
+    userId UserId Maybe
+    deriving Eq
+    deriving Show
+
+
+Category json
+    name Text
+    parent CategoryId Maybe
+    description Text default=''
+    UniqueCategory name
+    deriving Show
+
+Product json
+    name Text
+    description Text
+    category CategoryId
+    isOrganic Bool
+    isHeirloom Bool
+    isSouthEast Bool
+    UniqueProduct name
+    deriving Show
+
+ProductVariant json
+    product ProductId
+    sku Text
+    weight Rational
+    price Rational
+    UniqueVariant sku
+    deriving Show
+
+
+Customer json
+    firstName Text
+    lastName Text
+    email Text
+    phone Text
+    sendCatalog Bool
+    deriving Show
+
+ShippingAddress json
+    customer CustomerId
+    address Text
+    address2 Text
+    city Text
+    state Text
+    zip Text
+    country Text
+    deriving Show
+
+BillingAddress json
+    customer CustomerId
+    address Text
+    address2 Text
+    city Text
+    state Text
+    zip Text
+    country Text
+    deriving Show
+
+ -- By default this file is used in Model.hs (which is imported by Foundation.hs)
