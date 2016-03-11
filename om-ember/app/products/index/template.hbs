@@ -1,0 +1,19 @@
+{{outlet}}
+{{toggle-button css='btn-sm' value=expandVariants
+  offIcon='arrows-alt' offText='Show SKUs' onIcon='compress' onText='Hide SKUs'}}
+
+<table class='table-condensed'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Organic</th>
+      <th>Heirloom</th>
+      <th>SouthEast</th>
+      <th>Active</th>
+    </tr>
+  </thead>
+  {{#each model as |product|}}
+    {{products/product-row product=product globalToggle=expandVariants}}
+  {{/each}}
+</table>

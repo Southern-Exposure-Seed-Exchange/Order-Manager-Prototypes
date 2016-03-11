@@ -1,0 +1,136 @@
+@import "bourbon"
+@import "variables"
+@import "neat"
+@import "core/base"
+
+/** Utility Classes
+.text-right
+  text-align: right
+.text-center
+  text-align: center
+.pointer
+  cursor: pointer
+button.btn-sm
+  padding: 6px 6px
+  font-size: 0.8em
+  font-weight: 400
+
+
+/** TEXT
+body
+  color: $dark-text-color
+  background: $light-background-color
+a
+  color: $link-color
+  &:hover, &:focus
+    color: $link-hover-color
+h1
+  font-size: 2em
+
+
+/** LAYOUT
+html, body, body > .ember-view
+  height: 100%
+body
+  margin: 0
+table.table-condensed
+  td, th
+    padding: 6px 0
+    font-size: 0.9em
+
+header
+  background-color: $deep-blue
+  color: $white
+  vertical-align: middle
+  padding: 5px 0
+  +row
+  #left-header
+    font-weight: bold
+    +span-columns(4)
+    +omega()
+    +media($mobile)
+      @extend .text-center
+      +fill-parent()
+    small
+      font-weight: normal
+  #right-header
+    @extend .text-right
+    +span-columns(8)
+    +omega()
+    +media($mobile)
+      +fill-parent()
+
+nav
+  color: $nav-text-color
+  background-color: $nav-background-color
+  height: 100%
+  padding-top: 55px
+  +span-columns(2.5)
+  +omega()
+  +media($tablet)
+    +span-columns(3 of 12)
+  +media($mobile)
+    height: auto
+    +span-columns(12 of 12)
+  & > ul
+    margin-top: 0px
+    border-top-style: solid
+    border-top-color: $nav-border-color
+    border-top-width: $nav-border-width
+    li
+      border-bottom-style: solid
+      border-bottom-color: $nav-border-color
+      border-bottom-width: $nav-border-width
+      a
+        display: block
+        padding: 10px 10px
+      ul.submenu
+        display: none
+        margin-top: 0
+        &.active
+          display: block
+        li
+          border-top-color: $nav-submenu-border-color
+          border-top-width: $nav-submenu-border-width
+          border-bottom-style: none
+          border-top-style: solid
+          a
+            color: $nav-submenu-text-color
+            background-color: $nav-submenu-background-color
+            padding: 5px 5px
+            &.active
+              color: $nav-active-color
+              background-color: $nav-active-background
+            &:hover
+              color: $off-white
+              background-color: $nav-hover-background-color
+      &:hover, & > a.active-submenu
+        background-color: $nav-hover-background-color
+        & > ul.submenu
+          display: block
+      a.active
+        color: $nav-active-color
+        background-color: $nav-active-background
+
+
+/** MAIN CONTENT
+content
+  padding-left: 20px
+  padding-top: 20px
+  +span-columns(9.5)
+  +media($tablet)
+    +span-columns(8.5 of 12)
+  +media($mobile)
+    +span-columns(12 of 12)
+
+
+/** COMPONENTS
+.product-row
+  @extend .pointer
+.variant-row, .variant-header
+  font-size: 0.8em
+  .hide-border
+    border-bottom-style: none
+.variant-header
+  th
+    border-bottom-color: shade($base-border-color, 10%)

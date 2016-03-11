@@ -4,7 +4,7 @@ import Import
 
 getProductListR :: Handler Value
 getProductListR = do
-        prods <- runDB $ selectList [] [Desc ProductName]
+        prods <- runDB $ selectList [] [Asc ProductName]
         returnJson $ object ["product" .= prods]
 
 postProductListR :: Handler Value
@@ -17,6 +17,6 @@ newtype ProductList = ProductList [Product]
 instance FromJSON ProductList where
         parseJSON (Object o) = do
             productJson <- o .: "product"
-            p <- parseJSON productJson 
+            p <- parseJSON productJson
             return $ ProductList [p]
         parseJSON _ = mzero

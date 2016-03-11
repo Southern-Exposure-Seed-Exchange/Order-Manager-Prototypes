@@ -1,11 +1,11 @@
 <table>
-  <thead><tr><th>Name</th><th>Description</th><th>Parent</th></tr></thead>
+  <thead><tr><th>Name</th><th>Description</th><th>Parent</th><th class='text-right'>Product Count</th></tr></thead>
   <tbody>
     {{#each categories as |category|}}
       <tr><td>{{category.name}}</td>
           <td>{{category.description}}</td>
           <td>{{category.parent.name}}</td>
-          <td>{{category.products.length}}</td>
+          <td class='text-right'>{{category.products.length}}</td>
       </tr>
     {{/each}}
   </tbody>

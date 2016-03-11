@@ -4,7 +4,10 @@ import Import
 import qualified Data.Text as Text
 
 getCategoryR :: CategoryId -> Handler Value
-getCategoryR categoryId = runDB (get categoryId) >>= returnJson
+getCategoryR categoryId = do
+        category <- runDB $ get404 categoryId
+        let categoryJSON = toJSON $ Entity categoryId category
+        returnJson $ object ["category" .= categoryJSON]
 
 postCategoryR :: CategoryId -> Handler Value
 postCategoryR categoryId = do

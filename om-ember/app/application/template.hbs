@@ -1,0 +1,70 @@
+<header>
+  <div>
+    <div id='left-header'>OM <small>The Enlightened Order Manager</small></div>
+    <div id='right-header'>Hello, USER_NAME | CUSTOMIZE | SIGN_OUT</div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li>{{#link-to 'index'}}Dashboard{{/link-to}}</li>
+    <li>{{#link-to 'products'}}Products{{/link-to}}
+      <ul class='submenu'>
+        <li><a>Add</a></li>
+        <li><a>Reports</a></li>
+      </ul>
+    </li>
+    <li><a>Categories</a>
+      <ul class='submenu'>
+        <li><a>Add</a></li>
+        <li><a>Search</a></li>
+        <li><a>Reports</a></li>
+      </ul>
+    </li>
+    <li><a>Orders</a>
+      <ul class='submenu'>
+        <li><a>Add</a></li>
+        <li><a>Search</a></li>
+        <li><a>Reports</a></li>
+      </ul>
+    </li>
+    <li><a>Customers</a>
+      <ul class='submenu'>
+        <li><a>Add</a></li>
+        <li><a>Search</a></li>
+        <li><a>Reports</a></li>
+      </ul>
+    </li>
+    <li><a>Coupons</a>
+      <ul class='submenu'>
+        <li><a>Add</a></li>
+        <li><a>Search</a></li>
+        <li><a>Reports</a></li>
+      </ul>
+    </li>
+    <li><a>Inventory</a>
+      <ul class='submenu'>
+        <li><a>Add Container</a></li>
+        <li><a>Add Purchase Order</a></li>
+        <li><a>Add Packing Run</a></li>
+        <li><a>Search</a></li>
+        <li><a>Reports</a></li>
+      </ul>
+    </li>
+    <li><a>Stripe</a>
+      <ul class='submenu'>
+        <li><a>Transactions</a></li>
+        <li><a>Settings</a></li>
+      </ul>
+    </li>
+    <li><a>Admin</a>
+      <ul class='submenu'>
+        <li><a>Users</a></li>
+        <li><a>Settings</a></li>
+      </ul>
+    </li>
+
+  </ul>
+</nav>
+
+<content>{{outlet}}</content>

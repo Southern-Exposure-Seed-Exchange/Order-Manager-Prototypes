@@ -27,6 +27,7 @@ library
                      Handler.CategoryList
                      Handler.Product
                      Handler.ProductList
+                     Handler.ProductVariantList
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

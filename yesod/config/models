@@ -29,6 +29,7 @@ Product json
     isOrganic Bool
     isHeirloom Bool
     isSouthEast Bool
+    isActive Bool default=1
     UniqueProduct name
     deriving Show
 

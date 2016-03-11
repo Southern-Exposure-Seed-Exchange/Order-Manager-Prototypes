@@ -10,5 +10,8 @@
 
 /categories CategoryListR GET POST
 /categories/#CategoryId CategoryR GET POST DELETE
-/products/#ProductId ProductR GET POST PUT DELETE
+
 /products/ ProductListR GET POST
+/products/#ProductId ProductR GET POST PUT DELETE
+
+/productVariants/ ProductVariantListR GET POST
