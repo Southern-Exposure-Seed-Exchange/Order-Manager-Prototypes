@@ -1,0 +1,13 @@
+<thead>
+  <tr>
+    <th>Name</th>
+    {{#if showParent}}<th>Parent Category</th>{{/if}}
+    <th>Categories</th>
+    <th>Products</th>
+  </tr>
+</thead>
+<tbody>
+  {{#each categories as |category|}}
+    {{categories/category-row category=category showParent=showParent}}
+  {{/each}}
+</tbody>

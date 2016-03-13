@@ -1,0 +1,8 @@
+<td>
+  {{#link-to 'categories.show' category.id}}{{category.name}}{{/link-to}}
+</td>
+{{#if showParent}}<td>
+  {{#link-to 'categories.show' category.parent.id}}{{category.parent.name}}{{/link-to}}
+</td>{{/if}}
+<td>{{category.children.length}}</td>
+<td>{{category.products.length}}</td>
