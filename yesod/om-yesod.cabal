@@ -18,6 +18,7 @@ library
                      Import
                      Import.NoFoundation
                      Model
+                     Models.Validation
                      Settings
                      Settings.StaticFiles
                      Handler.Common
