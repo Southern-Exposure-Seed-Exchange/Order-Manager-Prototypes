@@ -5,7 +5,8 @@ import Import
 getProductListR :: Handler Value
 getProductListR = do
         prods <- runDB $ selectList [] [Asc ProductName]
-        returnJson $ object ["product" .= prods]
+        variants <- runDB $ selectList [] [Asc ProductVariantSku]
+        returnJson $ object ["product" .= prods, "productVariant" .= variants]
 
 postProductListR :: Handler Value
 postProductListR = do
