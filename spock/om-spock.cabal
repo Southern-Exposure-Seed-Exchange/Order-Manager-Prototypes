@@ -24,7 +24,7 @@ executable om-spock
                        Types
                        Utils
 
-  defualt-extensions:  OverloadedStrings
+  default-extensions:  OverloadedStrings
   build-depends:       base >=4.8 && <4.9,
                        Spock >=0.10.0 && <0.11,
                        persistent >=2.2.4 && <3,
