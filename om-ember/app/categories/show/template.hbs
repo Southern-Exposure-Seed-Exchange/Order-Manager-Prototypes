@@ -5,6 +5,10 @@
   </small>{{/if}}
 </h2>
 
+<p>
+  {{#link-to 'categories.edit' model class="btn-sm"}}Edit Category{{/link-to}}
+  <a href="#" {{action "delete" model}} class='btn-sm danger'>Delete</a>
+</p>
 
 <dl>
   {{#if model.description}}

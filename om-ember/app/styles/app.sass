@@ -1,5 +1,8 @@
+@import "ember-power-select"
 @import "bourbon"
+
 @import "variables"
+
 @import "neat"
 @import "core/base"
 
@@ -10,10 +13,22 @@
   text-align: center
 .pointer
   cursor: pointer
-button.btn-sm
+a.btn-sm, button.btn-sm
   padding: 6px 6px
   font-size: 0.8em
   font-weight: 400
+  &.danger
+    background-color: red
+    color: white
+a.btn-sm
+  color: #fff
+  border-radius: $base-border-radius
+  text-decoration: none
+  background-color: $action-color
+table.table-condensed
+  td, th
+    padding: 6px 0
+    font-size: 0.9em
 
 
 /** TEXT
@@ -25,7 +40,11 @@ a
   &:hover, &:focus
     color: $link-hover-color
 h1
-  font-size: 2em
+  font-size: 2.2em
+h2
+  font-size: 1.8em
+h4
+  font-size: 1.1em
 
 
 /** LAYOUT
@@ -33,10 +52,6 @@ html, body, body > .ember-view
   height: 100%
 body
   margin: 0
-table.table-condensed
-  td, th
-    padding: 6px 0
-    font-size: 0.9em
 
 header
   background-color: $deep-blue
@@ -82,8 +97,11 @@ nav
       border-bottom-color: $nav-border-color
       border-bottom-width: $nav-border-width
       a
+        color: $nav-link-color
         display: block
         padding: 10px 10px
+        &:hover
+          color: $nav-link-hover-color
       ul.submenu
         display: none
         margin-top: 0
@@ -122,6 +140,11 @@ content
     +span-columns(8.5 of 12)
   +media($mobile)
     +span-columns(12 of 12)
+  a
+    text-decoration: underline
+span.form-error
+  font-size: 0.8em
+  color: red
 
 
 /** COMPONENTS

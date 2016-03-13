@@ -38,6 +38,7 @@
     "ember-export-application-global": "^1.0.4",
     "ember-font-awesome": "2.0.0",
     "ember-load-initializers": "^0.5.0",
+    "ember-power-select": "0.9.2",
     "ember-resolver": "^2.0.3",
     "loader.js": "^4.0.0"
   }
