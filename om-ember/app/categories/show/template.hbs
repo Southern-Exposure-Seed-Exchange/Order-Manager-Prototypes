@@ -1,0 +1,27 @@
+<h2>
+  {{model.name}}
+  {{#if model.parent}}<small>
+    {{#link-to 'categories.show' model.parent.id}}({{model.parent.name}}){{/link-to}}
+  </small>{{/if}}
+</h2>
+
+
+<dl>
+  {{#if model.description}}
+    <dt>Description</dt><dd>{{model.description}}</dd>
+  {{/if}}
+</dl>
+
+{{outlet}}
+
+<h4>Products</h4>
+{{#if model.products}}
+  {{products/product-table products=model.products}}
+{{else}}
+  <p>This Category has no Products!</p>
+{{/if}}
+
+{{#if model.children}}
+  <h4>Child Categories</h4>
+  {{categories/category-table categories=model.children}}
+{{/if}}

@@ -1,0 +1,13 @@
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Organic</th>
+    <th>Heirloom</th>
+    <th>SouthEast</th>
+    <th>Active</th>
+  </tr>
+</thead>
+{{#each products as |product|}}
+  {{products/product-row product=product globalToggle=globalToggle}}
+{{/each}}
