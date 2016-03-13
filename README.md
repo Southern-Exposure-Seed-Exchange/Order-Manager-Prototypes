@@ -4,8 +4,9 @@ This repository contains very rough prototypes of various web frontends and
 backends for an ERP/Order Manager. Right now just Ember.js & Yesod exist, but
 Servant, Django Rest Framework, Angular prototypes are planned.
 
+## Backends
 
-## Yesod
+### Yesod
 
 ```
 cabal install yesod-bin
@@ -17,11 +18,13 @@ yesod devel
 ```
 
 
-## Ember
+## Frontends
+
+### Ember
 
 ```
 cd ember
 npm install
 bower install
-ember serve
+ember serve --proxy 'http://localhost:3000'
 ```
