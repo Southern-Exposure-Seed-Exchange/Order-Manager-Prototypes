@@ -1,6 +1,6 @@
 <h1>Dashboard</h1>
 
-<p>At some point there'll be cool stuff here I guess.</p>
+<p>At some point there'll be cool stuff here I guess:</p>
 
 <ul>
   <li>Order Status Counts - New, Needs Packing, Awaiting Shipping, Back Ordered</li>
@@ -9,8 +9,25 @@
   <li>Needs Packing Table - SKU, Name, Number of backordered orders/packets</li>
 </ul>
 
+<br />
+<br />
 
-{{category-table categories=model}}
+<p>Right now you're backend needs to implement:</p>
 
+<ul>
+  <li>Categories - add, list, details</li>
+  <li>Products - list, details</li>
+  <li>ProductVariants - list</li>
+</ul>
+
+<br />
+
+<dl>
+  <dt>add</dt><dd>create new instance</dd>
+  <dt>list</dt><dd>list all instances</dd>
+  <dt>details</dt><dd>list attributes of single instance</dd>
+  <dt>update</dt><dd>update attributes of single instance</dd>
+  <dt>delete</dt><dd>delete a single instance</dd>
+</dl>
 
 {{outlet}}
