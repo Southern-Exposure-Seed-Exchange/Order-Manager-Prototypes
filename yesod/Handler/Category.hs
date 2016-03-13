@@ -18,4 +18,4 @@ postCategoryR categoryId = do
 deleteCategoryR :: CategoryId -> Handler Value
 deleteCategoryR categoryId = do
         runDB $ delete categoryId
-        returnJson $ Text.pack "ok"
+        returnJson $ object []
