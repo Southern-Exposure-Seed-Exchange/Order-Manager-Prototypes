@@ -2,16 +2,21 @@
 module Handlers.Products (productHandlers) where
 
 import Import
---import qualified Database.Persist as P        (delete)
 
 
 productHandlers :: OM a
-productHandlers = productListHandlers
+productHandlers = productListHandlers >> productDetailHandlers
 
 productListHandlers :: OM a
 productListHandlers = do
     get root $ listAndWrap [Asc ProductName]
     post root $ do
-        [newProduct] :: [Product] <- jsonBody'
+        JSONObject (newProduct :: Product) <- jsonBody'
         insertedProduct <- runSQL $ insertEntity newProduct
         json $ JSONList [insertedProduct]
+
+productDetailHandlers :: OM a
+productDetailHandlers = do
+    get var $ \prodId -> getAndWrap (toSqlKey prodId :: Key Product)
+    put var $ \prodId -> updateAndWrap (toSqlKey prodId :: Key Product)
+    delete var $ \prodId -> deleteAndReturn (toSqlKey prodId :: Key Product)

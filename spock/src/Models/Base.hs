@@ -66,11 +66,20 @@ instance (FromJSON a, Named a) => FromJSON (JSONList a) where
             named <- o .: name (Proxy :: Proxy a) >>= parseJSON
             return $ JSONList [named]
         parseJSON _          = mzero
-
 instance (ToJSON a, Named a) => ToJSON (JSONList a) where
         toJSON (JSONList []) = emptyObject
         toJSON (JSONList l)  = object
             [name (Proxy :: Proxy a) .= map toJSON l]
+
+data JSONObject a = JSONObject a
+instance (FromJSON a, Named a) => FromJSON (JSONObject a) where
+        parseJSON (Object o) = do
+            named <- o .: name (Proxy :: Proxy a) >>= parseJSON
+            return $ JSONObject named
+        parseJSON _          = mzero
+instance (ToJSON a, Named a) => ToJSON (JSONObject a) where
+        toJSON (JSONObject a)  = object
+            [name (Proxy :: Proxy a) .= toJSON a]
 
 
 class Sideload a  where
