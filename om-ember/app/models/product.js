@@ -8,6 +8,6 @@ export default DS.Model.extend({
   isHeirloom: DS.attr('boolean'),
   isSouthEast: DS.attr('boolean'),
   isActive: DS.attr('boolean'),
-  productVariants: DS.hasMany('productVariant', { async: true }),
+  productVariants: DS.hasMany('productVariant'),
 
 });
