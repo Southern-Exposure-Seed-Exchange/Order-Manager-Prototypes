@@ -10,15 +10,17 @@
 {-# LANGUAGE GADTs #-}
 module Models.Base where
 
-import Control.Monad                (mzero, (>=>))
+import Control.Monad                (mzero)
+import Data.Aeson                   ( FromJSON(..), (.:), Value(..), ToJSON(..)
+                                    , (.=), object)
+import Data.Aeson.Types             (emptyObject)
+import Data.Proxy                   (Proxy(..))
+import Database.Persist
+import Database.Persist.TH
 import qualified Data.Text     as T
 
-import Data.Aeson (FromJSON(..), (.:), Value(..), ToJSON(..), (.=), object)
-import Data.Aeson.Types (emptyObject)
-import Database.Persist.TH
-import Database.Persist
-
 import Types
+
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Category json
@@ -50,40 +52,25 @@ ProductVariant json
 
 
 class Named a where
-        usingName  :: (T.Text -> (a, b)) -> (a, b)
-        usingNameM :: (T.Text -> m a) -> m a
+        name :: Proxy a -> T.Text
 
-instance Named Category where
-        usingName = ($ "category")
-        usingNameM = ($ "category")
-instance Named (Entity Category) where
-        usingName = ($ "category")
-        usingNameM = ($ "category")
-instance Named Product where
-        usingName = ($ "product")
-        usingNameM = ($ "product")
-instance Named (Entity Product) where
-        usingName = ($ "product")
-        usingNameM = ($ "product")
-instance Named ProductVariant where
-        usingName = ($ "productVariant")
-        usingNameM = ($ "productVariant")
-instance Named (Entity ProductVariant) where
-        usingName = ($ "productVariant")
-        usingNameM = ($ "productVariant")
+instance Named Category where name _ = "category"
+instance Named Product where name _ = "product"
+instance Named ProductVariant where name _ = "productVariant"
+instance Named a => Named (Entity a) where
+        name _ = name (Proxy :: Proxy a)
 
 data JSONList a = JSONList [a]
 instance (FromJSON a, Named a) => FromJSON (JSONList a) where
         parseJSON (Object o) = do
-            named <- usingNameM $ (o .:) >=> parseJSON
+            named <- o .: name (Proxy :: Proxy a) >>= parseJSON
             return $ JSONList [named]
         parseJSON _          = mzero
 
 instance (ToJSON a, Named a) => ToJSON (JSONList a) where
         toJSON (JSONList []) = emptyObject
-        toJSON (JSONList l@(x:_)) = object
-            [snd (usingName $ \n -> (x, n)) .= map toJSON l]
-
+        toJSON (JSONList l)  = object
+            [name (Proxy :: Proxy a) .= map toJSON l]
 
 
 class Sideload a  where
