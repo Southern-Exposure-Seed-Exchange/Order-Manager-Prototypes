@@ -19,6 +19,7 @@ executable om-spock
   main-is:             Main.hs
   other-modules:       App
                        Handlers.Categories
+                       Handlers.Products
                        Import
                        Models.Base
                        Types
@@ -35,6 +36,9 @@ executable om-spock
                        aeson,
                        resourcet,
                        http-types,
-                       transformers
+                       transformers,
+                       wai,
+                       wai-extra,
+                       unordered-containers
   hs-source-dirs:      src
   default-language:    Haskell2010
