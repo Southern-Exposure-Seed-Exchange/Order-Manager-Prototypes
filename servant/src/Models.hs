@@ -18,7 +18,6 @@ import Control.Monad                (mzero)
 import Control.Monad.Reader         (ReaderT)
 import Data.Aeson                   ( FromJSON(..), (.:), Value(..), ToJSON(..)
                                     , (.=), object)
-import Data.Aeson.Types             (emptyObject)
 import Data.Proxy                   (Proxy(..))
 import Database.Persist
 import Database.Persist.Postgresql  (SqlBackend(..), runMigration)
@@ -72,7 +71,6 @@ instance (FromJSON a, Named a) => FromJSON (JSONList a) where
             return $ JSONList [named]
         parseJSON _          = mzero
 instance (ToJSON a, Named a) => ToJSON (JSONList a) where
-        toJSON (JSONList []) = emptyObject
         toJSON (JSONList l)  = object
             [name (Proxy :: Proxy a) .= map toJSON l]
 
