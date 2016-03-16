@@ -61,12 +61,19 @@ doMigrations :: ReaderT SqlBackend IO ()
 doMigrations = runMigration migrateAll
 
 
+-- | The Named typeclass is used to automatically generate the name of the
+-- key to nest the object(s) under when returning it in a JSON response.
+-- For example, a Category will be nested under the "category" key of the
+-- response object.
 class Named a where
         name :: Proxy a -> T.Text
 
 instance Named Category where name _ = "category"
 instance Named Product where name _ = "product"
 instance Named ProductVariant where name _ = "productVariant"
+-- | The `Entity a` instance of the Named typeclass automatically applies
+-- the base Model's Named instance instead of requiring us to define
+-- a Named instance for both a `Category` and an `Entity Category`.
 instance Named a => Named (Entity a) where
         name _ = name (Proxy :: Proxy a)
 
