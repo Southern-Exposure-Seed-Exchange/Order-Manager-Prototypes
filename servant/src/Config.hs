@@ -38,4 +38,4 @@ envPool Development = 1
 envPool Production = 8
 
 connStr :: Environment -> ConnectionString
-connStr _ = "host=localhost dbname=om-servant user=prikhi port=5432"
+connStr _ = "host=localhost dbname=om-servant"

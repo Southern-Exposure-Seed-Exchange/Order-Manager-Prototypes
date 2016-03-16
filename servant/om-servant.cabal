@@ -18,6 +18,8 @@ library
   exposed-modules:     Api
                        Config
                        Models
+                       Routes
+                       Types
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , servant

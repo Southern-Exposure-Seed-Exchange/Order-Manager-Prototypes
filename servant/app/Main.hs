@@ -1,14 +1,14 @@
 module Main where
 
+import Database.Persist.Postgresql  (runSqlPool)
 import Network.Wai.Handler.Warp     (run)
 import System.Environment           (lookupEnv)
 
-import Database.Persist.Postgresql  (runSqlPool)
+import Config                       ( defaultConfig, Config(..), Environment(..)
+                                    , setLogger, makePool)
+import Api                          (app)
+import Models                       (doMigrations)
 
-
-import Config (defaultConfig, Config(..), Environment(..), setLogger, makePool)
-import Api (app)
-import Models (doMigrations)
 
 main :: IO ()
 main = do
