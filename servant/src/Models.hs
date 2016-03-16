@@ -2,27 +2,30 @@
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE DeriveGeneric              #-}
-{-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE QuasiQuotes                #-}
+{-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE MultiParamTypeClasses      #-}
+{-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE RankNTypes                 #-}
+{-# LANGUAGE FlexibleContexts           #-}
+{-# LANGUAGE GADTs                      #-}
+{-# LANGUAGE UndecidableInstances       #-}
 module Models where
 
 import Control.Monad                (mzero)
 import Control.Monad.Reader         (ReaderT)
 import Data.Aeson                   ( FromJSON(..), (.:), Value(..), ToJSON(..)
                                     , (.=), object)
+import Data.Int                     (Int64)
 import Data.Proxy                   (Proxy(..))
 import Database.Persist
-import Database.Persist.Postgresql  (SqlBackend(..), runMigration)
+import Database.Persist.Postgresql  ( SqlBackend(..), runMigration, toSqlKey )
 import Database.Persist.TH          ( share, mkPersist, sqlSettings, mkMigrate
                                     , persistLowerCase)
+import Servant.Common.Text          (FromText(..), ToText(..))
 import qualified Data.Text       as T
 
 
@@ -53,6 +56,9 @@ ProductVariant json
     UniqueVariant sku
     deriving Show
 |]
+
+doMigrations :: ReaderT SqlBackend IO ()
+doMigrations = runMigration migrateAll
 
 
 class Named a where
@@ -85,5 +91,10 @@ instance (ToJSON a, Named a) => ToJSON (JSONObject a) where
             [name (Proxy :: Proxy a) .= toJSON a]
 
 
-doMigrations :: ReaderT SqlBackend IO ()
-doMigrations = runMigration migrateAll
+-- | A Persistent Key wrapped in a newtype so that we can derive the
+-- FromText & ToText instances necessary for Servant's routing.
+newtype PKey a = PKey { fromPKey :: Int64
+                      } deriving (FromJSON, ToJSON, ToText, FromText)
+-- | Retrieve a Persistent SQL Key out of a PKey value.
+_PKey :: ToBackendKey SqlBackend a => PKey a -> Key a
+_PKey pKey = toSqlKey $ fromPKey pKey

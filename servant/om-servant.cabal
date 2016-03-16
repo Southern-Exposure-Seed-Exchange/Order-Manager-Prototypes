@@ -4,7 +4,7 @@ synopsis:            Initial project template from stack
 description:         Please see README.md
 homepage:            http://github.com/githubuser/om-servant#readme
 license:             BSD3
-license-file:        LICENSE
+license-file:        ../LICENSE
 author:              Author name here
 maintainer:          example@example.com
 copyright:           2016 Author Here
@@ -20,6 +20,7 @@ library
                        Models
   build-depends:       base >= 4.7 && < 5
                      , aeson
+                     , servant
                      , servant-server
                      , wai
                      , wai-extra
