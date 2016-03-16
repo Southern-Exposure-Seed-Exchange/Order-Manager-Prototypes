@@ -9,7 +9,7 @@
   <p><label>
     Parent Category:
     {{#power-select selected=model.parent
-                    options=categories
+                    options=validParents
                     onchange=(action (mut model.parent)) as |category|}}
       {{category.name}}
     {{/power-select}}

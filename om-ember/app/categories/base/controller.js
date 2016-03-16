@@ -2,6 +2,11 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   categories: Ember.computed({get() { return this.store.findAll('category'); }}),
+  validParents: Ember.computed.filter('categories',
+    function(category) {
+      return category.get('id') !== this.get('model.id');
+    }
+  ).property('model.id'),
   isValid: Ember.computed('model.name', {
     get() { return !Ember.isEmpty(this.get('model.name')); }
   }),
