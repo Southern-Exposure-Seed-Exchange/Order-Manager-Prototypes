@@ -5,10 +5,24 @@ backends for an ERP/Order Manager. Right now just Ember.js, Spock & Yesod
 exist, but Servant, Django Rest Framework, Angular prototypes, and possible
 others are planned.
 
+## Implemented
+
+* CRUD Categories
+* Listing Products & Product Variants.
+
+## Todo?
+
+Something like this:
+
+* Create/Update/Delete/View Products/Variants
+* CRU Customers
+* CR Inventory
+* CR Orders
+
 ## Backends
 
 ```
-sudo pacman -S ghc alex happy cabal-install
+sudo pacman -S ghc alex happy cabal-install stack
 ```
 
 ### Yesod
@@ -26,9 +40,7 @@ yesod devel
 
 ```
 cd spock
-cabal sandbox init
-cabal install --only-dependencies
-cabal build && dist/build/om-spock/op-spock
+make
 ```
 
 
