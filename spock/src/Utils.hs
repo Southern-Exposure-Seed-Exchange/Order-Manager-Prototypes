@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE RankNTypes       #-}
+{-# LANGUAGE TypeFamilies     #-}
 module Utils where
 import Data.Aeson                                   (ToJSON(..), Value(..), FromJSON)
 import Data.Aeson.Types                             (emptyObject)
