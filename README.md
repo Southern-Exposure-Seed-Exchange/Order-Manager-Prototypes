@@ -25,6 +25,20 @@ Something like this:
 sudo pacman -S ghc alex happy cabal-install stack
 ```
 
+### Servant
+
+```
+cd servant
+make
+```
+
+### Spock
+
+```
+cd spock
+make
+```
+
 ### Yesod
 
 ```
@@ -34,13 +48,6 @@ cd yesod
 cabal sandbox init
 cabal install --only-dependencies
 yesod devel
-```
-
-### Spock
-
-```
-cd spock
-make
 ```
 
 
