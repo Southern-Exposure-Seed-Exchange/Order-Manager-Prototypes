@@ -25,7 +25,7 @@ import Models
 import Types
 
 
-type DocsAPI = Api.API :<|> Raw
+type DocsAPI = Api.API :<|> ("docs" :> Raw)
 
 docsApp :: Config -> Application
 docsApp cfg = serve docsApi $ docsReaderServer cfg
