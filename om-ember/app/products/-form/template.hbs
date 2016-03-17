@@ -1,0 +1,38 @@
+<form {{action "save" on="submit"}}>
+  <span class='form-error'>{{errorMessage}}</span>
+
+  {{#form-input errors=model.errors.name fieldLabel='Name'}}
+    {{input value=model.name}}
+  {{/form-input}}
+  {{#form-input errors=model.errors.description fieldLabel='Description'}}
+    {{textarea value=model.description}}
+  {{/form-input}}
+
+  {{#form-input errors=model.errors.category fieldLabel='Category'}}
+    {{#power-select selected=model.category
+                    options=validCategories
+                    onchange=(action (mut model.category)) as |category|}}
+      {{category.name}}
+    {{/power-select}}
+  {{/form-input}}
+
+  {{#form-input errors=model.errors.isActive fieldLabel='Is Active'}}
+    {{input type='checkbox' checked=model.isActive}}
+  {{/form-input}}
+
+  {{#form-input errors=model.errors.isOrganic fieldLabel='Is Organic'}}
+    {{input type='checkbox' checked=model.isOrganic}}
+  {{/form-input}}
+
+  {{#form-input errors=model.errors.isHeirloom fieldLabel='Is Heirloom'}}
+    {{input type='checkbox' checked=model.isHeirloom}}
+  {{/form-input}}
+
+  {{#form-input errors=model.errors.isSouthEast fieldLabel='Is SouthEast'}}
+    {{input type='checkbox' checked=model.isSouthEast}}
+  {{/form-input}}
+
+
+  <input type="submit" value="Save" />
+  <button {{action "cancel"}}>Cancel</button>
+</form>

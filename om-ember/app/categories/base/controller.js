@@ -22,8 +22,5 @@ export default Ember.Controller.extend({
       }
       return false;
     },
-    updateParent(parent) {
-      this.set(this.get('model'), 'parent', parent);
-    },
   }
 });

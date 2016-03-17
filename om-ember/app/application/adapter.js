@@ -6,7 +6,7 @@ export default DS.RESTAdapter.extend({
     return {
       "Content-Type": 'application/json',
       "Accept": "application/json",
-      "X-XSRF-TOKEN": Ember.get(document.cookie.match(/XSRF\-TOKEN\=([^;]*)/), "1"),
+      //"X-XSRF-TOKEN": Ember.get(document.cookie.match(/XSRF\-TOKEN\=([^;]*)/), "1"),
     };
   }).volatile(),
 });
