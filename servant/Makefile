@@ -2,7 +2,7 @@ server: build
 	stack exec om-servant-exe
 
 watch: build
-	stack build --file-watch
+	stack build --pedantic --file-watch
 
 clean:
 	stack clean
