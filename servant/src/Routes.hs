@@ -32,9 +32,9 @@ type CRUD resource =
 type CRUDRoutes resource =
          AppM (JSONList (Entity resource))
     :<|> ((JSONObject resource -> AppM (JSONObject (Entity resource)))
-    :<|> (((PKey resource) -> AppM (JSONObject (Entity resource)))
-    :<|> (((PKey resource) -> JSONObject resource -> AppM (JSONObject (Entity resource)))
-    :<|> ((PKey resource) -> AppM ()))))
+    :<|> ((PKey resource -> AppM (JSONObject (Entity resource)))
+    :<|> ((PKey resource -> JSONObject resource -> AppM (JSONObject (Entity resource)))
+    :<|> (PKey resource -> AppM ()))))
 
 crudRoutes :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
                ToBackendKey SqlBackend r)

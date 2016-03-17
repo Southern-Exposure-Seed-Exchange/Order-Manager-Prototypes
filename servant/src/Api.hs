@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators #-}
-module Api (app) where
+module Api where
 
 import Control.Monad.Reader         (runReaderT)
 import Control.Monad.Trans.Either   (EitherT)
@@ -25,7 +26,6 @@ readerServer cfg = enter (readerToEither cfg) server
 readerToEither :: Config -> AppM :~> EitherT ServantErr IO
 readerToEither cfg = Nat $ \x -> runReaderT x cfg
 
-
 type API = "categories"      :> CategoryAPI
       :<|> "products"        :> ProductAPI
       :<|> "productVariants" :> ProductVariantAPI
@@ -33,6 +33,7 @@ server :: ServerT API AppM
 server = categoryRoutes
     :<|> productRoutes
     :<|> productVariantRoutes
+
 
 type CategoryAPI = CRUD Category
 categoryRoutes :: CRUDRoutes Category
