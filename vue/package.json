@@ -12,7 +12,8 @@
     "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
-    "vue": "^1.0.17"
+    "vue": "^1.0.17",
+    "vue-router": "^0.7.11"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

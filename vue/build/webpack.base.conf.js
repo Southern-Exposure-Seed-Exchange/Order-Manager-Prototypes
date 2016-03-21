@@ -4,7 +4,8 @@ var projectRoot = path.resolve(__dirname, '../')
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    router: './src/router.js',
   },
   output: {
     path: path.resolve(__dirname, '../dist/static'),
