@@ -1,13 +1,13 @@
 import Vue from 'vue'
-import Hello from 'src/components/Hello'
+import Categories from 'src/components/Categories'
 
-describe('Hello.vue', () => {
+describe('Categories.vue', () => {
   it('should render correct contents', () => {
     const vm = new Vue({
-      template: '<div><hello></hello></div>',
-      components: { Hello }
+      template: '<div><categories></categories></div>',
+      components: { Categories }
     }).$mount()
-    expect(vm.$el.querySelector('.hello h1').textContent).toBe('Hello World!')
+    expect(vm.$el.querySelector('h1').textContent).toBe('Categories')
   })
 })
 

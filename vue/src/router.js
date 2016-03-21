@@ -2,13 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import App from './App'
-import Hello from './components/Hello'
+import Categories from './components/Categories'
 
 Vue.use(VueRouter)
 var router = new VueRouter()
 
 router.map({
-  '/hello': { component: Hello }
+  '/categories': { component: Categories }
 })
 
 router.start(App, '#app')
