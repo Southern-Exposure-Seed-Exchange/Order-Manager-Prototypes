@@ -1,0 +1,15 @@
+<tr class='variant-header'>
+  <td colspan="3" class='hide-border'></td>
+  <th>SKU</th>
+  <th>Weight</th>
+  <th>Price</th>
+</tr>
+{{#each variants as |variant|}}
+  <tr class='variant-row'>
+    <td colspan="3" class='hide-border'></td>
+    <td>{{variant.sku}}</td>
+    <td>{{variant.weight}}</td>
+    <td>{{variant.price}}</td>
+  </tr>
+{{/each}}
+<tr><td colspan="6">&nbsp;</td></tr>

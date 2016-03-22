@@ -1,0 +1,16 @@
+<h2>
+  {{model.name}}
+  <small>{{#link-to 'categories.show' model.category}}
+      ({{model.category.name}})
+  {{/link-to}}</small>
+</h2>
+{{outlet}}
+
+<p>{{model.description}}</p>
+
+{{#if model.productVariants}}
+  <table>
+    <caption><h3>Product Variants</h3></caption>
+    {{product-variants/variant-table variants=model.productVariants}}
+  </table>
+{{/if}}

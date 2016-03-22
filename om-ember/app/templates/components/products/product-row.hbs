@@ -1,25 +1,12 @@
 <tr {{action 'clickProduct'}}>
-  <td>{{product.name}}</td>
-  <td>{{product.category.name}}</td>
+  <td>{{#link-to 'products.show' product}}{{product.name}}{{/link-to}}</td>
+  <td>{{#link-to 'categories.show' product.category}}{{product.category.name}}{{/link-to}}</td>
   <td>{{product.isOrganic}}</td>
   <td>{{product.isHeirloom}}</td>
   <td>{{product.isSouthEast}}</td>
   <td>{{product.isActive}}</td>
 </tr>
 {{#if showVariants}}
-  <tr class='variant-header'>
-    <td colspan="3" class='hide-border'></td>
-    <th>SKU</th>
-    <th>Weight</th>
-    <th>Price</th>
-  </tr>
-  {{#each product.productVariants as |variant|}}
-    <tr class='variant-row'>
-      <td colspan="3" class='hide-border'></td>
-      <td>{{variant.sku}}</td>
-      <td>{{variant.weight}}</td>
-      <td>{{variant.price}}</td>
-    </tr>
-  {{/each}}
+  {{product-variants/variant-table variants=product.productVariants}}
   <tr><td colspan="6">&nbsp;</td></tr>
 {{/if}}
