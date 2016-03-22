@@ -1,6 +1,8 @@
 <tr {{action 'clickProduct'}}>
   <td>{{#link-to 'products.show' product}}{{product.name}}{{/link-to}}</td>
-  <td>{{#link-to 'categories.show' product.category}}{{product.category.name}}{{/link-to}}</td>
+  {{#if showCategory}}
+    <td>{{#link-to 'categories.show' product.category}}{{product.category.name}}{{/link-to}}</td>
+  {{/if}}
   <td>{{product.isOrganic}}</td>
   <td>{{product.isHeirloom}}</td>
   <td>{{product.isSouthEast}}</td>

@@ -20,7 +20,7 @@
 
 <h4>Products</h4>
 {{#if model.products}}
-  {{products/product-table products=model.products}}
+  {{products/product-table products=model.products showCategory=false}}
 {{else}}
   <p>This Category has no Products!</p>
 {{/if}}

@@ -1,7 +1,7 @@
 <thead>
   <tr>
     <th>Name</th>
-    <th>Category</th>
+    {{#if showCategory}}<th>Category</th>{{/if}}
     <th>Organic</th>
     <th>Heirloom</th>
     <th>SouthEast</th>
@@ -9,5 +9,5 @@
   </tr>
 </thead>
 {{#each products as |product|}}
-  {{products/product-row product=product globalToggle=globalToggle}}
+  {{products/product-row product=product globalToggle=globalToggle showCategory=showCategory}}
 {{/each}}
