@@ -4,9 +4,12 @@
       ({{model.category.name}})
   {{/link-to}}</small>
 </h2>
-{{outlet}}
+
+<p><a class='btn-sm danger' href="#" {{action "delete" model}}>Delete</a></p>
 
 <p>{{model.description}}</p>
+
+{{outlet}}
 
 {{#if model.productVariants}}
   <table>
