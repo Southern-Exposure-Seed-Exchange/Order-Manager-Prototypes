@@ -10,12 +10,10 @@ export default Ember.Controller.extend({
   }),
   actions: {
     save() {
-      let isValid = this.get('isValid');
-      console.log(isValid);
-      if (isValid) {
+      if (this.get('isValid')) {
         this.set('errorMessage', '');
         this.get('model').save().then(() => {
-          this.transitionToRoute('products');
+          this.transitionToRoute('products.show', this.get('model.id'));
         });
       } else {
         if (!this.get('categoryIsValid')) {

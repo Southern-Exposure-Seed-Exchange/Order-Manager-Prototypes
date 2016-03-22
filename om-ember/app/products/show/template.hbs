@@ -5,7 +5,10 @@
   {{/link-to}}</small>
 </h2>
 
-<p><a class='btn-sm danger' href="#" {{action "deleteAndGo" model 'products'}}>Delete</a></p>
+<p>
+  {{#link-to 'products.edit' model class='btn-sm'}}Edit Product{{/link-to}}
+  <a class='btn-sm danger' href="#" {{action "deleteAndGo" model 'products'}}>Delete</a>
+</p>
 
 <p>{{model.description}}</p>
 
