@@ -2,10 +2,12 @@ var path = require('path')
 var cssLoaders = require('./css-loaders')
 var projectRoot = path.resolve(__dirname, '../')
 
+var bourbon = require('node-bourbon').includePaths
+var neat = require('node-neat').includePaths
+
 module.exports = {
   entry: {
     app: './src/main.js',
-    router: './src/router.js',
   },
   output: {
     path: path.resolve(__dirname, '../dist/static'),
@@ -21,6 +23,9 @@ module.exports = {
   },
   resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
+  },
+  sassLoader: {
+    includePaths: [bourbon, neat]
   },
   module: {
     preLoaders: [
@@ -41,6 +46,10 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue'
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css?sourceMap', 'sass?sourceMap']
       },
       {
         test: /\.js$/,

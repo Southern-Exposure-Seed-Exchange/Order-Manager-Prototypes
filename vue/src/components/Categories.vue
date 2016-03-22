@@ -11,7 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="category in categories"> 
+    <tr v-for="category in categories">
       <td>{{ category.name }}</td>
       <td>{{ category.parent.name }}</td>
       <td>{{ category.children.length }}</td>
@@ -25,7 +25,9 @@
 export default {
   data () {
     return {
-      categories: []
+      categories: [
+        { name: 'hello', parent: {name: 'world'}, children: [], products: [] }
+      ]
     }
   }
 }
