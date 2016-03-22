@@ -7,7 +7,6 @@ module Routes
     , CRUDRoutes
     , crudRoutes
     ) where
-import Control.Monad                (liftM)
 import Control.Monad.Reader         (lift)
 import Control.Monad.Trans.Either   (left)
 import Database.Persist.Postgresql
@@ -18,7 +17,7 @@ import Types
 
 
 type CRUD resource =
-        Get '[JSON] (JSONList (Entity resource))
+        Get '[JSON] (Sideloaded (Entity resource))
    :<|> ReqBody '[JSON] (JSONObject resource)
         :> Post '[JSON] (JSONObject (Entity resource))
    :<|> Capture "id" (PKey resource)
@@ -30,14 +29,14 @@ type CRUD resource =
         :> Delete '[JSON] ()
 
 type CRUDRoutes resource =
-         AppM (JSONList (Entity resource))
+         AppM (Sideloaded (Entity resource))
     :<|> ((JSONObject resource -> AppM (JSONObject (Entity resource)))
     :<|> ((PKey resource -> AppM (JSONObject (Entity resource)))
     :<|> ((PKey resource -> JSONObject resource -> AppM (JSONObject (Entity resource)))
     :<|> (PKey resource -> AppM ()))))
 
 crudRoutes :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-               ToBackendKey SqlBackend r)
+               ToBackendKey SqlBackend r, Sideload (Entity r))
            => CRUDRoutes r
 crudRoutes =    listRoute
            :<|> createRoute
@@ -45,10 +44,12 @@ crudRoutes =    listRoute
            :<|> updateRoute
            :<|> deleteRoute
 
--- | The `listRoute` returns a JSON Array of Persistent Entities.
-listRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r)
-          => AppM (JSONList (Entity r))
-listRoute = liftM JSONList . runDB $ selectList [] []
+-- | The `listRoute` returns a JSON Array of Persistent Entities, along
+-- with any sideloaded Entities.
+listRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
+              Sideload (Entity r))
+          => AppM (Sideloaded (Entity r))
+listRoute = runDB (selectList [] []) >>= sideload
 
 -- | The `createRoute` parses a JSON request body & inserts the value into
 -- the database if it is valid.

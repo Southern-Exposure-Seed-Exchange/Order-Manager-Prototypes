@@ -16,11 +16,15 @@ import Data.Aeson                   ( FromJSON(..), (.:), Value(..), ToJSON(..)
                                     , (.=), object)
 import Data.Int                     (Int64)
 import Data.Proxy                   (Proxy(..))
+import Data.List                    (nub)
 import Database.Persist
 import Database.Persist.Postgresql  (SqlBackend(..), runMigration)
 import Database.Persist.TH          ( share, mkPersist, sqlSettings, mkMigrate
                                     , persistLowerCase)
 import qualified Data.Text       as T
+import qualified Data.HashMap.Strict    as HM
+
+import Types
 
 
 type Milligrams = Int64
@@ -93,3 +97,49 @@ instance (FromJSON a, Named a) => FromJSON (JSONObject a) where
 instance (ToJSON a, Named a) => ToJSON (JSONObject a) where
         toJSON (JSONObject a)  = object
             [name (Proxy :: Proxy a) .= toJSON a]
+
+
+-- | The `Sideloaded a` type represents a list of Entities that have had
+-- their related data loaded. The sideloaded `Value` should be a JSON
+-- object that will be merged into the final JSONList.
+data Sideloaded a = Sideloaded (JSONList a, Value)
+-- | The `Sideloaded a` instance of the ToJSON typeclass merges the
+-- sideloaded data with the Entity into a single object.
+instance (ToJSON a, Named a) => ToJSON (Sideloaded a) where
+        toJSON (Sideloaded (ent, side)) = mergeObjects ent side
+
+-- | The Sideload typeclass is used by the `listRoute` to pull the
+-- sideloaded data for an Entity type from the database.
+class (ToJSON a, Named a) => Sideload a where
+        -- | The default action is to pull nothing from the database.
+        sideload :: [a] -> AppM (Sideloaded a)
+        sideload x = return $ Sideloaded (JSONList x, object [])
+
+-- | Categories sideload their Products.
+instance Sideload (Entity Category) where
+        sideload cs =
+            do prods <- runDB $ selectList [ProductCategory <-. catIds] []
+               return $ Sideloaded (JSONList cs, toJSON $ JSONList prods)
+            where catIds = nub $ map (\(Entity i _) -> i) cs
+-- | Products sideload their Categories, & Variants.
+instance Sideload (Entity Product) where
+        sideload ps = do
+            cats <- runDB $ selectList [CategoryId <-. catIds] []
+            vars <- runDB $ selectList [ProductVariantProduct <-. prodIds] []
+            return $ Sideloaded (JSONList ps, mergeObjects (JSONList cats) (JSONList vars))
+            where catIds = nub $ map (\(Entity _ prod) -> productCategory prod) ps
+                  prodIds = nub $ map (\(Entity i _) -> i) ps
+-- | Product Variants sideload their Products.
+instance Sideload (Entity ProductVariant) where
+        sideload pvs = do
+            prods <- runDB $ selectList [ProductId <-. prodIds] []
+            return $ Sideloaded (JSONList pvs, toJSON $ JSONList prods)
+            where prodIds = nub $ map (\(Entity _ pv) -> productVariantProduct pv) pvs
+
+
+-- | Merge the keys of two JSON Objects, or simply return the first JSON
+-- value if two Objects are not passed.
+mergeObjects :: (ToJSON a, ToJSON b) => a -> b -> Value
+mergeObjects obj1 obj2 = case (toJSON obj1, toJSON obj2) of
+        (Object o1, Object o2) -> Object $ HM.union o1 o2
+        (x, _)                 -> x

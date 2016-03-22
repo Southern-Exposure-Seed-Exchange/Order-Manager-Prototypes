@@ -7,6 +7,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Docs (docsApp) where
 
+import Data.Aeson                   (toJSON)
 import Data.ByteString.Lazy         (ByteString)
 import Data.Monoid                  ((<>))
 import Data.Text.Lazy               (pack, toStrict, fromStrict)
@@ -74,8 +75,11 @@ instance ToSample (JSONObject (Entity Category)) (JSONObject (Entity Category)) 
         toSample _ = Just . JSONObject $ Entity (toSqlKey 42) cat1
 instance ToSample (JSONObject Category) (JSONObject Category) where
         toSample _ = Just $ JSONObject cat1
-instance ToSample (JSONList (Entity Category)) (JSONList (Entity Category)) where
-        toSample _ = Just $ JSONList [Entity (toSqlKey 42) cat1, Entity (toSqlKey 21) cat2]
+instance ToSample (Sideloaded (Entity Category)) (Sideloaded (Entity Category)) where
+        toSample _ = Just $ Sideloaded
+            ( JSONList [Entity (toSqlKey 42) cat1, Entity (toSqlKey 96) cat2]
+            , toJSON $ JSONList [Entity (toSqlKey 22) prod1, Entity (toSqlKey 11) prod2]
+            )
 
 prod1 :: Product
 prod1 = Product "Scully's Fire Peppers" "They look like little red alian babys."
@@ -87,8 +91,11 @@ instance ToSample (JSONObject (Entity Product)) (JSONObject (Entity Product)) wh
         toSample _ = Just . JSONObject $ Entity (toSqlKey 42) prod1
 instance ToSample (JSONObject Product) (JSONObject Product) where
         toSample _ = Just $ JSONObject prod1
-instance ToSample (JSONList (Entity Product)) (JSONList (Entity Product)) where
-        toSample _ = Just $ JSONList [Entity (toSqlKey 42) prod1, Entity (toSqlKey 89) prod2]
+instance ToSample (Sideloaded (Entity Product)) (Sideloaded (Entity Product)) where
+        toSample _ = Just $ Sideloaded
+            ( JSONList [Entity (toSqlKey 42) prod1, Entity (toSqlKey 89) prod2]
+            , toJSON $ JSONList [Entity (toSqlKey 96) cat1]
+            )
 
 variant1 :: ProductVariant
 variant1 = ProductVariant (toSqlKey 42) "1001A" 2500 250
@@ -98,8 +105,11 @@ instance ToSample (JSONObject ProductVariant) (JSONObject ProductVariant) where
         toSample _ = Just $ JSONObject variant1
 instance ToSample (JSONObject (Entity ProductVariant)) (JSONObject (Entity ProductVariant)) where
         toSample _ = Just . JSONObject $ Entity (toSqlKey 69) variant1
-instance ToSample (JSONList (Entity ProductVariant)) (JSONList (Entity ProductVariant)) where
-        toSample _ = Just $ JSONList [Entity (toSqlKey 77) variant1, Entity (toSqlKey 33) variant2]
+instance ToSample (Sideloaded (Entity ProductVariant)) (Sideloaded (Entity ProductVariant)) where
+        toSample _ = Just $ Sideloaded
+            ( JSONList [Entity (toSqlKey 77) variant1, Entity (toSqlKey 33) variant2]
+            , toJSON $ JSONList [Entity (toSqlKey 42) prod1, Entity (toSqlKey 24) prod2]
+            )
 
 instance ToSample () () where
         toSample _ = Just ()

@@ -40,6 +40,7 @@ library
                      , bytestring
                      , http-types
                      , cmark
+                     , unordered-containers
   default-language:    Haskell2010
 
 executable om-servant-exe
