@@ -91,9 +91,9 @@ instance ToSample (JSONList (Entity Product)) (JSONList (Entity Product)) where
         toSample _ = Just $ JSONList [Entity (toSqlKey 42) prod1, Entity (toSqlKey 89) prod2]
 
 variant1 :: ProductVariant
-variant1 = ProductVariant (toSqlKey 42) "1001A" 25.0 2.50
+variant1 = ProductVariant (toSqlKey 42) "1001A" 2500 250
 variant2 :: ProductVariant
-variant2 = ProductVariant (toSqlKey 24) "4224C" 1.25 7.50
+variant2 = ProductVariant (toSqlKey 24) "4224C" 125 750
 instance ToSample (JSONObject ProductVariant) (JSONObject ProductVariant) where
         toSample _ = Just $ JSONObject variant1
 instance ToSample (JSONObject (Entity ProductVariant)) (JSONObject (Entity ProductVariant)) where

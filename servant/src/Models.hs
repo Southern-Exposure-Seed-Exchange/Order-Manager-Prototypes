@@ -14,6 +14,7 @@ import Control.Monad                (mzero)
 import Control.Monad.Reader         (ReaderT)
 import Data.Aeson                   ( FromJSON(..), (.:), Value(..), ToJSON(..)
                                     , (.=), object)
+import Data.Int                     (Int64)
 import Data.Proxy                   (Proxy(..))
 import Database.Persist
 import Database.Persist.Postgresql  (SqlBackend(..), runMigration)
@@ -21,6 +22,9 @@ import Database.Persist.TH          ( share, mkPersist, sqlSettings, mkMigrate
                                     , persistLowerCase)
 import qualified Data.Text       as T
 
+
+type Milligrams = Int64
+type Cents = Int64
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Category json
@@ -44,8 +48,8 @@ Product json
 ProductVariant json
     product ProductId
     sku T.Text
-    weight Rational
-    price Rational
+    weight Milligrams
+    price Cents
     UniqueVariant sku
     deriving Show
 |]
