@@ -7,7 +7,7 @@
 
 <p>
   {{#link-to 'categories.edit' model class="btn-sm"}}Edit Category{{/link-to}}
-  <a href="#" {{action "delete" model}} class='btn-sm danger'>Delete</a>
+  <a href="#" {{action "deleteAndGo" model "categories"}} class='btn-sm danger'>Delete</a>
 </p>
 
 <dl>
