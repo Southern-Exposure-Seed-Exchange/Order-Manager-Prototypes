@@ -54,6 +54,7 @@ ProductVariant json
     sku T.Text
     weight Milligrams
     price Cents
+    quantity Int64
     UniqueVariant sku
     deriving Show
 |]

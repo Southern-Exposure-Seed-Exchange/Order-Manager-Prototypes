@@ -98,9 +98,9 @@ instance ToSample (Sideloaded (Entity Product)) (Sideloaded (Entity Product)) wh
             )
 
 variant1 :: ProductVariant
-variant1 = ProductVariant (toSqlKey 42) "1001A" 2500 250
+variant1 = ProductVariant (toSqlKey 42) "1001A" 2500 250 30
 variant2 :: ProductVariant
-variant2 = ProductVariant (toSqlKey 24) "4224C" 125 750
+variant2 = ProductVariant (toSqlKey 24) "4224C" 125 750 20
 instance ToSample (JSONObject ProductVariant) (JSONObject ProductVariant) where
         toSample _ = Just $ JSONObject variant1
 instance ToSample (JSONObject (Entity ProductVariant)) (JSONObject (Entity ProductVariant)) where
