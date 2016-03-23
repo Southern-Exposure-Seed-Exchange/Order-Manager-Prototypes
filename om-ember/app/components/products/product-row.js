@@ -4,6 +4,13 @@ export default Ember.Component.extend({
   tagName: 'tbody',
   classNameBindings: ['hasVariants:pointer'],
 
+  colSpacing: Ember.computed('showCategory', function() {
+    return this.get('showCategory') ? '3' : '2';
+  }),
+  totalWidth: Ember.computed('colSpacing', function() {
+    return Number(this.get('colSpacing')) + 3;
+  }),
+
   showVariants: function() {
     return (this.get('globalToggle') || this.get('clickToggle')) &&
            this.get('hasVariants');

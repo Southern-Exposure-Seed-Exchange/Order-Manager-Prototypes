@@ -9,6 +9,19 @@
   <td>{{product.isActive}}</td>
 </tr>
 {{#if showVariants}}
-  {{product-variants/variant-table variants=product.productVariants}}
-  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr class='variant-header'>
+    <td colspan="{{ colSpacing }}" class='hide-border'></td>
+    <th>SKU</th>
+    <th>Weight</th>
+    <th>Price</th>
+  </tr>
+  {{#each product.productVariants as |variant|}}
+    <tr class='variant-row'>
+      <td colspan="{{ colSpacing }}" class='hide-border'></td>
+      <td>{{variant.sku}}</td>
+      <td>{{variant.weight}}</td>
+      <td>{{variant.price}}</td>
+    </tr>
+  {{/each}}
+  <tr><td colspan="{{ totalWidth }}">&nbsp;</td></tr>
 {{/if}}
