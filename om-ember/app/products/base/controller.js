@@ -12,12 +12,13 @@ export default Ember.Controller.extend({
     save() {
       if (this.get('isValid')) {
         this.set('errorMessage', '');
+        this.set('model.errors.category', '');
         this.get('model').save().then(() => {
           this.transitionToRoute('products.show', this.get('model.id'));
         });
       } else {
         if (!this.get('categoryIsValid')) {
-          this.set('model.errors.category', ['A Category is required.']);
+          this.set('model.errors.category', [{message: 'A Category is required.'}]);
         }
       }
       return false;
