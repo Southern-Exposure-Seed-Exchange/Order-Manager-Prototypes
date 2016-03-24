@@ -1,19 +1,18 @@
 <form {{action "save" on="submit"}}>
   <span class='form-error'>{{errorMessage}}</span>
-  <p><label>Name: {{input value=model.name}}</label>
-     {{#each model.errors.name as |error|}}
-        <span class="form-error">{{error.message}}</span>
-     {{/each}}
-  </p>
-  <p><label>Description: {{textarea value=model.description}}</label></p>
-  <p><label>
-    Parent Category:
+  {{#form-input errors=model.errors.name fieldLabel='Name'}}
+    {{input value=model.name}}
+  {{/form-input}}
+  {{#form-input errors=model.errors.description fieldLabel="Description"}}
+    {{textarea value=model.description}}
+  {{/form-input}}
+  {{#form-input errors=model.errors.parent fieldLabel="Parent Category"}}
     {{#power-select selected=model.parent
                     options=validParents
                     onchange=(action (mut model.parent)) as |category|}}
       {{category.name}}
     {{/power-select}}
-  </label></p>
+  {{/form-input}}
   <input type="submit" value="Save" />
   <button {{action "cancel"}}>Cancel</button>
 </form>

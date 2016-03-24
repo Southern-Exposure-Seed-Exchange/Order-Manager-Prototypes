@@ -7,19 +7,11 @@ export default Ember.Controller.extend({
       return category.get('id') !== this.get('model.id');
     }
   ).property('model.id'),
-  isValid: Ember.computed('model.name', {
-    get() { return !Ember.isEmpty(this.get('model.name')); }
-  }),
   actions: {
     save() {
-      if (this.get('isValid')) {
-        this.set('errorMessage', '');
-        this.get('model').save().then((category) => {
-          this.transitionToRoute('categories.show', category.id);
-        });
-      } else {
-        this.set('errorMessage', "You must enter a Unique Name.");
-      }
+      this.get('model').save().then((category) => {
+        this.transitionToRoute('categories.show', category.id);
+      });
       return false;
     },
   }
