@@ -14,7 +14,7 @@ export default Ember.Component.extend({
   hasErrors: Ember.computed.notEmpty('errors'),
   errorString: Ember.computed('errors', function() {
     if (!this.get('hasErrors')) { return ''; }
-    let errors = this.get('errors').map((e) => { return `<li>${e}</li>`; });
+    let errors = this.get('errors').map((e) => { return `<li>${e.message}</li>`; });
     return `<ul>${errors}</ul>`;
   }),
 });
