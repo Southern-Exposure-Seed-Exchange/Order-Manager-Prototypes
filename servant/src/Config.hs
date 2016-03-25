@@ -26,7 +26,7 @@ defaultConfig = Config { getPool = undefined, getEnv = Development }
 setLogger :: Environment -> Middleware
 setLogger Test = id
 setLogger Development = logStdoutDev
-setLogger Production = id
+setLogger Production = logStdout
 
 makePool :: Environment -> IO ConnectionPool
 makePool e@Development = runStdoutLoggingT $ createPostgresqlPool (connStr e) (envPool e)

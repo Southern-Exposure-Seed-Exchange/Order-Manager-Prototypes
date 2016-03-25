@@ -14,6 +14,7 @@ import Servant
 
 import Models
 import Types
+import Validation                   (Validation(..))
 
 
 type CRUD resource =
@@ -36,7 +37,7 @@ type CRUDRoutes resource =
     :<|> (PKey resource -> AppM ()))))
 
 crudRoutes :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-               ToBackendKey SqlBackend r, Sideload (Entity r))
+               ToBackendKey SqlBackend r, Sideload (Entity r), Validation r)
            => CRUDRoutes r
 crudRoutes =    listRoute
            :<|> createRoute
@@ -53,11 +54,12 @@ listRoute = runDB (selectList [] []) >>= sideload
 
 -- | The `createRoute` parses a JSON request body & inserts the value into
 -- the database if it is valid.
-createRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r)
+createRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r, Validation r)
           => JSONObject r -> AppM (JSONObject (Entity r))
 createRoute (JSONObject item) = do
-        key <- runDB $ insert item
-        return . JSONObject $ Entity key item
+        validated <- runValidate Nothing item
+        key <- runDB $ insert validated
+        return . JSONObject $ Entity key validated
 
 -- | The `viewRoute` returns a single JSON object representing a Persistent
 -- Entity.
@@ -74,12 +76,13 @@ viewRoute pKey =  do
 -- | The `updateRoute` attempts to update an Entity using a JSON request
 -- body and returns the new Entity.
 updateRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-                ToBackendKey SqlBackend r)
+                ToBackendKey SqlBackend r, Validation r)
             => PKey r -> JSONObject r -> AppM (JSONObject (Entity r))
 updateRoute pKey (JSONObject item) = do
         let key = _PKey pKey
-        runDB $ replace key item
-        return . JSONObject $ Entity key item
+        validated <- runValidate (Just key) item
+        runDB $ replace key validated
+        return . JSONObject $ Entity key validated
 
 -- | The `deleteRoute` deletes the Entity, if it exists.
 deleteRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
