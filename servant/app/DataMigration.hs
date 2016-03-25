@@ -39,8 +39,8 @@ main = do
         Right ps -> flip runSqlPool pool $ do
             M.doMigrations >> dropDatabase
             mapM_ insert (map catToDB . nub $ map category ps :: [M.Category])
-            (dbProducts :: [M.Product]) <- liftM (nubBy ((==) `on` M.productName))
-                                         $ mapM prodToDB ps
+            (dbProducts :: [M.Product]) <- nubBy ((==) `on` M.productName)
+                                       <$> mapM prodToDB ps
             mapM_ insert dbProducts
             dbVariants <- mapM prodToVariant ps
             mapM_ insert dbVariants
@@ -85,7 +85,7 @@ catToDB t = M.Category t "" Nothing
 prodToDB :: CSVProduct -> SQL m M.Product
 prodToDB csvp = do
     let catName = category csvp
-    (Entity catId _ :: Entity M.Category) <- liftM fromJust . getBy $ M.UniqueCategory catName
+    (Entity catId _ :: Entity M.Category) <- fmap fromJust . getBy $ M.UniqueCategory catName
     return $ M.Product (name csvp)
                        (contents csvp)
                        catId
@@ -99,7 +99,7 @@ prodToDB csvp = do
 prodToVariant :: CSVProduct -> SQL m M.ProductVariant
 prodToVariant csvp = do
         let prodName = name csvp
-        (Entity prodId _ :: Entity M.Product) <- liftM fromJust . getBy $ M.UniqueProduct prodName
+        (Entity prodId _ :: Entity M.Product) <- fmap fromJust . getBy $ M.UniqueProduct prodName
         return $ M.ProductVariant prodId
                                   (sku csvp)
                                   (round . maybeCenti $ weight csvp)
