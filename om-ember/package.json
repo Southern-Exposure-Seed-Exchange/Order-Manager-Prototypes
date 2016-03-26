@@ -21,6 +21,7 @@
   "devDependencies": {
     "broccoli-asset-rev": "^2.2.0",
     "ember-ajax": "0.7.1",
+    "ember-async-image": "0.1.1",
     "ember-cli": "2.4.1",
     "ember-cli-app-version": "^1.0.0",
     "ember-cli-babel": "^5.1.5",
@@ -40,6 +41,8 @@
     "ember-load-initializers": "^0.5.0",
     "ember-power-select": "0.9.2",
     "ember-resolver": "^2.0.3",
-    "loader.js": "^4.0.0"
+    "ember-run-raf": "1.1.1",
+    "loader.js": "^4.0.0",
+    "smoke-and-mirrors": "0.5.2"
   }
 }

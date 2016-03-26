@@ -6,8 +6,14 @@
     <th>Products</th>
   </tr>
 </thead>
-<tbody>
-  {{#each categories as |category|}}
-    {{categories/category-row category=category showParent=showParent}}
-  {{/each}}
-</tbody>
+{{#vertical-collection
+  tagName='tbody'
+  content=categories
+  containerSelector='body'
+  defaultHeight=27
+  alwaysUseDefaultHeight=true
+  bufferSize=0.5
+  key="id"
+  as |category|}}
+    {{categories/category-row category=category showParent=showParent tagName=""}}
+{{/vertical-collection}}
