@@ -55,33 +55,13 @@ html, body, body > .ember-view
 body
   margin: 0
 
-header
-  background-color: $deep-blue
-  color: $white
-  vertical-align: middle
-  padding: 5px 0
-  +row
-  #left-header
-    font-weight: bold
-    +span-columns(4)
-    +omega()
-    +media($mobile)
-      @extend .text-center
-      +fill-parent()
-    small
-      font-weight: normal
-  #right-header
-    @extend .text-right
-    +span-columns(8)
-    +omega()
-    +media($mobile)
-      +fill-parent()
-
 nav
   color: $nav-text-color
   background-color: $nav-background-color
   height: 100%
-  padding-top: 55px
+  position: fixed
+  top: 0
+  bottom: 0
   +span-columns(2.5)
   +omega()
   +media($tablet)
@@ -89,11 +69,29 @@ nav
   +media($mobile)
     height: auto
     +span-columns(12 of 12)
+  #site-name
+    padding-bottom: 10px
+    border-right-style: solid
+    border-right-color: $nav-border-color
+    border-right-width: $nav-border-width
+    p
+      font-size: 1.8em
+      font-weight: bold
+      margin-bottom: 5px
+    small
+      font-size: 0.8em
+      color: $gray-light
+  #user-links
+    font-size: 0.7em
+    padding: 20px 5px
+    border-right-style: solid
+    border-right-color: $nav-border-color
+    border-right-width: $nav-border-width
+    p
+      font-size: 1.3em
+      margin-bottom: 3px
   & > ul
     margin-top: 0px
-    border-top-style: solid
-    border-top-color: $nav-border-color
-    border-top-width: $nav-border-width
     li
       border-bottom-style: solid
       border-bottom-color: $nav-border-color
@@ -102,6 +100,9 @@ nav
         color: $nav-link-color
         display: block
         padding: 10px 10px
+        border-right-style: solid
+        border-right-color: $nav-border-color
+        border-right-width: $nav-border-width
         &:hover
           color: $nav-link-hover-color
       ul.submenu
@@ -131,12 +132,14 @@ nav
       a.active
         color: $nav-active-color
         background-color: $nav-active-background
+        border-right-width: 0
 
 
 /** MAIN CONTENT
 content
-  padding-left: 20px
+  padding-right: 20px
   padding-top: 20px
+  +shift(2.5)
   +span-columns(9.5)
   +media($tablet)
     +span-columns(8.5 of 12)
