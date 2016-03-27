@@ -3,3 +3,5 @@ om-ember/tests
 dist
 *.sqlite3
 .stack-work
+
+OM_*_Export.csv
