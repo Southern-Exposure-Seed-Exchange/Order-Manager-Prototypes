@@ -25,6 +25,15 @@ Something like this:
 sudo pacman -S ghc alex happy cabal-install stack
 ```
 
+### Django
+
+```
+cd django
+pip install -r requirements
+./manage.py syncdb
+./manage.py runserver 0.0.0.0:3000
+```
+
 ### Servant
 
 ```
