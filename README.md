@@ -30,7 +30,8 @@ sudo pacman -S ghc alex happy cabal-install stack
 ```
 cd django
 pip install -r requirements
-./manage.py syncdb
+createdb om-django
+./manage.py migrate
 ./manage.py runserver 0.0.0.0:3000
 ```
 
@@ -38,6 +39,7 @@ pip install -r requirements
 
 ```
 cd servant
+createdb om-servant
 make
 ```
 
@@ -81,4 +83,52 @@ ember serve --proxy 'http://localhost:3000'
 cd vue
 npm install
 npm run dev
+```
+
+
+## Performance
+
+
+### Django
+
+* Cat/Prod/Variants import takes ~2 seconds.
+
+```
+$ siege http://localhost:3000/products/ -c 20 -t 60s -b
+
+Lifting the server siege...
+Transactions:		         378 hits
+Availability:		      100.00 %
+Elapsed time:		       59.09 secs
+Data transferred:	      176.84 MB
+Response time:		        3.05 secs
+Transaction rate:	        6.40 trans/sec
+Throughput:		        2.99 MB/sec
+Concurrency:		       19.54
+Successful transactions:         378
+Failed transactions:	           0
+Longest transaction:	        5.40
+Shortest transaction:	        1.25
+```
+
+### Servant
+
+* Cat/Prod/Variants import takes 0.6 seconds
+
+```
+$ siege http://localhost:3000/products/ -c 20 -t 60s -b
+
+Lifting the server siege...
+Transactions:		        1082 hits
+Availability:		      100.00 %
+Elapsed time:		       59.64 secs
+Data transferred:	      625.14 MB
+Response time:		        1.09 secs
+Transaction rate:	       18.14 trans/sec
+Throughput:		       10.48 MB/sec
+Concurrency:		       19.74
+Successful transactions:        1082
+Failed transactions:	           0
+Longest transaction:	        4.07
+Shortest transaction:	        0.36
 ```
