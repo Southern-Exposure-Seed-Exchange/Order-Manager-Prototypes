@@ -1,14 +1,14 @@
 # SESE Order Manager Prototypes
 
 This repository contains very rough prototypes of various web frontends and
-backends for an ERP/Order Manager. Right now just Ember.js, Spock & Yesod
-exist, but Servant, Django Rest Framework, Angular prototypes, and possible
+backends for an ERP/Order Manager. Right now just Ember.js, Servant, Spock &
+Yesod exist, but Django Rest Framework, & Angular prototypes, and possible
 others are planned.
 
 ## Implemented
 
-* CRUD Categories
-* Listing Products & Product Variants.
+* CRUD Categories/Products
+* Listing Product Variants.
 
 ## Todo?
 
