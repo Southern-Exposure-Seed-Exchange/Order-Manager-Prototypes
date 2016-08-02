@@ -17,6 +17,7 @@ data Config = Config { getPool :: ConnectionPool
 
 data Environment = Development
                  | Test
+                 | Benchmark
                  | Production
                  deriving (Eq, Show, Read)
 
@@ -27,6 +28,7 @@ setLogger :: Environment -> Middleware
 setLogger Test = id
 setLogger Development = logStdoutDev
 setLogger Production = logStdout
+setLogger Benchmark = id
 
 makePool :: Environment -> IO ConnectionPool
 makePool e@Development = runStdoutLoggingT $ createPostgresqlPool (connStr e) (envPool e)
@@ -36,6 +38,7 @@ envPool :: Environment -> Int
 envPool Test = 1
 envPool Development = 1
 envPool Production = 8
+envPool Benchmark = 8
 
 connStr :: Environment -> ConnectionString
 connStr _ = "host=localhost dbname=om-servant"
