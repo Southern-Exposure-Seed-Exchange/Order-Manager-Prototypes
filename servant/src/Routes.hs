@@ -8,7 +8,7 @@ module Routes
     , crudRoutes
     ) where
 import Control.Monad.Reader         (lift)
-import Control.Monad.Trans.Either   (left)
+import Control.Monad.Trans.Except   (throwE)
 import Database.Persist.Postgresql
 import Servant
 
@@ -36,7 +36,7 @@ type CRUDRoutes resource =
     :<|> ((PKey resource -> JSONObject resource -> AppM (JSONObject (Entity resource)))
     :<|> (PKey resource -> AppM ()))))
 
-crudRoutes :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
+crudRoutes :: (PersistEntityBackend r ~ SqlBackend,
                ToBackendKey SqlBackend r, Sideload (Entity r), Validation r)
            => CRUDRoutes r
 crudRoutes =    listRoute
@@ -63,20 +63,19 @@ createRoute (JSONObject item) = do
 
 -- | The `viewRoute` returns a single JSON object representing a Persistent
 -- Entity.
-viewRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-              ToBackendKey SqlBackend r)
+viewRoute :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r)
           => PKey r -> AppM (JSONObject (Entity r))
 viewRoute pKey =  do
         let key = _PKey pKey
         maybeItem <- runDB $ get key
         case maybeItem of
-            Nothing -> lift $ left err404
+            Nothing -> lift $ throwE err404
             Just value -> return $ JSONObject (Entity key value)
 
 -- | The `updateRoute` attempts to update an Entity using a JSON request
 -- body and returns the new Entity.
-updateRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-                ToBackendKey SqlBackend r, Validation r)
+updateRoute :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r,
+                Validation r)
             => PKey r -> JSONObject r -> AppM (JSONObject (Entity r))
 updateRoute pKey (JSONObject item) = do
         let key = _PKey pKey
@@ -85,12 +84,11 @@ updateRoute pKey (JSONObject item) = do
         return . JSONObject $ Entity key validated
 
 -- | The `deleteRoute` deletes the Entity, if it exists.
-deleteRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-                ToBackendKey SqlBackend r)
+deleteRoute :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r)
             => PKey r -> AppM ()
 deleteRoute pKey = do
         let key = _PKey pKey
         maybeItem <- runDB $ get key
         case maybeItem of
-            Nothing -> lift $ left err404
+            Nothing -> lift $ throwE err404
             _       -> runDB $ delete key

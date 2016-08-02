@@ -4,7 +4,7 @@
 module Api where
 
 import Control.Monad.Reader         (runReaderT)
-import Control.Monad.Trans.Either   (EitherT)
+import Control.Monad.Trans.Except   (ExceptT)
 import Network.Wai                  (Application)
 import Servant
 
@@ -23,7 +23,7 @@ api = Proxy
 readerServer :: Config -> Server API
 readerServer cfg = enter (readerToEither cfg) server
 
-readerToEither :: Config -> AppM :~> EitherT ServantErr IO
+readerToEither :: Config -> AppM :~> ExceptT ServantErr IO
 readerToEither cfg = Nat $ \x -> runReaderT x cfg
 
 type API = "categories"      :> CategoryAPI

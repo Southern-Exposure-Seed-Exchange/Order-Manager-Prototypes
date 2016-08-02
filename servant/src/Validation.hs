@@ -5,7 +5,7 @@
 module Validation (Validation(..)) where
 
 import Control.Monad.Trans.Class    (lift)
-import Control.Monad.Trans.Either   (left)
+import Control.Monad.Trans.Except   (throwE)
 import Data.Aeson
 import Data.Maybe                   (isJust, fromJust)
 import Database.Persist             ( selectFirst, (!=.), (==.), Key
@@ -52,7 +52,7 @@ class Validation a where
             Validated (errors, validatedItem) <- validate key item
             if HM.null errors
             then return validatedItem
-            else lift . left $ err422
+            else lift . throwE $ err422
                     { errBody = encode $ object ["errors" .= jsonAPIErrors errors] }
             where -- | jsonAPIErrors takes a HashMap of Errors and returns
                   -- a list of JSON API errors.
@@ -121,7 +121,7 @@ instance Validation ProductVariant where
 
 -- | Take an item and a list of potential errors & create a Validated item
 -- containing only actual errors.
-run :: (Show a) => a -> [(FieldName, [(ErrorMessage, Bool)])] -> AppM (Validated a)
+run :: a -> [(FieldName, [(ErrorMessage, Bool)])] -> AppM (Validated a)
 run item errorPairs =
         return $ Validated ( HM.fromList . filter notEmpty $ map processErrors errorPairs
                            , item)
