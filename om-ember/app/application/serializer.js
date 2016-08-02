@@ -1,5 +1,9 @@
 import DS from 'ember-data';
 
+// Django
+//export default DS.JSONAPISerializer.extend({});
+
+// Servant
 export default DS.RESTSerializer.extend({
   serializeBelongsTo: function(record, json, relationship) {
     this._super(record, json, relationship);
