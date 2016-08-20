@@ -3,7 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, div, text)
 import Html.App
 
-import Models exposing (Model)
+import Models exposing (Model, initialModel)
 import Messages exposing (Msg)
 import Update exposing (update)
 import View exposing (view)
@@ -11,7 +11,7 @@ import View exposing (view)
 
 init : ( Model, Cmd Msg )
 init =
-    ( "Hello World", Cmd.none )
+    ( initialModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
