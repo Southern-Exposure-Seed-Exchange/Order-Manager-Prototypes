@@ -1,6 +1,7 @@
 module Categories.List exposing (..)
 
 import Html exposing (..)
+import Maybe
 
 import Categories.Messages exposing (..)
 import Categories.Models exposing (Category)
@@ -48,12 +49,5 @@ catRow categories category =
 
 childCount : List Category -> Category -> Int
 childCount categories category =
-    let getParentId cat =
-            case cat.parent of
-                Just id ->
-                    id
-                Nothing ->
-                    0
-    in
-        List.filter (\c -> getParentId c == category.id) categories
-            |> List.length
+    List.filter (\c -> Maybe.withDefault 0 c.parent == category.id) categories
+        |> List.length
