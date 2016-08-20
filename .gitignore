@@ -4,4 +4,7 @@ dist
 *.sqlite3
 .stack-work
 
+elm-stuff
+npm-debug.log
+
 OM_*_Export.csv

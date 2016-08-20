@@ -1,0 +1,21 @@
+{
+  "name": "om-elm",
+  "version": "0.1.0",
+  "description": "An Order Manager Prototype Written in Elm",
+  "main": "index.js",
+  "dependencies": {
+    "elm-webpack-loader": "^3.0.6",
+    "file-loader": "^0.9.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "webpack-dev-server --port 7000"
+  },
+  "author": "Pavan Rikhi",
+  "license": "GPL-3.0"
+}

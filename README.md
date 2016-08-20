@@ -68,6 +68,15 @@ yesod devel
 sudo pacman -S npm bower
 ```
 
+### Elm
+
+```
+cd elm
+npm i -g elm
+npm i
+npm run dev
+```
+
 ### Ember
 
 ```
