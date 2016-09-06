@@ -1,4 +1,5 @@
 var path = require("path");
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -43,5 +44,9 @@ module.exports = {
       }
     }
   },
+
+  plugins: [
+    new CleanWebpackPlugin('elm-stuff/build-artifacts/0.17.1/user'),
+  ]
 
 };
