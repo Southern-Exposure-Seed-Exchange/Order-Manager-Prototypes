@@ -6,5 +6,5 @@ import Categories.Models exposing (CategoryData)
 
 
 type Msg
-    = FetchAllDone (CategoryData)
+    = FetchAllDone CategoryData
     | FetchAllFail (HttpBuilder.Error String)

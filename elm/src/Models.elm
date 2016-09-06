@@ -1,14 +1,19 @@
 module Models exposing (..)
 
-import Categories.Models exposing (CategoryData)
+import Categories.Models exposing (Category, Product)
+import Routing
 
 
 type alias Model =
-    CategoryData
+    { categories : List Category
+    , products : List Product
+    , route : Routing.Route
+    }
 
 
-initialModel : Model
-initialModel =
+initialModel : Routing.Route -> Model
+initialModel route =
     { categories = []
     , products = []
+    , route = route
     }

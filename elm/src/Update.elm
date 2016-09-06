@@ -1,5 +1,6 @@
 module Update exposing (..)
 
+import Categories.Models exposing (CategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
 import Models exposing (Model)
@@ -11,6 +12,9 @@ update msg model =
         CategoriesMsg subMsg ->
             let
                 ( updatedModel, cmd ) =
-                    Categories.Update.update subMsg model
+                    Categories.Update.update subMsg
+                        { categories = model.categories, products = model.products }
             in
-               ( updatedModel, Cmd.map CategoriesMsg cmd )
+               ( { model | categories = updatedModel.categories
+                         , products = updatedModel.products }
+               , Cmd.map CategoriesMsg cmd )
