@@ -1,5 +1,10 @@
 module Categories.Messages exposing (..)
 
+import HttpBuilder
+
+import Categories.Models exposing (CategoryData)
+
 
 type Msg
-    = NoOp
+    = FetchAllDone (CategoryData)
+    | FetchAllFail (HttpBuilder.Error String)

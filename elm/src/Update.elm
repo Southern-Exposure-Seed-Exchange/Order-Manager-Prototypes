@@ -10,7 +10,7 @@ update msg model =
     case msg of
         CategoriesMsg subMsg ->
             let
-                ( updatedCategories, cmd ) =
-                    Categories.Update.update subMsg model.categories
+                ( updatedModel, cmd ) =
+                    Categories.Update.update subMsg model
             in
-               ( { model | categories = updatedCategories }, Cmd.map CategoriesMsg cmd )
+               ( updatedModel, Cmd.map CategoriesMsg cmd )

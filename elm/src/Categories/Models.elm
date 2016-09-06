@@ -13,6 +13,26 @@ type alias Category =
     }
 
 
+type alias ProductId =
+    Int
+
+type alias Product =
+    { id : ProductId
+    , name : String
+    , description : String
+    , category : CategoryId
+    , isActive : Bool
+    , isOrganic : Bool
+    , isHeirloom : Bool
+    , isSouthEast : Bool
+    }
+
+type alias CategoryData =
+    { categories : List Category
+    , products : List Product
+    }
+
+
 new : Category
 new = 
     { id = 0

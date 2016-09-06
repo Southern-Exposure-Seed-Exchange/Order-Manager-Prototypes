@@ -1,11 +1,13 @@
 module Categories.Update exposing (..)
 
 import Categories.Messages exposing (Msg(..))
-import Categories.Models exposing (Category)
+import Categories.Models exposing (CategoryData)
 
 
-update : Msg -> List Category -> ( List Category, Cmd Msg )
-update msg categories =
+update : Msg -> CategoryData -> ( CategoryData, Cmd Msg )
+update msg model =
     case msg of
-        NoOp ->
-            ( categories, Cmd.none )
+        FetchAllDone newModel ->
+            ( newModel, Cmd.none )
+        FetchAllFail _ ->
+            ( model, Cmd.none )

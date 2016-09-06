@@ -1,17 +1,14 @@
 module Models exposing (..)
 
-import Categories.Models exposing (Category)
+import Categories.Models exposing (CategoryData)
 
 
 type alias Model =
-    { categories : List Category
-    }
+    CategoryData
 
 
 initialModel : Model
 initialModel =
-    { categories =
-        [ Category 1 "Bush Beans" "" Nothing
-        , Category 2 "Baked Beans" "" (Just 1)
-        ]
+    { categories = []
+    , products = []
     }

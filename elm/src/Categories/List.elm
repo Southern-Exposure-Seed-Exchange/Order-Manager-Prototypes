@@ -4,18 +4,18 @@ import Html exposing (..)
 import Maybe
 
 import Categories.Messages exposing (..)
-import Categories.Models exposing (Category)
+import Categories.Models exposing (CategoryData, Category, Product)
 
 
-view : List Category -> Html Msg
-view categories =
+view : CategoryData -> Html Msg
+view model =
     div []
         [ h1 [] [ text "Categories" ]
-        , catTable categories ]
+        , catTable model ]
 
 
-catTable : List Category -> Html Msg
-catTable categories =
+catTable : CategoryData -> Html Msg
+catTable model =
     let
         isNothing maybe =
             case maybe of
@@ -24,7 +24,7 @@ catTable categories =
                 Just _ ->
                     False
         rootCategories =
-            List.filter (\cat -> isNothing cat.parent) categories
+            List.filter (\cat -> isNothing cat.parent) model.categories
     in
         table []
             [ thead []
@@ -34,20 +34,26 @@ catTable categories =
                     , th [] [ text "Products" ]
                     ]
                 ]
-            , tbody [] (List.map (catRow categories) rootCategories)
+            , tbody [] (List.map (catRow model) rootCategories)
             ]
 
 
-catRow : List Category -> Category -> Html Msg
-catRow categories category =
+catRow : CategoryData -> Category -> Html Msg
+catRow model category =
     tr []
         [ td [] [ text category.name ]
-        , td [] [ text (childCount categories category |> toString) ]
-        , td [] [ text "0" ]
+        , td [] [ text (childCount model.categories category |> toString) ]
+        , td [] [ text (productCount model.products category |> toString) ]
         ]
 
 
 childCount : List Category -> Category -> Int
 childCount categories category =
     List.filter (\c -> Maybe.withDefault 0 c.parent == category.id) categories
+        |> List.length
+
+
+productCount : List Product -> Category -> Int
+productCount products category =
+    List.filter (\p -> p.category == category.id) products
         |> List.length
