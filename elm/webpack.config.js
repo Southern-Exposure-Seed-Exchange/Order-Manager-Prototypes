@@ -35,6 +35,13 @@ module.exports = {
       colors: true,
       chunks: false,
     },
+    proxy: {
+      '*': {
+        target: 'http://localhost:3000/',
+        secure: false,
+        changeOrigin: true,
+      }
+    }
   },
 
 };
