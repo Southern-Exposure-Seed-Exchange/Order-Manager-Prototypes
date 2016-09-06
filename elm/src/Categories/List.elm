@@ -1,6 +1,7 @@
 module Categories.List exposing (..)
 
 import Html exposing (..)
+import Html.Events exposing (onClick)
 import Maybe
 
 import Categories.Messages exposing (..)
@@ -9,14 +10,6 @@ import Categories.Models exposing (CategoryData, Category, Product)
 
 view : CategoryData -> Html Msg
 view model =
-    div []
-        [ h1 [] [ text "Categories" ]
-        , button [] [ text "New Category" ]
-        , catTable model ]
-
-
-catTable : CategoryData -> Html Msg
-catTable model =
     let
         isNothing maybe =
             case maybe of
@@ -27,6 +20,14 @@ catTable model =
         rootCategories =
             List.filter (\cat -> isNothing cat.parent) model.categories
     in
+        div []
+            [ h1 [] [ text "Categories" ]
+            , button [] [ text "New Category" ]
+            , catTable model rootCategories ]
+
+
+catTable : CategoryData -> List Category -> Html Msg
+catTable model categories =
         table []
             [ thead []
                 [ tr []
@@ -35,13 +36,13 @@ catTable model =
                     , th [] [ text "Products" ]
                     ]
                 ]
-            , tbody [] (List.map (catRow model) rootCategories)
+            , tbody [] (List.map (catRow model) categories)
             ]
 
 
 catRow : CategoryData -> Category -> Html Msg
 catRow model category =
-    tr []
+    tr [ onClick <| VisitCategory category.id ]
         [ td [] [ text category.name ]
         , td [] [ text (childCount model.categories category |> toString) ]
         , td [] [ text (productCount model.products category |> toString) ]

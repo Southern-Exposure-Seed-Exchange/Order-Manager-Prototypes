@@ -4,10 +4,13 @@ import String
 import Navigation
 import UrlParser exposing (..)
 
+import Categories.Models exposing (CategoryId)
+
 
 type Route
-    = CategoriesRoute
-    | DashboardRoute
+    = DashboardRoute
+    | CategoryRoute CategoryId
+    | CategoriesRoute
     | NotFoundRoute
 
 
@@ -16,6 +19,7 @@ matchers =
     oneOf
         [ format DashboardRoute (s "")
         , format DashboardRoute (s "dashboard")
+        , format CategoryRoute (s "categories" </> int)
         , format CategoriesRoute (s "categories")
         ]
 

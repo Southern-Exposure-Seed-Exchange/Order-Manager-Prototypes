@@ -1,5 +1,8 @@
 module Categories.Update exposing (..)
 
+import Navigation
+
+import Categories.Commands exposing (fetchOne)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
 
@@ -11,3 +14,23 @@ update msg model =
             ( newModel, Cmd.none )
         FetchAllFail _ ->
             ( model, Cmd.none )
+        FetchOneDone newCategory ->
+            ( updateModel model newCategory, Cmd.none )
+        FetchOneFail _ ->
+            ( model, Cmd.none )
+        VisitCategory categoryId ->
+            model ! [ fetchOne categoryId, (Navigation.newUrl ("#categories/" ++ toString categoryId)) ]
+
+
+updateModel model category =
+    let
+        replace list =
+            case list of
+                [] ->
+                    [ category ]
+                c::cs ->
+                    if c.id == category.id
+                    then category :: cs
+                    else c :: replace cs
+    in
+       { model | categories = replace model.categories }

@@ -4,7 +4,9 @@ import Html exposing (..)
 import Html.App
 import Html.Events exposing (onClick)
 
+import Categories.Detail
 import Categories.List
+import Categories.Models exposing (CategoryId)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 import Routing exposing (Route(..))
@@ -36,8 +38,27 @@ page model =
         CategoriesRoute ->
             Categories.List.view { categories = model.categories, products = model.products }
                 |> Html.App.map CategoriesMsg
+        CategoryRoute categoryId ->
+            maybeCategoryView model categoryId
         NotFoundRoute ->
             notFound model
+
+
+maybeCategoryView : Model -> CategoryId -> Html Msg
+maybeCategoryView model categoryId =
+    let
+        category =
+            model.categories
+                |> List.filter (\c -> c.id == categoryId)
+                |> List.head
+    in
+       case category of
+           Nothing ->
+               notFound model
+           Just cat ->
+                Categories.Detail.view cat { categories = model.categories, products = model.products }
+                    |> Html.App.map CategoriesMsg
+
 
 
 notFound : Model -> Html Msg
@@ -50,6 +71,7 @@ dashboard =
         , p [] [ text "At some point there'll be cool stuff here." ]
         , p [] [ text "Backends should implement:" ]
         , ul []
-            [ li [] [ text "Categories - list" ]
+            [ li [] [ text "Categories - list, view" ]
+            , li [] [ text "Products - list" ]
             ]
         ]
