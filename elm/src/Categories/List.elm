@@ -11,6 +11,7 @@ view : CategoryData -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Categories" ]
+        , button [] [ text "New Category" ]
         , catTable model ]
 
 

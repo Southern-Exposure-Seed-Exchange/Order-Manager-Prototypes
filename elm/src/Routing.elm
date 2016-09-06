@@ -7,13 +7,16 @@ import UrlParser exposing (..)
 
 type Route
     = CategoriesRoute
+    | DashboardRoute
     | NotFoundRoute
 
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
-        [ format CategoriesRoute (s "")
+        [ format DashboardRoute (s "")
+        , format DashboardRoute (s "dashboard")
+        , format CategoriesRoute (s "categories")
         ]
 
 
