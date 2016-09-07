@@ -8,6 +8,8 @@ import Categories.Update
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 import Routing exposing (Route(..))
+import Products.Commands
+import Products.Update
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -32,6 +34,11 @@ update msg model =
                             [ Cmd.map CategoriesMsg (Categories.Commands.fetchOne categoryId)
                             , Navigation.newUrl <| "#categories" ++ toString categoryId
                             ]
+                    ProductsRoute ->
+                        updatedModel !
+                            [ Cmd.map ProductsMsg Products.Commands.fetchAll
+                            , Navigation.newUrl "#products"
+                            ]
                     NotFoundRoute ->
                         ( updatedModel, Cmd.none )
         CategoriesMsg subMsg ->
@@ -43,3 +50,13 @@ update msg model =
                ( { model | categories = updatedModel.categories
                          , products = updatedModel.products }
                , Cmd.map CategoriesMsg cmd )
+        ProductsMsg subMsg ->
+            let
+                ( updatedModel, cmd ) =
+                    Products.Update.update subMsg
+                        { products = model.products, productVariants = model.productVariants
+                        , categories = model.categories }
+            in
+               ( { model | products = updatedModel.products, productVariants = updatedModel.productVariants
+                 , categories = updatedModel.categories }
+               , Cmd.map ProductsMsg cmd )

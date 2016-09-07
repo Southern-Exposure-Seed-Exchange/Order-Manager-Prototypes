@@ -9,6 +9,7 @@ import Categories.Detail
 import Categories.List
 import Messages exposing (Msg(..))
 import Models exposing (Model)
+import Products.List
 import Routing exposing (Route(..))
 
 
@@ -24,9 +25,13 @@ nav =
     div []
         [ span [] [text "Menu:  "]
         , a [ onClick (RoutingMsg DashboardRoute) ]
-            [ text "Dashboard " ]
+            [ text "Dashboard" ]
+        , text " "
         , a [ onClick (RoutingMsg CategoriesRoute) ]
-            [ text "Categories " ]
+            [ text "Categories" ]
+        , text " "
+        , a [ onClick (RoutingMsg ProductsRoute) ]
+            [ text "Products" ]
         ]
 
 
@@ -36,10 +41,18 @@ page model =
         DashboardRoute ->
             dashboard
         CategoriesRoute ->
-            Categories.List.view { categories = model.categories, products = model.products }
+            { categories = model.categories
+            , products = model.products }
+                |> Categories.List.view
                 |> Html.App.map CategoriesMsg
         CategoryRoute categoryId ->
             maybeCategoryView model categoryId
+        ProductsRoute ->
+            { categories = model.categories
+            , products = model.products
+            , productVariants = model.productVariants }
+                |> Products.List.view
+                |> Html.App.map ProductsMsg
         NotFoundRoute ->
             notFound
 
@@ -60,10 +73,10 @@ maybeCategoryView model categoryId =
                     |> Html.App.map CategoriesMsg
 
 
-
 notFound : Html Msg
 notFound =
     div [] [h1 [] [ text "404 - Page Not Found" ] ]
+
 
 dashboard : Html Msg
 dashboard =

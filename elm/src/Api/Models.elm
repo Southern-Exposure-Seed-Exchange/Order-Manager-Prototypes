@@ -27,3 +27,17 @@ type alias Product =
     , isHeirloom : Bool
     , isSouthEast : Bool
     }
+
+
+type alias ProductVariantId =
+    Int
+
+
+type alias ProductVariant =
+    { id : ProductVariantId
+    , sku : String
+    , product : ProductId
+    , price : Int
+    , quantity : Int
+    , weight : Int
+    }

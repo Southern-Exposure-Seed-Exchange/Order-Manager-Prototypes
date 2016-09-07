@@ -4,13 +4,14 @@ import String
 import Navigation
 import UrlParser exposing (..)
 
-import Categories.Models exposing (CategoryId)
+import Api.Models exposing (CategoryId)
 
 
 type Route
     = DashboardRoute
     | CategoryRoute CategoryId
     | CategoriesRoute
+    | ProductsRoute
     | NotFoundRoute
 
 
@@ -21,6 +22,7 @@ matchers =
         , format DashboardRoute (s "dashboard")
         , format CategoryRoute (s "categories" </> int)
         , format CategoriesRoute (s "categories")
+        , format ProductsRoute (s "products")
         ]
 
 
