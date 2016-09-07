@@ -1,14 +1,15 @@
 module Update exposing (..)
 
+import Dict
 import Navigation
 
 import Categories.Commands
-import Categories.Models exposing (CategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
-import Models exposing (Model)
+import Models exposing (Model, UIState(..))
 import Routing exposing (Route(..))
 import Products.Commands
+import Products.Models exposing (makeProductData)
 import Products.Update
 
 
@@ -53,10 +54,11 @@ update msg model =
         ProductsMsg subMsg ->
             let
                 ( updatedModel, cmd ) =
-                    Products.Update.update subMsg
-                        { products = model.products, productVariants = model.productVariants
-                        , categories = model.categories }
+                    makeProductData model
+                        |> Products.Update.update subMsg
+                updatedUI =
+                    ProductList { showSKUs = updatedModel.showSKUs }
             in
                ( { model | products = updatedModel.products, productVariants = updatedModel.productVariants
-                 , categories = updatedModel.categories }
+                 , categories = updatedModel.categories, uiState = updatedUI }
                , Cmd.map ProductsMsg cmd )

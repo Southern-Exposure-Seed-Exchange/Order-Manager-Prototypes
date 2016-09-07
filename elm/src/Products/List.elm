@@ -1,8 +1,11 @@
 module Products.List exposing (..)
 
+import Dict
 import Html exposing (..)
+import Html.Attributes exposing (colspan, hidden)
+import Html.Events exposing (..)
 
-import Api.Models exposing (Product)
+import Api.Models exposing (Product, ProductVariant)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
 
@@ -11,12 +14,13 @@ view model =
     div []
         [ h1 [] [ text "Products" ]
         , button [] [ text "New Product" ]
-        , prodTable model.products
+        , button [ onClick ToggleAllSKUs ] [ text "Toggle SKUs" ]
+        , prodTable model
         ]
 
 
-prodTable : List Product -> Html msg
-prodTable products =
+prodTable : ProductData -> Html Msg
+prodTable model =
     table []
         [ thead []
             [ tr []
@@ -27,16 +31,43 @@ prodTable products =
                 , th [] [ text "Active" ]
                 ]
             ]
-        , tbody [] (List.map prodRow products)
+        , tbody [] (List.concatMap (prodRow model) model.products)
         ]
 
 
-prodRow : Product -> Html msg
-prodRow product =
-    tr []
-        [ td [] [ text product.name ]
-        , td [] [ text <| toString product.isOrganic ]
-        , td [] [ text <| toString product.isHeirloom ]
-        , td [] [ text <| toString product.isSouthEast ]
-        , td [] [ text <| toString product.isActive ]
+prodRow : ProductData -> Product -> List (Html Msg)
+prodRow model product =
+    let
+        showSKUs =
+            Dict.get product.id model.showSKUs
+                |> Maybe.withDefault False
+        variants =
+            List.filter (\v -> v.product == product.id) model.productVariants
+        extraRows =
+            [ tr [ hidden <| not showSKUs ]
+                [ th [ colspan 2 ] []
+                , th [] [ text "SKU" ]
+                , th [] [ text "Weight" ]
+                , th [] [ text "Price" ]
+                ]
+
+            ] ++ List.map (skuRow showSKUs) variants
+    in
+        [ tr [ onClick (ToggleSKUs product.id) ]
+            [ td [] [ text product.name ]
+            , td [] [ text <| toString product.isOrganic ]
+            , td [] [ text <| toString product.isHeirloom ]
+            , td [] [ text <| toString product.isSouthEast ]
+            , td [] [ text <| toString product.isActive ]
+            ]
+        ] ++ extraRows
+
+
+skuRow : Bool -> ProductVariant -> Html Msg
+skuRow show productVariant =
+    tr [ hidden <| not show ]
+        [ td [ colspan 2 ] []
+        , td [] [ text productVariant.sku ]
+        , td [] [ text <| toString productVariant.weight ]
+        , td [] [ text <| toString productVariant.price ]
         ]

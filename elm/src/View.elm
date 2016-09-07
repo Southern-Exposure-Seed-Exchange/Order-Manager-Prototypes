@@ -10,6 +10,7 @@ import Categories.List
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 import Products.List
+import Products.Models exposing (makeProductData)
 import Routing exposing (Route(..))
 
 
@@ -48,9 +49,7 @@ page model =
         CategoryRoute categoryId ->
             maybeCategoryView model categoryId
         ProductsRoute ->
-            { categories = model.categories
-            , products = model.products
-            , productVariants = model.productVariants }
+            makeProductData model
                 |> Products.List.view
                 |> Html.App.map ProductsMsg
         NotFoundRoute ->

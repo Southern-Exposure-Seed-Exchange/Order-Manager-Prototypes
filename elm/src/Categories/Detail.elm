@@ -7,7 +7,6 @@ import Api.Models exposing (Category, Product, CategoryId)
 import Categories.List exposing (catTable)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
-import Products.List exposing (prodTable)
 
 
 view : Category -> CategoryData -> Html Msg
@@ -55,4 +54,31 @@ view category model =
             ]
         , categoryTable
         , div [] [ h4 [] [ text "Products" ], productsTable ]
+        ]
+
+
+prodTable : List Product -> Html msg
+prodTable products =
+    table []
+        [ thead []
+            [ tr []
+                [ th [] [ text "Name" ]
+                , th [] [ text "Organic" ]
+                , th [] [ text "Heirloom" ]
+                , th [] [ text "SouthEast" ]
+                , th [] [ text "Active" ]
+                ]
+            ]
+        , tbody [] (List.map prodRow products)
+        ]
+
+
+prodRow : Product -> Html msg
+prodRow product =
+    tr []
+        [ td [] [ text product.name ]
+        , td [] [ text <| toString product.isOrganic ]
+        , td [] [ text <| toString product.isHeirloom ]
+        , td [] [ text <| toString product.isSouthEast ]
+        , td [] [ text <| toString product.isActive ]
         ]
