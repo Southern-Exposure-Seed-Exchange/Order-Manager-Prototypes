@@ -19,7 +19,9 @@ update msg model =
         FetchOneFail _ ->
             ( model, Cmd.none )
         VisitCategory categoryId ->
-            model ! [ fetchOne categoryId, (Navigation.newUrl ("#categories/" ++ toString categoryId)) ]
+            model ! [ fetchOne categoryId
+                    , Navigation.newUrl <| "#categories/" ++ toString categoryId
+                    ]
 
 
 updateModel model category =

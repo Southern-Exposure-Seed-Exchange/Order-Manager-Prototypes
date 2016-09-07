@@ -41,7 +41,7 @@ page model =
         CategoryRoute categoryId ->
             maybeCategoryView model categoryId
         NotFoundRoute ->
-            notFound model
+            notFound
 
 
 maybeCategoryView : Model -> CategoryId -> Html Msg
@@ -54,15 +54,16 @@ maybeCategoryView model categoryId =
     in
        case category of
            Nothing ->
-               notFound model
+               notFound
            Just cat ->
                 Categories.Detail.view cat { categories = model.categories, products = model.products }
                     |> Html.App.map CategoriesMsg
 
 
 
-notFound : Model -> Html Msg
-notFound model = div [] [text "404 - Page Not Found"]
+notFound : Html Msg
+notFound =
+    div [] [h1 [] [ text "404 - Page Not Found" ] ]
 
 dashboard : Html Msg
 dashboard =

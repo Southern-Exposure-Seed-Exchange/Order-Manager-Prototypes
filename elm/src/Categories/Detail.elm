@@ -36,7 +36,8 @@ view category model =
         categoryTable =
             if List.isEmpty subCategories
                 then text ""
-                else div [] [ h4 [] [ text "Categories" ], catTable model subCategories ]
+                else div [] [ h4 [] [ text "Categories" ]
+                            , catTable model subCategories ]
         productsTable =
             if List.isEmpty products
                then text "This Category has no Products."
