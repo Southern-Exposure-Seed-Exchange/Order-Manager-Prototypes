@@ -2,9 +2,10 @@ module Categories.Commands exposing (..)
 
 import Json.Decode as Decode exposing ((:=))
 
-import Api exposing (..)
-import Categories.Models exposing (CategoryId, Category, CategoryData, Product)
+import Api.Http exposing (..)
+import Api.Models exposing (CategoryId, Category, Product)
 import Categories.Messages exposing (..)
+import Categories.Models exposing (CategoryData)
 
 
 fetchAll : Cmd Msg

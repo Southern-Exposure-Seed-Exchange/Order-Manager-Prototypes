@@ -4,8 +4,9 @@ import Html exposing (..)
 import Html.Events exposing (onClick)
 import Maybe
 
+import Api.Models exposing (Category, Product)
 import Categories.Messages exposing (..)
-import Categories.Models exposing (CategoryData, Category, Product)
+import Categories.Models exposing (CategoryData)
 
 
 view : CategoryData -> Html Msg

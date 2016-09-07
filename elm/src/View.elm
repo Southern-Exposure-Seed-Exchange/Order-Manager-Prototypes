@@ -4,9 +4,9 @@ import Html exposing (..)
 import Html.App
 import Html.Events exposing (onClick)
 
+import Api.Models exposing (CategoryId)
 import Categories.Detail
 import Categories.List
-import Categories.Models exposing (CategoryId)
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 import Routing exposing (Route(..))

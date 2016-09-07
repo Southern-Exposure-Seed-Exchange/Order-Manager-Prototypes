@@ -1,6 +1,6 @@
 module Models exposing (..)
 
-import Categories.Models exposing (Category, Product)
+import Api.Models exposing (Category, Product)
 import Routing
 
 

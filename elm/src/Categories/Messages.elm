@@ -2,7 +2,8 @@ module Categories.Messages exposing (..)
 
 import HttpBuilder
 
-import Categories.Models exposing (CategoryData, Category, CategoryId)
+import Api.Models exposing (Category, CategoryId)
+import Categories.Models exposing (CategoryData)
 
 
 type Msg

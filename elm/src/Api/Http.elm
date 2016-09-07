@@ -1,10 +1,10 @@
-module Api exposing (..)
+module Api.Http exposing (..)
 
 import HttpBuilder
 import Json.Decode as Decode
 import Task
 
-import Categories.Models exposing (CategoryId)
+import Api.Models exposing (CategoryId)
 
 
 type Endpoint

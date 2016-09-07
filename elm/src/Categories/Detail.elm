@@ -3,9 +3,10 @@ module Categories.Detail exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 
+import Api.Models exposing (Category, Product, CategoryId)
 import Categories.List exposing (catTable)
 import Categories.Messages exposing (Msg(..))
-import Categories.Models exposing (CategoryData, Category, Product, CategoryId)
+import Categories.Models exposing (CategoryData)
 
 
 view : Category -> CategoryData -> Html Msg
