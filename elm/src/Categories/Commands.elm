@@ -1,36 +1,19 @@
 module Categories.Commands exposing (..)
 
-import Http
-import HttpBuilder
 import Json.Decode as Decode exposing ((:=))
-import Task
 
+import Api exposing (..)
 import Categories.Models exposing (CategoryId, Category, CategoryData, Product)
 import Categories.Messages exposing (..)
 
-fetchAll : Cmd Msg
-fetchAll = get fetchAllUrl categoriesDecoder FetchAllFail FetchAllDone
 
-fetchAllUrl : String
-fetchAllUrl =
-    "/categories"
+fetchAll : Cmd Msg
+fetchAll = get CategoriesEndpoint categoriesDecoder FetchAllFail FetchAllDone
+
 
 fetchOne : CategoryId -> Cmd Msg
 fetchOne categoryId =
-    get (fetchOneUrl categoryId) categoryDecoder FetchOneFail FetchOneDone
-
-fetchOneUrl categoryId =
-    "/categories/" ++ toString categoryId
-
-get : String -> Decode.Decoder a -> (HttpBuilder.Error String -> Msg) -> (a -> Msg) -> Cmd Msg
-get url decoder failMsg successMsg =
-    HttpBuilder.get url
-        |> HttpBuilder.withHeaders
-            [ ("Accept","application/json")
-            , ("Content-Type", "application/json")
-            ]
-        |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
-        |> Task.perform failMsg (\r -> successMsg r.data)
+    get (CategoryEndpoint categoryId) categoryDecoder FetchOneFail FetchOneDone
 
 
 categoriesDecoder : Decode.Decoder CategoryData
@@ -38,6 +21,7 @@ categoriesDecoder =
     Decode.object2 CategoryData
         ("category" := Decode.list categoryDecoder)
         ("product" := Decode.list productDecoder)
+
 
 categoryDecoder : Decode.Decoder Category
 categoryDecoder =

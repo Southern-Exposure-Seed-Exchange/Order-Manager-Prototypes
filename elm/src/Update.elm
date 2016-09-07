@@ -2,7 +2,7 @@ module Update exposing (..)
 
 import Navigation
 
-import Categories.Commands exposing (fetchAll, fetchOne)
+import Categories.Commands
 import Categories.Models exposing (CategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
@@ -23,13 +23,13 @@ update msg model =
                     CategoriesRoute ->
                         ( updatedModel
                         , Cmd.batch
-                            [ Cmd.map CategoriesMsg fetchAll
+                            [ Cmd.map CategoriesMsg Categories.Commands.fetchAll
                             , Navigation.newUrl "#categories"
                             ]
                         )
                     CategoryRoute categoryId ->
                         updatedModel !
-                            [ Cmd.map CategoriesMsg (fetchOne categoryId)
+                            [ Cmd.map CategoriesMsg (Categories.Commands.fetchOne categoryId)
                             , Navigation.newUrl <| "#categories" ++ toString categoryId
                             ]
                     NotFoundRoute ->
