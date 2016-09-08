@@ -1,6 +1,5 @@
 module Main exposing (..)
 
-import Html.App
 import Navigation
 
 import Commands exposing (fetchForRoute)
