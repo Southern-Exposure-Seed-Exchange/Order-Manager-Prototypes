@@ -97,8 +97,9 @@ npm run dev
 
 ## Performance
 
+### Backends
 
-### Django
+#### Django
 
 * Cat/Prod/Variants import takes ~2 seconds.
 
@@ -120,7 +121,7 @@ Longest transaction:	        5.40
 Shortest transaction:	        1.25
 ```
 
-### Servant
+#### Servant
 
 * Cat/Prod/Variants import takes 0.6 seconds
 
@@ -141,3 +142,23 @@ Failed transactions:	           0
 Longest transaction:	        4.07
 Shortest transaction:	        0.36
 ```
+
+### Frontends
+
+#### Ember
+
+* Displaying the Products Page with a table of 1441 Product rows takes 9.8s of
+  scripting time & 0.5s of rendering time.
+* Un-hiding 1855 Variants on the Products Page takes 2.9s of scripting time &
+  0.4s of rendering time.
+* Hiding 1855 Variants on the Products Page takes 2.9s of scripting time & 0.4s
+  of rendering time.
+
+#### Elm
+
+* Displaying the Products Page with a table of 1441 Product rows takes 0.5s of
+  scripting time & 0.1s of rendering time.
+* Un-hiding 1855 Variants on the Products Page takes 0.4s of scripting time &
+  0.3s of rendering time.
+* Hiding 1855 Variants on the Products Page takes 0.3s of scripting time & 0.2s
+  of rendering time.
