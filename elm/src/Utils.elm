@@ -2,12 +2,15 @@ module Utils exposing (..)
 
 
 replaceBy : (a -> b) -> a -> List a -> List a
-replaceBy selector item =
-    let
-        itemValue =
-            selector item
-    in
-        List.map (\listItem -> if selector listItem == itemValue then item else listItem)
+replaceBy selector item items =
+    case items of
+        [] ->
+            [ item ]
+        x::xs ->
+            if selector item == selector x then
+                item :: xs
+            else
+                x :: replaceBy selector item xs
 
 
 filterBy : (a -> b) -> b -> List a -> List a

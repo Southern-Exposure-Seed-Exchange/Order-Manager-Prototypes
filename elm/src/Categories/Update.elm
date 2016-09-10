@@ -14,11 +14,21 @@ update msg model =
             ( newModel, Cmd.none )
         FetchAllFail _ ->
             ( model, Cmd.none )
-        FetchOneDone newCategory ->
-            ( { model | categories = replaceBy .id newCategory model.categories }, Cmd.none )
+        FetchOneDone newModel ->
+            ( updateModel model newModel, Cmd.none )
         FetchOneFail _ ->
             ( model, Cmd.none )
         VisitCategory id ->
             ( model, Navigation.newUrl <| "#categories/" ++ toString id )
         VisitProduct id ->
             ( model, Navigation.newUrl <| "#products/" ++ toString id )
+
+updateModel : CategoryData -> CategoryData -> CategoryData
+updateModel model newData =
+    let
+        newCategories =
+            List.foldl (replaceBy .id) model.categories newData.categories
+        newProducts =
+            List.foldl (replaceBy .id) model.products newData.products
+    in
+        { model | categories = newCategories, products = newProducts }

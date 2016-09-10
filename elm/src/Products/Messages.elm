@@ -9,7 +9,7 @@ import Products.Models exposing (ProductData)
 type Msg
     = FetchAllDone ProductData
     | FetchAllFail (HttpBuilder.Error String)
-    | FetchOneDone Product
+    | FetchOneDone ProductData
     | FetchOneFail (HttpBuilder.Error String)
     | ToggleSKUs ProductId
     | ToggleAllSKUs

@@ -17,7 +17,7 @@ fetchAll =
 
 fetchOne : ProductId -> Cmd Msg
 fetchOne id =
-    get (ProductEndpoint id) productDecoder FetchOneFail FetchOneDone
+    get (ProductEndpoint id) productsDecoder FetchOneFail FetchOneDone
 
 
 productsDecoder : Decode.Decoder ProductData

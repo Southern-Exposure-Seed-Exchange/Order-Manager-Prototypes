@@ -9,7 +9,7 @@ import Categories.Models exposing (CategoryData)
 type Msg
     = FetchAllDone CategoryData
     | FetchAllFail (HttpBuilder.Error String)
-    | FetchOneDone Category
+    | FetchOneDone CategoryData
     | FetchOneFail (HttpBuilder.Error String)
     | VisitCategory CategoryId
     | VisitProduct ProductId

@@ -151,8 +151,9 @@ Shortest transaction:	        0.36
   scripting time & 0.5s of rendering time.
 * Un-hiding 1855 Variants on the Products Page takes 2.9s of scripting time &
   0.4s of rendering time.
-* Hiding 1855 Variants on the Products Page takes 2.9s of scripting time & 0.4s
+* Hiding 1855 Variants on the Products Page takes 1.1s of scripting time & 0.1s
   of rendering time.
+* Loading directly into a Product Details Page takes 1.7s of scripting time.
 
 #### Elm
 
@@ -162,3 +163,4 @@ Shortest transaction:	        0.36
   0.3s of rendering time.
 * Hiding 1855 Variants on the Products Page takes 0.3s of scripting time & 0.2s
   of rendering time.
+* Loading directly into a Product Details Page takes 0.1s of scripting time.

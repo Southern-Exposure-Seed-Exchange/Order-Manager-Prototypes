@@ -10,12 +10,13 @@ import Categories.Models exposing (CategoryData)
 
 
 fetchAll : Cmd Msg
-fetchAll = get CategoriesEndpoint categoriesDecoder FetchAllFail FetchAllDone
+fetchAll =
+    get CategoriesEndpoint categoriesDecoder FetchAllFail FetchAllDone
 
 
 fetchOne : CategoryId -> Cmd Msg
 fetchOne categoryId =
-    get (CategoryEndpoint categoryId) categoryDecoder FetchOneFail FetchOneDone
+    get (CategoryEndpoint categoryId) categoriesDecoder FetchOneFail FetchOneDone
 
 
 categoriesDecoder : Decode.Decoder CategoryData

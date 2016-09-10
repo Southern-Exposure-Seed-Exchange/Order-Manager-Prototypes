@@ -16,9 +16,8 @@ update msg model =
             ( { newModel | showSKUs = model.showSKUs }, Cmd.none )
         FetchAllFail _ ->
             ( model, Cmd.none )
-        FetchOneDone newProduct ->
-            ( { model | products = replaceBy .id newProduct model.products }
-            , Cmd.none )
+        FetchOneDone newModel ->
+            ( updateModel model newModel, Cmd.none )
         FetchOneFail _ ->
             ( model, Cmd.none )
         ToggleSKUs productId ->
@@ -29,6 +28,18 @@ update msg model =
             ( model, Navigation.newUrl <| "#products/" ++ toString id )
         VisitCategory id ->
             ( model, Navigation.newUrl <| "#categories/" ++ toString id )
+
+updateModel : ProductData -> ProductData -> ProductData
+updateModel model newData =
+    let
+        newCategories =
+            List.foldl (replaceBy .id) model.categories newData.categories
+        newProducts =
+            List.foldl (replaceBy .id) model.products newData.products
+        newVariants =
+            List.foldl (replaceBy .id) model.productVariants newData.productVariants
+    in
+       { model | categories = newCategories, products = newProducts, productVariants = newVariants }
 
 
 toggleSKU : Dict.Dict ProductId Bool -> ProductId -> Dict.Dict ProductId Bool
