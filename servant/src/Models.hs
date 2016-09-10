@@ -17,6 +17,7 @@ import Data.Aeson                   ( FromJSON(..), (.:), Value(..), ToJSON(..)
 import Data.Int                     (Int64)
 import Data.Proxy                   (Proxy(..))
 import Data.List                    (nub)
+import Data.Maybe                   (mapMaybe)
 import Database.Persist
 import Database.Persist.Postgresql  (SqlBackend(..), runMigration)
 import Database.Persist.TH          ( share, mkPersist, sqlSettings, mkMigrate
@@ -36,7 +37,7 @@ Category json
     description T.Text
     parent CategoryId Maybe
     UniqueCategory name
-    deriving Show
+    deriving Show Eq
 
 Product json
     name T.Text
@@ -120,8 +121,12 @@ class (ToJSON a, Named a) => Sideload a where
 instance Sideload (Entity Category) where
         sideload cs =
             do prods <- runDB $ selectList [ProductCategory <-. catIds] []
-               return $ Sideloaded (JSONList cs, toJSON $ JSONList prods)
+               parents <- runDB $ selectList [CategoryId <-. parentIds] []
+               children <- runDB $ selectList [CategoryParent <-. map Just catIds] []
+               return $ Sideloaded (JSONList (nub $ cs ++ parents ++ children),
+                                    toJSON $ JSONList prods)
             where catIds = nub $ map (\(Entity i _) -> i) cs
+                  parentIds = mapMaybe (\(Entity _ e) -> categoryParent e) cs
 -- | Products sideload their Categories, & Variants.
 instance Sideload (Entity Product) where
         sideload ps = do

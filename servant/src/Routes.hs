@@ -22,7 +22,7 @@ type CRUD resource =
    :<|> ReqBody '[JSON] (JSONObject resource)
         :> Post '[JSON] (JSONObject (Entity resource))
    :<|> Capture "id" (PKey resource)
-        :> Get '[JSON] (JSONObject (Entity resource))
+        :> Get '[JSON] (Sideloaded (Entity resource))
    :<|> Capture "id" (PKey resource)
         :> ReqBody '[JSON] (JSONObject resource)
         :> Put '[JSON] (JSONObject (Entity resource))
@@ -32,7 +32,7 @@ type CRUD resource =
 type CRUDRoutes resource =
          AppM (Sideloaded (Entity resource))
     :<|> ((JSONObject resource -> AppM (JSONObject (Entity resource)))
-    :<|> ((PKey resource -> AppM (JSONObject (Entity resource)))
+    :<|> ((PKey resource -> AppM (Sideloaded (Entity resource)))
     :<|> ((PKey resource -> JSONObject resource -> AppM (JSONObject (Entity resource)))
     :<|> (PKey resource -> AppM ()))))
 
@@ -63,14 +63,15 @@ createRoute (JSONObject item) = do
 
 -- | The `viewRoute` returns a single JSON object representing a Persistent
 -- Entity.
-viewRoute :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r)
-          => PKey r -> AppM (JSONObject (Entity r))
+viewRoute :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r,
+              Sideload (Entity r))
+          => PKey r -> AppM (Sideloaded (Entity r))
 viewRoute pKey =  do
         let key = _PKey pKey
         maybeItem <- runDB $ get key
         case maybeItem of
             Nothing -> lift $ throwE err404
-            Just value -> return $ JSONObject (Entity key value)
+            Just value -> sideload [Entity key value]
 
 -- | The `updateRoute` attempts to update an Entity using a JSON request
 -- body and returns the new Entity.
