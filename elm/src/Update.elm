@@ -1,14 +1,11 @@
 module Update exposing (..)
 
-import Dict
 import Navigation
 
-import Categories.Commands
 import Categories.Update
 import Messages exposing (Msg(..))
 import Models exposing (Model, UIState(..))
 import Routing exposing (Route(..))
-import Products.Commands
 import Products.Models exposing (makeProductData)
 import Products.Update
 

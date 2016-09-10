@@ -2,6 +2,7 @@ module Categories.Update exposing (..)
 
 import Navigation
 
+import Api.Models exposing (Category)
 import Categories.Commands exposing (fetchOne)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
@@ -24,6 +25,7 @@ update msg model =
                     ]
 
 
+updateModel : CategoryData -> Category -> CategoryData
 updateModel model category =
     let
         replace list =
