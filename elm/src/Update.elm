@@ -24,22 +24,12 @@ update msg model =
                     DashboardRoute ->
                         ( updatedModel, Navigation.newUrl "#dashboard" )
                     CategoriesRoute ->
-                        ( updatedModel
-                        , Cmd.batch
-                            [ Cmd.map CategoriesMsg Categories.Commands.fetchAll
-                            , Navigation.newUrl "#categories"
-                            ]
-                        )
+                        ( updatedModel,  Navigation.newUrl "#categories" )
                     CategoryRoute categoryId ->
-                        updatedModel !
-                            [ Cmd.map CategoriesMsg (Categories.Commands.fetchOne categoryId)
-                            , Navigation.newUrl <| "#categories" ++ toString categoryId
-                            ]
+                        ( updatedModel
+                        , Navigation.newUrl <| "#categories" ++ toString categoryId)
                     ProductsRoute ->
-                        updatedModel !
-                            [ Cmd.map ProductsMsg Products.Commands.fetchAll
-                            , Navigation.newUrl "#products"
-                            ]
+                        ( updatedModel, Navigation.newUrl "#products" )
                     NotFoundRoute ->
                         ( updatedModel, Cmd.none )
         CategoriesMsg subMsg ->
