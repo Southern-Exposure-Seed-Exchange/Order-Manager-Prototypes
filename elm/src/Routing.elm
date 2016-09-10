@@ -4,7 +4,7 @@ import String
 import Navigation
 import UrlParser exposing (..)
 
-import Api.Models exposing (CategoryId)
+import Api.Models exposing (CategoryId, ProductId)
 
 
 type Route
@@ -12,6 +12,7 @@ type Route
     | CategoriesRoute
     | CategoryRoute CategoryId
     | ProductsRoute
+    | ProductRoute ProductId
     | NotFoundRoute
 
 
@@ -22,6 +23,7 @@ matchers =
         , format DashboardRoute (s "dashboard")
         , format CategoryRoute (s "categories" </> int)
         , format CategoriesRoute (s "categories")
+        , format ProductRoute (s "products" </> int)
         , format ProductsRoute (s "products")
         ]
 

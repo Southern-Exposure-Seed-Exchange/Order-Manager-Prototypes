@@ -2,7 +2,7 @@ module Categories.Messages exposing (..)
 
 import HttpBuilder
 
-import Api.Models exposing (Category, CategoryId)
+import Api.Models exposing (Category, CategoryId, ProductId)
 import Categories.Models exposing (CategoryData)
 
 
@@ -12,3 +12,4 @@ type Msg
     | FetchOneDone Category
     | FetchOneFail (HttpBuilder.Error String)
     | VisitCategory CategoryId
+    | VisitProduct ProductId

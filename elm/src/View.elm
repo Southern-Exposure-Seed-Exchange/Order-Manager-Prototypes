@@ -4,14 +4,15 @@ import Html exposing (..)
 import Html.App
 import Html.Events exposing (onClick)
 
-import Api.Models exposing (CategoryId)
 import Categories.Detail
 import Categories.List
 import Messages exposing (Msg(..))
 import Models exposing (Model)
+import Products.Detail
 import Products.List
 import Products.Models exposing (makeProductData)
 import Routing exposing (Route(..))
+import Utils exposing (getById)
 
 
 view : Model -> Html Msg
@@ -47,29 +48,28 @@ page model =
                 |> Categories.List.view
                 |> Html.App.map CategoriesMsg
         CategoryRoute categoryId ->
-            maybeCategoryView model categoryId
+            itemViewOr404 categoryId model.categories
+                 { categories = model.categories, products = model.products }
+                 Categories.Detail.view CategoriesMsg
         ProductsRoute ->
             makeProductData model
                 |> Products.List.view
                 |> Html.App.map ProductsMsg
+        ProductRoute productId ->
+            itemViewOr404 productId model.products
+                (makeProductData model) Products.Detail.view ProductsMsg
         NotFoundRoute ->
             notFound
 
 
-maybeCategoryView : Model -> CategoryId -> Html Msg
-maybeCategoryView model categoryId =
-    let
-        category =
-            model.categories
-                |> List.filter (\c -> c.id == categoryId)
-                |> List.head
-    in
-       case category of
-           Nothing ->
-               notFound
-           Just cat ->
-                Categories.Detail.view cat { categories = model.categories, products = model.products }
-                    |> Html.App.map CategoriesMsg
+itemViewOr404 : b -> List { a | id : b } -> c ->
+                ({ a | id : b } -> c -> Html msg) -> (msg -> Msg) -> Html Msg
+itemViewOr404 id items viewData view msg =
+    case getById items id of
+        Nothing ->
+            notFound
+        Just item ->
+            view item viewData |> Html.App.map msg
 
 
 notFound : Html Msg

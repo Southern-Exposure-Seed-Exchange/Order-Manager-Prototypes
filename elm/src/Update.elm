@@ -24,9 +24,12 @@ update msg model =
                         ( updatedModel,  Navigation.newUrl "#categories" )
                     CategoryRoute categoryId ->
                         ( updatedModel
-                        , Navigation.newUrl <| "#categories" ++ toString categoryId)
+                        , Navigation.newUrl <| "#categories" ++ toString categoryId )
                     ProductsRoute ->
                         ( updatedModel, Navigation.newUrl "#products" )
+                    ProductRoute productId ->
+                        ( updatedModel
+                        , Navigation.newUrl <| "#products" ++ toString productId )
                     NotFoundRoute ->
                         ( updatedModel, Cmd.none )
         CategoriesMsg subMsg ->

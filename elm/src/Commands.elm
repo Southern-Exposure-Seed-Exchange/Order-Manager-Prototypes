@@ -17,5 +17,7 @@ fetchForRoute route =
             Cmd.map CategoriesMsg (Categories.Commands.fetchOne id)
         ProductsRoute ->
             Cmd.map ProductsMsg Products.Commands.fetchAll
+        ProductRoute id ->
+            Cmd.map ProductsMsg (Products.Commands.fetchOne id)
         NotFoundRoute ->
             Cmd.none

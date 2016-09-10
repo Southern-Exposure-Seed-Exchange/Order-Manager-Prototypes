@@ -1,10 +1,12 @@
 module Products.Update exposing (..)
 
 import Dict
+import Navigation
 
 import Api.Models exposing (ProductId)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
+import Utils exposing (replaceBy)
 
 
 update : Msg -> ProductData -> ( ProductData, Cmd Msg )
@@ -14,10 +16,19 @@ update msg model =
             ( { newModel | showSKUs = model.showSKUs }, Cmd.none )
         FetchAllFail _ ->
             ( model, Cmd.none )
+        FetchOneDone newProduct ->
+            ( { model | products = replaceBy .id newProduct model.products }
+            , Cmd.none )
+        FetchOneFail _ ->
+            ( model, Cmd.none )
         ToggleSKUs productId ->
             ( { model | showSKUs = toggleSKU model.showSKUs productId }, Cmd.none )
         ToggleAllSKUs ->
             ( { model | showSKUs = toggleAllSKUs model }, Cmd.none )
+        VisitProduct id ->
+            ( model, Navigation.newUrl <| "#products/" ++ toString id )
+        VisitCategory id ->
+            ( model, Navigation.newUrl <| "#categories/" ++ toString id )
 
 
 toggleSKU : Dict.Dict ProductId Bool -> ProductId -> Dict.Dict ProductId Bool

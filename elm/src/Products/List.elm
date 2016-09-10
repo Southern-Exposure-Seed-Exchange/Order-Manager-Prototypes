@@ -3,11 +3,13 @@ module Products.List exposing (..)
 import Dict
 import Html exposing (..)
 import Html.Attributes exposing (colspan, hidden)
-import Html.Events exposing (..)
+import Html.Events exposing (onClick)
 
 import Api.Models exposing (Product, ProductVariant)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
+import Utils exposing (filterBy)
+
 
 view : ProductData -> Html Msg
 view model =
@@ -42,7 +44,7 @@ prodRow model product =
             Dict.get product.id model.showSKUs
                 |> Maybe.withDefault False
         variants =
-            List.filter (\v -> v.product == product.id) model.productVariants
+            filterBy .product product.id model.productVariants
         extraRows =
             [ tr [ hidden <| not showSKUs ]
                 [ th [ colspan 2 ] []
@@ -54,7 +56,7 @@ prodRow model product =
             ] ++ List.map (skuRow showSKUs) variants
     in
         [ tr [ onClick (ToggleSKUs product.id) ]
-            [ td [] [ text product.name ]
+            [ td [ onClick (VisitProduct product.id) ] [ text product.name ]
             , td [] [ text <| toString product.isOrganic ]
             , td [] [ text <| toString product.isHeirloom ]
             , td [] [ text <| toString product.isSouthEast ]

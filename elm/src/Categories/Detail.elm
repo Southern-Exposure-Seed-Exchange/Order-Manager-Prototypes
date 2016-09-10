@@ -7,24 +7,18 @@ import Api.Models exposing (Category, Product, CategoryId)
 import Categories.List exposing (catTable)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
+import Utils exposing (getById, filterBy)
 
 
 view : Category -> CategoryData -> Html Msg
 view category model =
     let
-        isChildCategory otherCategory =
-            case otherCategory.parent of
-                Nothing ->
-                    False
-                Just parentId ->
-                    category.id == parentId
         subCategories =
-            List.filter isChildCategory model.categories
+            filterBy (.parent >> Maybe.withDefault 0) category.id model.categories
         products =
-            List.filter (\p -> p.category == category.id) model.products
+            filterBy .category category.id model.products
         parentCategory =
-            category.parent `Maybe.andThen`
-                (\parentId -> List.filter (\c -> parentId == c.id) model.categories |> List.head)
+            category.parent `Maybe.andThen` getById model.categories
         parentLink =
             case parentCategory of
                 Nothing ->
@@ -57,7 +51,7 @@ view category model =
         ]
 
 
-prodTable : List Product -> Html msg
+prodTable : List Product -> Html Msg
 prodTable products =
     table []
         [ thead []
@@ -73,9 +67,9 @@ prodTable products =
         ]
 
 
-prodRow : Product -> Html msg
+prodRow : Product -> Html Msg
 prodRow product =
-    tr []
+    tr [ onClick (VisitProduct product.id) ]
         [ td [] [ text product.name ]
         , td [] [ text <| toString product.isOrganic ]
         , td [] [ text <| toString product.isHeirloom ]

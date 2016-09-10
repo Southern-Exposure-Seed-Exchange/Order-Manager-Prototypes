@@ -7,6 +7,7 @@ import Maybe
 import Api.Models exposing (Category, Product)
 import Categories.Messages exposing (..)
 import Categories.Models exposing (CategoryData)
+import Utils exposing (filterBy)
 
 
 view : CategoryData -> Html Msg
@@ -52,11 +53,10 @@ catRow model category =
 
 childCount : List Category -> Category -> Int
 childCount categories category =
-    List.filter (\c -> Maybe.withDefault 0 c.parent == category.id) categories
+    filterBy (.parent >> Maybe.withDefault 0) category.id categories
         |> List.length
 
 
 productCount : List Product -> Category -> Int
 productCount products category =
-    List.filter (\p -> p.category == category.id) products
-        |> List.length
+    filterBy .category category.id products |> List.length
