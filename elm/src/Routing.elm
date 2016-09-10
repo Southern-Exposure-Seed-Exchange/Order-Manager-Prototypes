@@ -9,8 +9,8 @@ import Api.Models exposing (CategoryId)
 
 type Route
     = DashboardRoute
-    | CategoryRoute CategoryId
     | CategoriesRoute
+    | CategoryRoute CategoryId
     | ProductsRoute
     | NotFoundRoute
 
