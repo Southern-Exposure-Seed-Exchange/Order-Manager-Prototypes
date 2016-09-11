@@ -4,7 +4,7 @@ import Navigation
 
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
-import Utils exposing (replaceBy)
+import Utils exposing (replaceAllById)
 
 
 update : Msg -> CategoryData -> ( CategoryData, Cmd Msg )
@@ -23,12 +23,13 @@ update msg model =
         VisitProduct id ->
             ( model, Navigation.newUrl <| "#products/" ++ toString id )
 
+
 updateModel : CategoryData -> CategoryData -> CategoryData
 updateModel model newData =
     let
-        newCategories =
-            List.foldl (replaceBy .id) model.categories newData.categories
-        newProducts =
-            List.foldl (replaceBy .id) model.products newData.products
+        updateAttribute =
+            replaceAllById model newData
     in
-        { model | categories = newCategories, products = newProducts }
+        { model
+            | categories = updateAttribute .categories
+            , products = updateAttribute .products }

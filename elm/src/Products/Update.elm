@@ -6,7 +6,7 @@ import Navigation
 import Api.Models exposing (ProductId)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
-import Utils exposing (replaceBy)
+import Utils exposing (replaceAllById)
 
 
 update : Msg -> ProductData -> ( ProductData, Cmd Msg )
@@ -29,17 +29,17 @@ update msg model =
         VisitCategory id ->
             ( model, Navigation.newUrl <| "#categories/" ++ toString id )
 
+
 updateModel : ProductData -> ProductData -> ProductData
 updateModel model newData =
     let
-        newCategories =
-            List.foldl (replaceBy .id) model.categories newData.categories
-        newProducts =
-            List.foldl (replaceBy .id) model.products newData.products
-        newVariants =
-            List.foldl (replaceBy .id) model.productVariants newData.productVariants
+        updateAttribute =
+            replaceAllById model newData
     in
-       { model | categories = newCategories, products = newProducts, productVariants = newVariants }
+       { model
+            | categories = updateAttribute .categories
+            , products = updateAttribute .products
+            , productVariants = updateAttribute .productVariants }
 
 
 toggleSKU : Dict.Dict ProductId Bool -> ProductId -> Dict.Dict ProductId Bool

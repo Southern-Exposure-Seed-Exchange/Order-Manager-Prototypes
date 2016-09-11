@@ -13,6 +13,11 @@ replaceBy selector item items =
                 x :: replaceBy selector item xs
 
 
+replaceAllById : a -> a -> (a -> List { b | id : c }) -> List { b | id : c }
+replaceAllById oldModel newModel selector =
+    List.foldl (replaceBy .id) (selector oldModel) (selector newModel)
+
+
 filterBy : (a -> b) -> b -> List a -> List a
 filterBy selector value items =
     items |> List.filter (\i -> selector i == value)
