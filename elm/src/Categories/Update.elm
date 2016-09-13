@@ -11,7 +11,7 @@ update : Msg -> CategoryData -> ( CategoryData, Cmd Msg )
 update msg model =
     case msg of
         FetchAllDone newModel ->
-            ( newModel, Cmd.none )
+            ( updateModel model newModel, Cmd.none )
         FetchAllFail _ ->
             ( model, Cmd.none )
         FetchOneDone newModel ->

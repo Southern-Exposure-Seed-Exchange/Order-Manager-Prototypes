@@ -13,7 +13,7 @@ update : Msg -> ProductData -> ( ProductData, Cmd Msg )
 update msg model =
     case msg of
         FetchAllDone newModel ->
-            ( { newModel | showSKUs = model.showSKUs }, Cmd.none )
+            ( updateModel model newModel, Cmd.none )
         FetchAllFail _ ->
             ( model, Cmd.none )
         FetchOneDone newModel ->
