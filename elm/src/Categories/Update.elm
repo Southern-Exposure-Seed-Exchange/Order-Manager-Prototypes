@@ -31,5 +31,6 @@ updateModel model newData =
             replaceAllById model newData
     in
         { model
-            | categories = updateAttribute .categories
-            , products = updateAttribute .products }
+            | categories = List.sortBy .name <| updateAttribute .categories
+            , products = List.sortBy .name <| updateAttribute .products
+            }

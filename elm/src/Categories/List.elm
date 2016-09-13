@@ -20,7 +20,7 @@ view model =
                 Just _ ->
                     False
         rootCategories =
-            List.filter (\cat -> isNothing cat.parent) model.categories
+            List.filter (.parent >> isNothing) model.categories
     in
         div []
             [ h1 [] [ text "Categories" ]

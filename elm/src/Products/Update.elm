@@ -37,9 +37,10 @@ updateModel model newData =
             replaceAllById model newData
     in
        { model
-            | categories = updateAttribute .categories
-            , products = updateAttribute .products
-            , productVariants = updateAttribute .productVariants }
+            | categories = List.sortBy .name <| updateAttribute .categories
+            , products = List.sortBy .name <| updateAttribute .products
+            , productVariants = List.sortBy .sku <| updateAttribute .productVariants
+            }
 
 
 toggleSKU : Dict.Dict ProductId Bool -> ProductId -> Dict.Dict ProductId Bool
