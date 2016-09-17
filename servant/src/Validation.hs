@@ -7,7 +7,7 @@ module Validation (Validation(..)) where
 import Control.Monad.Trans.Class    (lift)
 import Control.Monad.Trans.Except   (throwE)
 import Data.Aeson
-import Data.Maybe                   (isJust, fromJust)
+import Data.Maybe                   (isJust, fromJust, fromMaybe)
 import Database.Persist             ( selectFirst, (!=.), (==.), Key
                                     , EntityField, PersistEntityBackend
                                     , PersistField, PersistEntity)
@@ -74,7 +74,7 @@ class Validation a where
 instance Validation Category where
         validate key cat = do
             let catName = categoryName cat
-                parentIsSelf = isJust $ (==) <$> key <*> categoryParent cat
+                parentIsSelf = fromMaybe False $ (==) <$> key <*> categoryParent cat
             sameName <- fieldValueExists CategoryId key CategoryName catName
             run cat [ ("name", [ ("The Name cannot be blank.", T.null catName)
                                , ("A Category with this name already exists.", sameName)
