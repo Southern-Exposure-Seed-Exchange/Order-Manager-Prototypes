@@ -3,7 +3,6 @@ module Api.Http exposing (..)
 import HttpBuilder
 import Json.Decode as Decode
 import Task
-
 import Api.Models exposing (CategoryId, ProductId)
 
 
@@ -19,10 +18,13 @@ endpointToUrl endpoint =
     case endpoint of
         CategoriesEndpoint ->
             "/categories/"
+
         CategoryEndpoint id ->
             endpointToUrl CategoriesEndpoint ++ toString id
+
         ProductsEndpoint ->
             "/products/"
+
         ProductEndpoint id ->
             endpointToUrl ProductsEndpoint ++ toString id
 
@@ -30,7 +32,7 @@ endpointToUrl endpoint =
 defaultHeaders : HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder
 defaultHeaders =
     HttpBuilder.withHeaders
-        [ ("Accept", "application/json"), ("Content-Type", "application/json") ]
+        [ ( "Accept", "application/json" ), ( "Content-Type", "application/json" ) ]
 
 
 get : Endpoint -> Decode.Decoder a -> (HttpBuilder.Error String -> msg) -> (a -> msg) -> Cmd msg

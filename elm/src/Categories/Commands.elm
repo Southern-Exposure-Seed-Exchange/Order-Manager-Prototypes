@@ -2,7 +2,6 @@ module Categories.Commands exposing (..)
 
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
-
 import Api.Decoders exposing (categoryDecoder, productDecoder)
 import Api.Encoders exposing (categoryEncoder)
 import Api.Http exposing (..)
@@ -23,14 +22,20 @@ fetchOne categoryId =
 
 updateOne : Category -> Cmd Msg
 updateOne category =
-    put (CategoryEndpoint category.id) (categoriesEncoder category)
-        ("category" := categoryDecoder) UpdateOneFail (UpdateOneDone category.id)
+    put (CategoryEndpoint category.id)
+        (categoriesEncoder category)
+        ("category" := categoryDecoder)
+        UpdateOneFail
+        (UpdateOneDone category.id)
 
 
 createOne : Category -> Cmd Msg
 createOne category =
-    post CategoriesEndpoint (categoriesEncoder category)
-        ("category" := categoryDecoder) CreateOneFail CreateOneDone
+    post CategoriesEndpoint
+        (categoriesEncoder category)
+        ("category" := categoryDecoder)
+        CreateOneFail
+        CreateOneDone
 
 
 deleteOne : CategoryId -> Cmd Msg
@@ -49,4 +54,4 @@ categoriesDecoder =
 categoriesEncoder : Category -> Encode.Value
 categoriesEncoder category =
     Encode.object
-        [ ("category", categoryEncoder category) ]
+        [ ( "category", categoryEncoder category ) ]

@@ -1,7 +1,6 @@
 module Main exposing (..)
 
 import Navigation
-
 import Api.Models exposing (initialCategory)
 import Commands exposing (fetchForRoute)
 import Messages exposing (Msg)
@@ -13,10 +12,11 @@ import View exposing (view)
 
 init : Result String Route -> ( Model, Cmd Msg )
 init result =
-    let currentRoute =
-        Routing.routeFromResult result
+    let
+        currentRoute =
+            Routing.routeFromResult result
     in
-       ( initialModel currentRoute, fetchForRoute currentRoute )
+        ( initialModel currentRoute, fetchForRoute currentRoute )
 
 
 urlUpdate : Result String Route -> Model -> ( Model, Cmd Msg )
@@ -24,14 +24,16 @@ urlUpdate result model =
     let
         updatedModel =
             { model | route = Routing.routeFromResult result }
+
         updateUI model =
             case model.route of
                 CategoryAddRoute ->
                     { model | uiState = Categories { categoryForm = initialCategory } }
+
                 _ ->
                     model
     in
-       ( updateUI updatedModel, fetchForRoute updatedModel.route )
+        ( updateUI updatedModel, fetchForRoute updatedModel.route )
 
 
 subscriptions : Model -> Sub Msg

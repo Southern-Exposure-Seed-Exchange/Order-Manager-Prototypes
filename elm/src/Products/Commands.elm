@@ -2,7 +2,6 @@ module Products.Commands exposing (..)
 
 import Dict
 import Json.Decode as Decode exposing ((:=))
-
 import Api.Models exposing (ProductId)
 import Api.Decoders exposing (categoryDecoder, productDecoder, productVariantDecoder)
 import Api.Http exposing (..)

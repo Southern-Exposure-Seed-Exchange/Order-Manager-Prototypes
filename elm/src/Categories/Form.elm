@@ -3,7 +3,6 @@ module Categories.Form exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (type', value, name, for, selected)
 import Html.Events exposing (onInput, onClick)
-
 import Api.Models exposing (Category)
 import Categories.Messages exposing (Msg(..))
 import Utils exposing (onChange)
@@ -14,6 +13,7 @@ view categoryForm categories =
     let
         otherCategories =
             List.filter (\c -> c.id /= categoryForm.id) categories
+
         parentOptions =
             option [] [ text "None" ] :: List.map (parentOption categoryForm) otherCategories
     in
@@ -21,13 +21,15 @@ view categoryForm categories =
             [ label []
                 [ text "Name: "
                 , input
-                    [ type' "text", value categoryForm.name, onInput FormNameChange ] []
+                    [ type' "text", value categoryForm.name, onInput FormNameChange ]
+                    []
                 ]
             , br [] []
             , label []
                 [ text "Description: "
                 , textarea
-                    [ value categoryForm.description, onInput FormDescriptionChange ] []
+                    [ value categoryForm.description, onInput FormDescriptionChange ]
+                    []
                 ]
             , br [] []
             , label []
@@ -47,6 +49,7 @@ parentOption category optionCategory =
         isParent =
             Maybe.map (\p -> p == optionCategory.id) category.parent
                 |> Maybe.withDefault False
+
         attributes =
             if isParent then
                 [ selected True ]

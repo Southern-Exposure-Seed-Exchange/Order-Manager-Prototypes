@@ -1,7 +1,6 @@
 module Models exposing (..)
 
 import Dict
-
 import Api.Models exposing (Category, Product, ProductVariant, ProductId)
 import Routing
 

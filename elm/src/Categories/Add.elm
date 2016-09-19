@@ -1,7 +1,6 @@
 module Categories.Add exposing (..)
 
 import Html exposing (Html, h1, div, text)
-
 import Categories.Form
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)

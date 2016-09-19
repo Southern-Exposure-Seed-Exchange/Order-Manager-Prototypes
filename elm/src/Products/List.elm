@@ -4,7 +4,6 @@ import Dict
 import Html exposing (..)
 import Html.Attributes exposing (colspan, hidden)
 import Html.Events exposing (onClick)
-
 import Api.Models exposing (Product, ProductVariant)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
@@ -43,8 +42,10 @@ prodRow model product =
         showSKUs =
             Dict.get product.id model.showSKUs
                 |> Maybe.withDefault False
+
         variants =
             filterBy .product product.id model.productVariants
+
         extraRows =
             [ tr [ hidden <| not showSKUs ]
                 [ th [ colspan 2 ] []
@@ -52,8 +53,8 @@ prodRow model product =
                 , th [] [ text "Weight" ]
                 , th [] [ text "Price" ]
                 ]
-
-            ] ++ List.map (skuRow showSKUs) variants
+            ]
+                ++ List.map (skuRow showSKUs) variants
     in
         [ tr [ onClick (ToggleSKUs product.id) ]
             [ td [ onClick (VisitProduct product.id) ] [ text product.name ]
@@ -62,7 +63,8 @@ prodRow model product =
             , td [] [ text <| toString product.isSouthEast ]
             , td [] [ text <| toString product.isActive ]
             ]
-        ] ++ extraRows
+        ]
+            ++ extraRows
 
 
 skuRow : Bool -> ProductVariant -> Html Msg

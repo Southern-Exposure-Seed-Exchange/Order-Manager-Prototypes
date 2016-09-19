@@ -1,7 +1,6 @@
 module Products.Messages exposing (..)
 
 import HttpBuilder
-
 import Api.Models exposing (Product, ProductId, CategoryId)
 import Products.Models exposing (ProductData)
 

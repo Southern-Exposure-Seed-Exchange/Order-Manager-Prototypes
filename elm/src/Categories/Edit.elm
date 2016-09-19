@@ -1,8 +1,6 @@
 module Categories.Edit exposing (..)
 
-
 import Html exposing (Html, h1, div, text)
-
 import Api.Models exposing (Category)
 import Categories.Form
 import Categories.Messages exposing (Msg)

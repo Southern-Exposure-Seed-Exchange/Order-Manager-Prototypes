@@ -3,7 +3,6 @@ module Categories.List exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Maybe
-
 import Api.Models exposing (Category, Product)
 import Categories.Messages exposing (..)
 import Categories.Models exposing (CategoryData)
@@ -17,29 +16,32 @@ view model =
             case maybe of
                 Nothing ->
                     True
+
                 Just _ ->
                     False
+
         rootCategories =
             List.filter (.parent >> isNothing) model.categories
     in
         div []
             [ h1 [] [ text "Categories" ]
             , button [] [ text "New Category" ]
-            , catTable model rootCategories ]
+            , catTable model rootCategories
+            ]
 
 
 catTable : CategoryData -> List Category -> Html Msg
 catTable model categories =
-        table []
-            [ thead []
-                [ tr []
-                    [ th [] [ text "Name" ]
-                    , th [] [ text "Categories" ]
-                    , th [] [ text "Products" ]
-                    ]
+    table []
+        [ thead []
+            [ tr []
+                [ th [] [ text "Name" ]
+                , th [] [ text "Categories" ]
+                , th [] [ text "Products" ]
                 ]
-            , tbody [] (List.map (catRow model) categories)
             ]
+        , tbody [] (List.map (catRow model) categories)
+        ]
 
 
 catRow : CategoryData -> Category -> Html Msg

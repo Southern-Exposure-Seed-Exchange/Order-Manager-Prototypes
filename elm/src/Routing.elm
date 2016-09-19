@@ -3,7 +3,6 @@ module Routing exposing (..)
 import String
 import Navigation
 import UrlParser exposing (..)
-
 import Api.Models exposing (CategoryId, ProductId)
 
 
@@ -49,5 +48,6 @@ routeFromResult result =
     case result of
         Ok route ->
             route
+
         Err _ ->
             NotFoundRoute

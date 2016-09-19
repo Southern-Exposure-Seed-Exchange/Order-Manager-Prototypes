@@ -1,7 +1,6 @@
 module Products.Models exposing (..)
 
 import Dict
-
 import Api.Models exposing (Category, Product, ProductVariant, ProductId)
 import Models exposing (Model, UIState(..))
 
@@ -21,6 +20,7 @@ makeProductData model =
             case model.uiState of
                 ProductList ui ->
                     ui.showSKUs
+
                 _ ->
                     Dict.empty
     in

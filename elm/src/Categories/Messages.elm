@@ -1,7 +1,6 @@
 module Categories.Messages exposing (..)
 
 import HttpBuilder
-
 import Api.Models exposing (Category, CategoryId, ProductId)
 import Categories.Models exposing (CategoryData)
 

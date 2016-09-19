@@ -2,7 +2,6 @@ module Products.Detail exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
-
 import Api.Models exposing (Product, ProductVariant)
 import Products.Models exposing (ProductData)
 import Products.Messages exposing (Msg(..))
@@ -14,12 +13,15 @@ view product model =
     let
         maybeCategory =
             getById model.categories product.category
+
         productVariants =
             filterBy .product product.id model.productVariants
+
         categoryLink category =
             small []
                 [ a [ onClick (VisitCategory category.id) ]
-                    [ text <| "(" ++ category.name ++ ")" ] ]
+                    [ text <| "(" ++ category.name ++ ")" ]
+                ]
     in
         div []
             [ h1 [] [ text "Products" ]

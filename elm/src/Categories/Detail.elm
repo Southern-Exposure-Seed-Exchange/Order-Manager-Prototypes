@@ -2,7 +2,6 @@ module Categories.Detail exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
-
 import Api.Models exposing (Category, Product, CategoryId)
 import Categories.List exposing (catTable)
 import Categories.Messages exposing (Msg(..))
@@ -15,42 +14,52 @@ view category model =
     let
         subCategories =
             filterBy (.parent >> Maybe.withDefault 0) category.id model.categories
+
         products =
             filterBy .category category.id model.products
+
         parentCategory =
             category.parent `Maybe.andThen` getById model.categories
+
         parentLink =
             case parentCategory of
                 Nothing ->
                     text ""
+
                 Just parent ->
                     small []
                         [ a [ onClick <| VisitCategory parent.id ]
                             [ text <| " (" ++ parent.name ++ ")" ]
                         ]
+
         categoryTable =
-            if List.isEmpty subCategories
-                then text ""
-                else div [] [ h4 [] [ text "Categories" ]
-                            , catTable model subCategories ]
+            if List.isEmpty subCategories then
+                text ""
+            else
+                div []
+                    [ h4 [] [ text "Categories" ]
+                    , catTable model subCategories
+                    ]
+
         productsTable =
-            if List.isEmpty products
-               then text "This Category has no Products."
-               else prodTable products
+            if List.isEmpty products then
+                text "This Category has no Products."
+            else
+                prodTable products
     in
         div []
-        [ h1 [] [ text "Categories" ]
-        , h2 [] [ text category.name, parentLink ]
-        , p [] [ text category.description ]
-        , p []
-            [ button [ onClick <| EditCategory category.id ]
-                [ text "Edit Category" ]
-            , button [ onClick <| DeleteCategory category.id ]
-                [ text "Delete Category" ]
+            [ h1 [] [ text "Categories" ]
+            , h2 [] [ text category.name, parentLink ]
+            , p [] [ text category.description ]
+            , p []
+                [ button [ onClick <| EditCategory category.id ]
+                    [ text "Edit Category" ]
+                , button [ onClick <| DeleteCategory category.id ]
+                    [ text "Delete Category" ]
+                ]
+            , categoryTable
+            , div [] [ h4 [] [ text "Products" ], productsTable ]
             ]
-        , categoryTable
-        , div [] [ h4 [] [ text "Products" ], productsTable ]
-        ]
 
 
 prodTable : List Product -> Html Msg

@@ -18,6 +18,7 @@ makeCategoryData model =
             case model.uiState of
                 Categories ui ->
                     ui.categoryForm
+
                 _ ->
                     initialCategory
     in

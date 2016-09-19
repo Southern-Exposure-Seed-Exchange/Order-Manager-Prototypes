@@ -1,7 +1,6 @@
 module Api.Decoders exposing (..)
 
 import Json.Decode as Decode exposing ((:=))
-
 import Api.Models exposing (Category, Product, ProductVariant)
 
 
@@ -11,7 +10,7 @@ categoryDecoder =
         ("id" := Decode.int)
         ("name" := Decode.string)
         ("description" := Decode.string)
-        (Decode.maybe("parent" := Decode.int))
+        (Decode.maybe ("parent" := Decode.int))
 
 
 productVariantDecoder : Decode.Decoder ProductVariant
