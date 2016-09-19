@@ -10,6 +10,7 @@ import Api.Models exposing (CategoryId, ProductId)
 type Route
     = DashboardRoute
     | CategoriesRoute
+    | CategoryAddRoute
     | CategoryRoute CategoryId
     | CategoryEditRoute CategoryId
     | ProductsRoute
@@ -24,6 +25,7 @@ matchers =
         , format DashboardRoute (s "dashboard")
         , format CategoryEditRoute (s "categories" </> int </> s "edit")
         , format CategoryRoute (s "categories" </> int)
+        , format CategoryAddRoute (s "categories" </> s "add")
         , format CategoriesRoute (s "categories")
         , format ProductRoute (s "products" </> int)
         , format ProductsRoute (s "products")

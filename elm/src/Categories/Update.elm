@@ -4,7 +4,7 @@ import Navigation
 import String
 
 import Api.Models exposing (CategoryId, initialCategory)
-import Categories.Commands exposing (updateOne)
+import Categories.Commands exposing (createOne, updateOne)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
 import Utils exposing (replaceBy, replaceAllById, getById)
@@ -27,6 +27,12 @@ update msg model =
             , Navigation.newUrl <| "#categories/" ++ toString categoryId
             )
         UpdateOneFail _ ->
+            ( model, Cmd.none )
+        CreateOneDone newCategory ->
+            ( { model | categories = newCategory :: model.categories }
+            , Navigation.newUrl <| "#categories/" ++ toString newCategory.id
+            )
+        CreateOneFail _ ->
             ( model, Cmd.none )
         VisitCategory id ->
             ( model, Navigation.newUrl <| "#categories/" ++ toString id )
@@ -60,7 +66,14 @@ update msg model =
             in
                ( { model | categoryForm = updatedForm }, Cmd.none )
         SaveForm ->
-            ( model, updateOne model.categoryForm )
+            let
+                saveCommand =
+                    if model.categoryForm.id == 0 then
+                       createOne
+                    else
+                        updateOne
+            in
+                ( model, saveCommand model.categoryForm )
         ResetForm ->
             ( setCategoryForm model.categoryForm.id model, Cmd.none )
         CancelForm ->

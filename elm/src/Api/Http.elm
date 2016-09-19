@@ -26,14 +26,18 @@ endpointToUrl endpoint =
         ProductEndpoint id ->
             endpointToUrl ProductsEndpoint ++ toString id
 
+
+defaultHeaders : HttpBuilder.RequestBuilder -> HttpBuilder.RequestBuilder
+defaultHeaders =
+    HttpBuilder.withHeaders
+        [ ("Accept", "application/json"), ("Content-Type", "application/json") ]
+
+
 get : Endpoint -> Decode.Decoder a -> (HttpBuilder.Error String -> msg) -> (a -> msg) -> Cmd msg
 get endpoint decoder failMsg successMsg =
     endpointToUrl endpoint
         |> HttpBuilder.get
-        |> HttpBuilder.withHeaders
-            [ ("Accept","application/json")
-            , ("Content-Type", "application/json")
-            ]
+        |> defaultHeaders
         |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
         |> Task.perform failMsg (\r -> successMsg r.data)
 
@@ -42,10 +46,17 @@ put : Endpoint -> Decode.Value -> Decode.Decoder a -> (HttpBuilder.Error String 
 put endpoint params decoder failMsg successMsg =
     endpointToUrl endpoint
         |> HttpBuilder.put
-        |> HttpBuilder.withHeaders
-            [ ("Accept","application/json")
-            , ("Content-Type", "application/json")
-            ]
+        |> defaultHeaders
+        |> HttpBuilder.withJsonBody params
+        |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
+        |> Task.perform failMsg (\r -> successMsg r.data)
+
+
+post : Endpoint -> Decode.Value -> Decode.Decoder a -> (HttpBuilder.Error String -> msg) -> (a -> msg) -> Cmd msg
+post endpoint params decoder failMsg successMsg =
+    endpointToUrl endpoint
+        |> HttpBuilder.post
+        |> defaultHeaders
         |> HttpBuilder.withJsonBody params
         |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
         |> Task.perform failMsg (\r -> successMsg r.data)

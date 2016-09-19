@@ -13,6 +13,8 @@ type Msg
     | FetchOneFail (HttpBuilder.Error String)
     | UpdateOneDone CategoryId Category
     | UpdateOneFail (HttpBuilder.Error String)
+    | CreateOneDone Category
+    | CreateOneFail (HttpBuilder.Error String)
     | VisitCategory CategoryId
     | EditCategory CategoryId
     | VisitProduct ProductId

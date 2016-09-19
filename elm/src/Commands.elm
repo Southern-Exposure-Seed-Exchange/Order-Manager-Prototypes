@@ -13,6 +13,8 @@ fetchForRoute route =
             Cmd.none
         CategoriesRoute ->
             Cmd.map CategoriesMsg Categories.Commands.fetchAll
+        CategoryAddRoute ->
+            Cmd.map CategoriesMsg Categories.Commands.fetchAll
         CategoryRoute id ->
             Cmd.map CategoriesMsg (Categories.Commands.fetchOne id)
         CategoryEditRoute id ->

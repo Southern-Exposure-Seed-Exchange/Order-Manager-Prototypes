@@ -27,6 +27,12 @@ updateOne category =
         ("category" := categoryDecoder) UpdateOneFail (UpdateOneDone category.id)
 
 
+createOne : Category -> Cmd Msg
+createOne category =
+    post CategoriesEndpoint (categoriesEncoder category)
+        ("category" := categoryDecoder) CreateOneFail CreateOneDone
+
+
 categoriesDecoder : Decode.Decoder CategoryData
 categoriesDecoder =
     Decode.object3 CategoryData

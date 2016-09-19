@@ -23,6 +23,8 @@ update msg model =
                         ( updatedModel, Navigation.newUrl "#dashboard" )
                     CategoriesRoute ->
                         ( updatedModel,  Navigation.newUrl "#categories" )
+                    CategoryAddRoute ->
+                        ( updatedModel, Navigation.newUrl "#categories/add" )
                     CategoryRoute categoryId ->
                         ( updatedModel
                         , Navigation.newUrl <| "#categories/" ++ toString categoryId )

@@ -5,6 +5,7 @@ import Html.App
 import Html.Events exposing (onClick)
 
 import Categories.Models exposing (makeCategoryData)
+import Categories.Add
 import Categories.Detail
 import Categories.Edit
 import Categories.List
@@ -34,6 +35,9 @@ nav =
         , a [ onClick (RoutingMsg CategoriesRoute) ]
             [ text "Categories" ]
         , text " "
+        , a [ onClick (RoutingMsg CategoryAddRoute) ]
+            [ text "Add Category" ]
+        , text " "
         , a [ onClick (RoutingMsg ProductsRoute) ]
             [ text "Products" ]
         ]
@@ -47,6 +51,10 @@ page model =
         CategoriesRoute ->
             makeCategoryData model
                 |> Categories.List.view
+                |> Html.App.map CategoriesMsg
+        CategoryAddRoute ->
+            makeCategoryData model
+                |> Categories.Add.view
                 |> Html.App.map CategoriesMsg
         CategoryRoute categoryId ->
             itemViewOr404 categoryId model.categories (makeCategoryData model)
