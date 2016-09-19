@@ -2,6 +2,7 @@ module Update exposing (..)
 
 import Navigation
 
+import Categories.Models exposing (makeCategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
 import Models exposing (Model, UIState(..))
@@ -24,22 +25,29 @@ update msg model =
                         ( updatedModel,  Navigation.newUrl "#categories" )
                     CategoryRoute categoryId ->
                         ( updatedModel
-                        , Navigation.newUrl <| "#categories" ++ toString categoryId )
+                        , Navigation.newUrl <| "#categories/" ++ toString categoryId )
+                    CategoryEditRoute categoryId ->
+                        ( updatedModel
+                        , Navigation.newUrl <| "#categories/" ++ toString categoryId ++ "/edit" )
                     ProductsRoute ->
                         ( updatedModel, Navigation.newUrl "#products" )
                     ProductRoute productId ->
                         ( updatedModel
-                        , Navigation.newUrl <| "#products" ++ toString productId )
+                        , Navigation.newUrl <| "#products/" ++ toString productId )
                     NotFoundRoute ->
                         ( updatedModel, Cmd.none )
         CategoriesMsg subMsg ->
             let
                 ( updatedModel, cmd ) =
-                    Categories.Update.update subMsg
-                        { categories = model.categories, products = model.products }
+                    makeCategoryData model
+                        |> Categories.Update.update subMsg
+                updatedUI =
+                    Categories { categoryForm = updatedModel.categoryForm }
+
             in
                ( { model | categories = updatedModel.categories
-                         , products = updatedModel.products }
+                         , products = updatedModel.products
+                         , uiState = updatedUI }
                , Cmd.map CategoriesMsg cmd )
         ProductsMsg subMsg ->
             let

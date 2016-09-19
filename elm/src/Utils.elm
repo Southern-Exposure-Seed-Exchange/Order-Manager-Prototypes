@@ -1,5 +1,9 @@
 module Utils exposing (..)
 
+import Html
+import Html.Events
+import Json.Decode
+
 
 replaceBy : (a -> b) -> a -> List a -> List a
 replaceBy selector item items =
@@ -25,3 +29,8 @@ filterBy selector value items =
 
 getById : List { b | id : a } -> a -> Maybe { b | id : a }
 getById items id = items |> filterBy .id id |> List.head
+
+
+onChange : (String -> msg) -> Html.Attribute msg
+onChange msg =
+    Html.Events.on "change" (Json.Decode.map msg Html.Events.targetValue)

@@ -17,6 +17,7 @@ type alias Model =
 
 type UIState
     = ProductList { showSKUs : Dict.Dict ProductId Bool }
+    | Categories { categoryForm : Category }
 
 
 initialModel : Routing.Route -> Model

@@ -11,6 +11,7 @@ type Route
     = DashboardRoute
     | CategoriesRoute
     | CategoryRoute CategoryId
+    | CategoryEditRoute CategoryId
     | ProductsRoute
     | ProductRoute ProductId
     | NotFoundRoute
@@ -21,6 +22,7 @@ matchers =
     oneOf
         [ format DashboardRoute (s "")
         , format DashboardRoute (s "dashboard")
+        , format CategoryEditRoute (s "categories" </> int </> s "edit")
         , format CategoryRoute (s "categories" </> int)
         , format CategoriesRoute (s "categories")
         , format ProductRoute (s "products" </> int)

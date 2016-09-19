@@ -13,6 +13,11 @@ type alias Category =
     }
 
 
+initialCategory : Category
+initialCategory =
+    { id = 0, name = "", description = "", parent = Nothing }
+
+
 type alias ProductId =
     Int
 

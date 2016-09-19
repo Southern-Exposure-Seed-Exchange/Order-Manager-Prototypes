@@ -43,7 +43,8 @@ view category model =
         , h2 [] [ text category.name, parentLink ]
         , p [] [ text category.description ]
         , p []
-            [ button [] [ text "Edit Category" ]
+            [ button [ onClick <| EditCategory category.id ]
+                [ text "Edit Category" ]
             , button [] [ text "Delete" ]
             ]
         , categoryTable

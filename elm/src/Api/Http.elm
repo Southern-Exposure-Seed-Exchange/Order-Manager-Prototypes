@@ -36,3 +36,16 @@ get endpoint decoder failMsg successMsg =
             ]
         |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
         |> Task.perform failMsg (\r -> successMsg r.data)
+
+
+put : Endpoint -> Decode.Value -> Decode.Decoder a -> (HttpBuilder.Error String -> msg) -> (a -> msg) -> Cmd msg
+put endpoint params decoder failMsg successMsg =
+    endpointToUrl endpoint
+        |> HttpBuilder.put
+        |> HttpBuilder.withHeaders
+            [ ("Accept","application/json")
+            , ("Content-Type", "application/json")
+            ]
+        |> HttpBuilder.withJsonBody params
+        |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
+        |> Task.perform failMsg (\r -> successMsg r.data)

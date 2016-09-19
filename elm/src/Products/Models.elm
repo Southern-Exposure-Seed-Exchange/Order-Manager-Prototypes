@@ -21,6 +21,8 @@ makeProductData model =
             case model.uiState of
                 ProductList ui ->
                     ui.showSKUs
+                _ ->
+                    Dict.empty
     in
         { products = model.products
         , productVariants = model.productVariants

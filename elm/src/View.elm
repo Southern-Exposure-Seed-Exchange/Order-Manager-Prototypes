@@ -4,7 +4,9 @@ import Html exposing (..)
 import Html.App
 import Html.Events exposing (onClick)
 
+import Categories.Models exposing (makeCategoryData)
 import Categories.Detail
+import Categories.Edit
 import Categories.List
 import Messages exposing (Msg(..))
 import Models exposing (Model)
@@ -43,14 +45,15 @@ page model =
         DashboardRoute ->
             dashboard
         CategoriesRoute ->
-            { categories = model.categories
-            , products = model.products }
+            makeCategoryData model
                 |> Categories.List.view
                 |> Html.App.map CategoriesMsg
         CategoryRoute categoryId ->
-            itemViewOr404 categoryId model.categories
-                 { categories = model.categories, products = model.products }
-                 Categories.Detail.view CategoriesMsg
+            itemViewOr404 categoryId model.categories (makeCategoryData model)
+                Categories.Detail.view CategoriesMsg
+        CategoryEditRoute categoryId ->
+            itemViewOr404 categoryId model.categories (makeCategoryData model)
+                Categories.Edit.view CategoriesMsg
         ProductsRoute ->
             makeProductData model
                 |> Products.List.view
