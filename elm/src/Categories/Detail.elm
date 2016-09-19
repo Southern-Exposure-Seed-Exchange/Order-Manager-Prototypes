@@ -45,7 +45,8 @@ view category model =
         , p []
             [ button [ onClick <| EditCategory category.id ]
                 [ text "Edit Category" ]
-            , button [] [ text "Delete" ]
+            , button [ onClick <| DeleteCategory category.id ]
+                [ text "Delete Category" ]
             ]
         , categoryTable
         , div [] [ h4 [] [ text "Products" ], productsTable ]

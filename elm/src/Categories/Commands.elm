@@ -33,6 +33,11 @@ createOne category =
         ("category" := categoryDecoder) CreateOneFail CreateOneDone
 
 
+deleteOne : CategoryId -> Cmd Msg
+deleteOne categoryId =
+    delete (CategoryEndpoint categoryId) (Decode.succeed categoryId) DeleteOneFail DeleteOneDone
+
+
 categoriesDecoder : Decode.Decoder CategoryData
 categoriesDecoder =
     Decode.object3 CategoryData

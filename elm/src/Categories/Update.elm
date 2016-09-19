@@ -4,7 +4,7 @@ import Navigation
 import String
 
 import Api.Models exposing (CategoryId, initialCategory)
-import Categories.Commands exposing (createOne, updateOne)
+import Categories.Commands exposing (createOne, updateOne, deleteOne)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
 import Utils exposing (replaceBy, replaceAllById, getById)
@@ -34,11 +34,18 @@ update msg model =
             )
         CreateOneFail _ ->
             ( model, Cmd.none )
+        DeleteOneDone id ->
+            ( { model | categories = List.filter (\c -> c.id /= id) model.categories }
+            , Navigation.newUrl "#categories" )
+        DeleteOneFail _ ->
+            ( model, Cmd.none )
         VisitCategory id ->
             ( model, Navigation.newUrl <| "#categories/" ++ toString id )
         EditCategory id ->
             ( setCategoryForm id model
             , Navigation.newUrl <| "#categories/" ++ toString id ++ "/edit")
+        DeleteCategory id ->
+            ( model, deleteOne id )
         VisitProduct id ->
             ( model, Navigation.newUrl <| "#products/" ++ toString id )
         FormNameChange newName ->

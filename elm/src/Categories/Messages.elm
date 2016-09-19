@@ -15,8 +15,11 @@ type Msg
     | UpdateOneFail (HttpBuilder.Error String)
     | CreateOneDone Category
     | CreateOneFail (HttpBuilder.Error String)
+    | DeleteOneDone CategoryId
+    | DeleteOneFail (HttpBuilder.Error String)
     | VisitCategory CategoryId
     | EditCategory CategoryId
+    | DeleteCategory CategoryId
     | VisitProduct ProductId
     | FormNameChange String
     | FormDescriptionChange String

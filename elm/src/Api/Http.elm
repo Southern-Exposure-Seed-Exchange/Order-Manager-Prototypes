@@ -60,3 +60,12 @@ post endpoint params decoder failMsg successMsg =
         |> HttpBuilder.withJsonBody params
         |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
         |> Task.perform failMsg (\r -> successMsg r.data)
+
+
+delete : Endpoint -> Decode.Decoder a -> (HttpBuilder.Error String -> msg) -> (a -> msg) -> Cmd msg
+delete endpoint decoder failMsg successMsg =
+    endpointToUrl endpoint
+        |> HttpBuilder.delete
+        |> defaultHeaders
+        |> HttpBuilder.send (HttpBuilder.jsonReader decoder) (HttpBuilder.stringReader)
+        |> Task.perform failMsg (\r -> successMsg r.data)
