@@ -1,12 +1,13 @@
 module Categories.Detail exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Api.Models exposing (Category, Product, CategoryId)
 import Categories.List exposing (catTable)
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
-import Utils exposing (getById, filterBy)
+import Utils exposing (getById, filterBy, onClickNoDefault)
 
 
 view : Category -> CategoryData -> Html Msg
@@ -28,8 +29,12 @@ view category model =
 
                 Just parent ->
                     small []
-                        [ a [ onClick <| VisitCategory parent.id ]
-                            [ text <| " (" ++ parent.name ++ ")" ]
+                        [ text " "
+                        , a
+                            [ onClickNoDefault <| VisitCategory parent.id
+                            , href <| "#categories/" ++ toString parent.id
+                            ]
+                            [ text <| "(" ++ parent.name ++ ")" ]
                         ]
 
         categoryTable =

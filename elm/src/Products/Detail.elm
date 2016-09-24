@@ -1,11 +1,11 @@
 module Products.Detail exposing (..)
 
 import Html exposing (..)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (href)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Models exposing (ProductData)
 import Products.Messages exposing (Msg(..))
-import Utils exposing (getById, filterBy)
+import Utils exposing (getById, filterBy, onClickNoDefault)
 
 
 view : Product -> ProductData -> Html Msg
@@ -19,7 +19,10 @@ view product model =
 
         categoryLink category =
             small []
-                [ a [ onClick (VisitCategory category.id) ]
+                [ a
+                    [ onClickNoDefault (VisitCategory category.id)
+                    , href <| "#categories/" ++ toString category.id
+                    ]
                     [ text <| "(" ++ category.name ++ ")" ]
                 ]
     in

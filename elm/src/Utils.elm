@@ -1,7 +1,7 @@
 module Utils exposing (..)
 
 import Html
-import Html.Events
+import Html.Events exposing (defaultOptions)
 import Json.Decode
 
 
@@ -36,3 +36,10 @@ getById items id =
 onChange : (String -> msg) -> Html.Attribute msg
 onChange msg =
     Html.Events.on "change" (Json.Decode.map msg Html.Events.targetValue)
+
+
+onClickNoDefault : msg -> Html.Attribute msg
+onClickNoDefault msg =
+    Html.Events.onWithOptions "click"
+        { defaultOptions | preventDefault = True }
+        (Json.Decode.succeed msg)

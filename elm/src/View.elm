@@ -2,7 +2,7 @@ module View exposing (..)
 
 import Html exposing (..)
 import Html.App
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (href)
 import Categories.Models exposing (makeCategoryData)
 import Categories.Add
 import Categories.Detail
@@ -14,7 +14,7 @@ import Products.Detail
 import Products.List
 import Products.Models exposing (makeProductData)
 import Routing exposing (Route(..))
-import Utils exposing (getById)
+import Utils exposing (getById, onClickNoDefault)
 
 
 view : Model -> Html Msg
@@ -29,16 +29,16 @@ nav : Html Msg
 nav =
     div []
         [ span [] [ text "Menu:  " ]
-        , a [ onClick (RoutingMsg DashboardRoute) ]
+        , a [ onClickNoDefault (RoutingMsg DashboardRoute), href "#dashboard/" ]
             [ text "Dashboard" ]
         , text " "
-        , a [ onClick (RoutingMsg CategoriesRoute) ]
+        , a [ onClickNoDefault (RoutingMsg CategoriesRoute), href "#categories/" ]
             [ text "Categories" ]
         , text " "
-        , a [ onClick (RoutingMsg CategoryAddRoute) ]
+        , a [ onClickNoDefault (RoutingMsg CategoryAddRoute), href "#categories/add" ]
             [ text "Add Category" ]
         , text " "
-        , a [ onClick (RoutingMsg ProductsRoute) ]
+        , a [ onClickNoDefault (RoutingMsg ProductsRoute), href "#products" ]
             [ text "Products" ]
         ]
 
