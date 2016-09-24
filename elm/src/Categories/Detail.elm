@@ -70,7 +70,7 @@ view category model =
 
 prodTable : List Product -> Html Msg
 prodTable products =
-    table []
+    table [ class "table-condensed" ]
         [ thead []
             [ tr []
                 [ th [] [ text "Name" ]
