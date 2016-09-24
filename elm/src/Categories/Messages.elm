@@ -16,6 +16,7 @@ type Msg
     | CreateOneFail (HttpBuilder.Error String)
     | DeleteOneDone CategoryId
     | DeleteOneFail (HttpBuilder.Error String)
+    | AddCategory
     | VisitCategory CategoryId
     | EditCategory CategoryId
     | DeleteCategory CategoryId

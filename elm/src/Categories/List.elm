@@ -25,7 +25,7 @@ view model =
     in
         div []
             [ h1 [] [ text "Categories" ]
-            , button [] [ text "New Category" ]
+            , button [ onClick AddCategory ] [ text "New Category" ]
             , catTable model rootCategories
             ]
 

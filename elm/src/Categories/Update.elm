@@ -50,6 +50,9 @@ update msg model =
         DeleteOneFail _ ->
             ( model, Cmd.none )
 
+        AddCategory ->
+            ( model, Navigation.newUrl "#categories/add" )
+
         VisitCategory id ->
             ( model, Navigation.newUrl <| "#categories/" ++ toString id )
 
