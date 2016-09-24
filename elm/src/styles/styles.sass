@@ -1,0 +1,163 @@
+@import "bourbon";
+@import "neat";
+
+@import "variables";
+@import "base/base";
+
+
+/** Utility Classes
+.text-right
+  text-align: right
+.text-center
+  text-align: center
+.pointer
+  cursor: pointer
+a.btn-sm, button.btn-sm
+  padding: 6px 6px
+  font-size: 0.8em
+  font-weight: 400
+  &.danger
+    background-color: red
+    color: white
+a.btn-sm
+  color: #fff
+  border-radius: $base-border-radius
+  text-decoration: none
+  background-color: $action-color
+table.table-condensed
+  td, th
+    padding: 6px 0
+    font-size: 0.9em
+
+
+/** TEXT
+body
+  color: $dark-text-color
+  background: $light-background-color
+a
+  color: $link-color
+  &:hover, &:focus
+    color: $link-hover-color
+h1
+  font-size: 2.2em
+h2
+  font-size: 1.8em
+h4
+  font-size: 1.1em
+small.error
+  color: red
+
+
+/** LAYOUT
+html, body, body > #main
+  height: 100%
+body
+  margin: 0
+
+nav
+  color: $nav-text-color
+  background-color: $nav-background-color
+  height: 100%
+  position: fixed
+  top: 0
+  bottom: 0
+  +span-columns(2.5)
+  +omega()
+  +media($tablet)
+    +span-columns(3 of 12)
+  +media($mobile)
+    height: auto
+    +span-columns(12 of 12)
+  #site-name
+    padding-bottom: 10px
+    border-right-style: solid
+    border-right-color: $nav-border-color
+    border-right-width: $nav-border-width
+    p
+      font-size: 1.8em
+      font-weight: bold
+      margin-bottom: 5px
+    small
+      font-size: 0.8em
+      color: $gray-light
+  #user-links
+    font-size: 0.7em
+    padding: 20px 5px
+    border-right-style: solid
+    border-right-color: $nav-border-color
+    border-right-width: $nav-border-width
+    p
+      font-size: 1.3em
+      margin-bottom: 3px
+  & > ul
+    margin-top: 0px
+    li
+      border-bottom-style: solid
+      border-bottom-color: $nav-border-color
+      border-bottom-width: $nav-border-width
+      a
+        color: $nav-link-color
+        display: block
+        padding: 10px 10px
+        border-right-style: solid
+        border-right-color: $nav-border-color
+        border-right-width: $nav-border-width
+        &:hover
+          color: $nav-link-hover-color
+      ul.submenu
+        display: none
+        margin-top: 0
+        &.active
+          display: block
+        li
+          border-top-color: $nav-submenu-border-color
+          border-top-width: $nav-submenu-border-width
+          border-bottom-style: none
+          border-top-style: solid
+          a
+            color: $nav-submenu-text-color
+            background-color: $nav-submenu-background-color
+            padding: 5px 5px
+            &.active
+              color: $nav-active-color
+              background-color: $nav-active-background
+            &:hover
+              color: $off-white
+              background-color: $nav-hover-background-color
+      &:hover, & > a.active-submenu
+        background-color: $nav-hover-background-color
+        & > ul.submenu
+          display: block
+      a.active
+        color: $nav-active-color
+        background-color: $nav-active-background
+        border-right-width: 0
+
+
+/** MAIN CONTENT
+content
+  padding-right: 20px
+  padding-top: 20px
+  +shift(2.5)
+  +span-columns(9.5)
+  +media($tablet)
+    +span-columns(8.5 of 12)
+  +media($mobile)
+    +span-columns(12 of 12)
+  a
+    text-decoration: underline
+span.form-error
+  font-size: 0.8em
+  color: red
+
+
+/** COMPONENTS
+.product-row
+  @extend .pointer
+.variant-row, .variant-header
+  font-size: 0.8em
+  .hide-border
+    border-bottom-style: none
+.variant-header
+  th
+    border-bottom-color: shade($base-border-color, 10%)

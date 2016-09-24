@@ -1,7 +1,7 @@
 module Categories.Form exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (type', value, name, for, selected)
+import Html.Attributes exposing (type', value, name, for, selected, class)
 import Html.Events exposing (onInput, onClick)
 import Api.Models exposing (Category)
 import Categories.Messages exposing (Msg(..))
@@ -38,7 +38,9 @@ view categoryForm categories =
                 ]
             , br [] []
             , button [ onClick SaveForm ] [ text "Save" ]
+            , text " "
             , button [ onClick ResetForm ] [ text "Reset" ]
+            , text " "
             , button [ onClick CancelForm ] [ text "Cancel" ]
             ]
 

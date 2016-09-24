@@ -1,7 +1,7 @@
 module Products.Detail exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (href, class)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Models exposing (ProductData)
 import Products.Messages exposing (Msg(..))
@@ -32,7 +32,11 @@ view product model =
                 [ text <| product.name ++ " "
                 , Maybe.map categoryLink maybeCategory |> Maybe.withDefault (text "")
                 ]
-            , p [] [ button [] [ text "Edit Product" ], button [] [ text "Delete" ] ]
+            , p []
+                [ button [ class "btn-sm" ] [ text "Edit Product" ]
+                , text " "
+                , button [ class "btn-sm danger" ] [ text "Delete" ]
+                ]
             , p [] [ text product.description ]
             , h4 [] [ text "Product Variants" ]
             , variantTable productVariants
@@ -43,7 +47,7 @@ variantTable : List ProductVariant -> Html Msg
 variantTable productVariants =
     table []
         [ thead []
-            [ tr []
+            [ tr [ class "variant-header" ]
                 [ th [] [ text "SKU" ]
                 , th [] [ text "Weight" ]
                 , th [] [ text "Price" ]
@@ -55,7 +59,7 @@ variantTable productVariants =
 
 variantRow : ProductVariant -> Html Msg
 variantRow productVariant =
-    tr []
+    tr [ class "variant-row" ]
         [ td [] [ text productVariant.sku ]
         , td [] [ text <| toString productVariant.weight ]
         , td [] [ text <| toString productVariant.price ]

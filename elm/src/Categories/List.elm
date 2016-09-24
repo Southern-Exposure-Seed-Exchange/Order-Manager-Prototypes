@@ -1,6 +1,7 @@
 module Categories.List exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Maybe
 import Api.Models exposing (Category, Product)
@@ -25,14 +26,14 @@ view model =
     in
         div []
             [ h1 [] [ text "Categories" ]
-            , button [ onClick AddCategory ] [ text "New Category" ]
+            , button [ onClick AddCategory, class "btn-sm" ] [ text "New Category" ]
             , catTable model rootCategories
             ]
 
 
 catTable : CategoryData -> List Category -> Html Msg
 catTable model categories =
-    table []
+    table [ class "table-condensed" ]
         [ thead []
             [ tr []
                 [ th [] [ text "Name" ]

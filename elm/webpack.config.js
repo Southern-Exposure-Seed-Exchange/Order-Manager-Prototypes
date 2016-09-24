@@ -1,5 +1,7 @@
 var path = require("path");
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+var bourbon = require('node-bourbon').includePaths;
+var neat = require('node-neat').includePaths;
 
 module.exports = {
   entry: {
@@ -25,6 +27,10 @@ module.exports = {
         exclude: [/elm-stuff/, /node_modules/,],
         loader: 'elm-hot!elm-webpack?warn=true',
       },
+      {
+        test: /\.sass$/,
+        loaders: ['style', 'css', 'sass']
+      }
     ],
 
     noParse: /\.elm$/,
@@ -43,6 +49,10 @@ module.exports = {
         changeOrigin: true,
       }
     }
+  },
+
+  sassLoader: {
+    includePaths: bourbon.concat(neat)
   },
 
   plugins: [

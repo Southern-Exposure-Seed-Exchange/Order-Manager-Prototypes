@@ -2,7 +2,7 @@ module Products.List exposing (..)
 
 import Dict
 import Html exposing (..)
-import Html.Attributes exposing (colspan, hidden)
+import Html.Attributes exposing (colspan, hidden, class)
 import Html.Events exposing (onClick)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Messages exposing (Msg(..))
@@ -14,15 +14,16 @@ view : ProductData -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Products" ]
-        , button [] [ text "New Product" ]
-        , button [ onClick ToggleAllSKUs ] [ text "Toggle SKUs" ]
+        , button [ class "btn-sm" ] [ text "New Product" ]
+        , text " "
+        , button [ onClick ToggleAllSKUs, class "btn-sm" ] [ text "Toggle SKUs" ]
         , prodTable model
         ]
 
 
 prodTable : ProductData -> Html Msg
 prodTable model =
-    table []
+    table [ class "table-condensed" ]
         [ thead []
             [ tr []
                 [ th [] [ text "Name" ]
@@ -47,8 +48,8 @@ prodRow model product =
             filterBy .product product.id model.productVariants
 
         extraRows =
-            [ tr [ hidden <| not showSKUs ]
-                [ th [ colspan 2 ] []
+            [ tr [ hidden <| not showSKUs, class "variant-header" ]
+                [ th [ colspan 2, class "hide-border" ] []
                 , th [] [ text "SKU" ]
                 , th [] [ text "Weight" ]
                 , th [] [ text "Price" ]
@@ -69,8 +70,8 @@ prodRow model product =
 
 skuRow : Bool -> ProductVariant -> Html Msg
 skuRow show productVariant =
-    tr [ hidden <| not show ]
-        [ td [ colspan 2 ] []
+    tr [ hidden <| not show, class "variant-row" ]
+        [ td [ colspan 2, class "hide-border" ] []
         , td [] [ text productVariant.sku ]
         , td [] [ text <| toString productVariant.weight ]
         , td [] [ text <| toString productVariant.price ]

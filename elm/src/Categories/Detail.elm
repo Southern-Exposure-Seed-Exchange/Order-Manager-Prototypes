@@ -1,7 +1,7 @@
 module Categories.Detail exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (href)
+import Html.Attributes exposing (href, class)
 import Html.Events exposing (onClick)
 import Api.Models exposing (Category, Product, CategoryId)
 import Categories.List exposing (catTable)
@@ -57,9 +57,10 @@ view category model =
             , h2 [] [ text category.name, parentLink ]
             , p [] [ text category.description ]
             , p []
-                [ button [ onClick <| EditCategory category.id ]
+                [ button [ onClick <| EditCategory category.id, class "btn-sm" ]
                     [ text "Edit Category" ]
-                , button [ onClick <| DeleteCategory category.id ]
+                , text " "
+                , button [ onClick <| DeleteCategory category.id, class "btn-sm danger" ]
                     [ text "Delete Category" ]
                 ]
             , categoryTable
