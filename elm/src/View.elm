@@ -2,7 +2,6 @@ module View exposing (..)
 
 import Html exposing (..)
 import Html.App
-import Html.Attributes exposing (href, class, id)
 import Categories.Models exposing (makeCategoryData)
 import Categories.Add
 import Categories.Detail
@@ -10,72 +9,19 @@ import Categories.Edit
 import Categories.List
 import Messages exposing (Msg(..))
 import Models exposing (Model)
+import NavBar
 import Products.Detail
 import Products.List
 import Products.Models exposing (makeProductData)
 import Routing exposing (Route(..))
-import Utils exposing (getById, onClickNoDefault)
+import Utils exposing (getById)
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ nav
+        [ Html.App.map NavBarMessage <| NavBar.view model.route
         , node "content" [] [ page model ]
-        ]
-
-
-nav : Html Msg
-nav =
-    node "nav"
-        []
-        [ ul
-            []
-            [ li [ class "text-center", id "site-name" ]
-                [ p [] [ text "OM" ]
-                , small [] [ text "The Enlightened Order Manager" ]
-                ]
-            , li [ class "text-center", id "user-links" ]
-                [ p [] [ text "Hello, USERNAME" ]
-                , text "Settings | Logout"
-                ]
-            , li []
-                [ a [ onClickNoDefault (RoutingMsg DashboardRoute), href "#dashboard/" ]
-                    [ text "Dashboard" ]
-                ]
-            , li []
-                [ a [ onClickNoDefault (RoutingMsg ProductsRoute), href "#products" ]
-                    [ text "Products" ]
-                , ul [ class "submenu" ]
-                    [ li []
-                        [ a [] [ text "Add" ] ]
-                    , li []
-                        [ a [] [ text "Reports" ] ]
-                    ]
-                ]
-            , li []
-                [ a [ onClickNoDefault (RoutingMsg CategoriesRoute), href "#categories/" ]
-                    [ text "Categories" ]
-                , ul [ class "submenu" ]
-                    [ li []
-                        [ a
-                            [ onClickNoDefault (RoutingMsg CategoryAddRoute)
-                            , href "#categories/add"
-                            ]
-                            [ text "Add" ]
-                        ]
-                    , li []
-                        [ a []
-                            [ text "Reports" ]
-                        ]
-                    ]
-                ]
-            , li [] [ a [] [ text "Orders" ] ]
-            , li [] [ a [] [ text "Customers" ] ]
-            , li [] [ a [] [ text "Inventory" ] ]
-            , li [] [ a [] [ text "Stripe" ] ]
-            , li [] [ a [] [ text "Admin" ] ]
-            ]
         ]
 
 

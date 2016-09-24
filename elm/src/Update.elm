@@ -5,7 +5,7 @@ import Categories.Models exposing (makeCategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
 import Models exposing (Model, UIState(..))
-import Routing exposing (Route(..))
+import NavBar
 import Products.Models exposing (makeProductData)
 import Products.Update
 
@@ -13,41 +13,9 @@ import Products.Update
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        RoutingMsg route ->
-            let
-                updatedModel =
-                    { model | route = route }
-            in
-                case route of
-                    DashboardRoute ->
-                        ( updatedModel, Navigation.newUrl "#dashboard" )
-
-                    CategoriesRoute ->
-                        ( updatedModel, Navigation.newUrl "#categories" )
-
-                    CategoryAddRoute ->
-                        ( updatedModel, Navigation.newUrl "#categories/add" )
-
-                    CategoryRoute categoryId ->
-                        ( updatedModel
-                        , Navigation.newUrl <| "#categories/" ++ toString categoryId
-                        )
-
-                    CategoryEditRoute categoryId ->
-                        ( updatedModel
-                        , Navigation.newUrl <| "#categories/" ++ toString categoryId ++ "/edit"
-                        )
-
-                    ProductsRoute ->
-                        ( updatedModel, Navigation.newUrl "#products" )
-
-                    ProductRoute productId ->
-                        ( updatedModel
-                        , Navigation.newUrl <| "#products/" ++ toString productId
-                        )
-
-                    NotFoundRoute ->
-                        ( updatedModel, Cmd.none )
+        NavBarMessage subMsg ->
+            NavBar.update subMsg model
+                |> (\( m, c ) -> ( m, Cmd.map NavBarMessage c ))
 
         CategoriesMsg subMsg ->
             let
