@@ -96,6 +96,8 @@ update msg model =
                     { productForm | isOrganic = newOrganicStatus }
             in
                 ( { model | productForm = updatedForm }, Cmd.none )
+        AddProduct ->
+            ( model, Navigation.newUrl <| "#products/add" )
 
         FormHeirloomChange newHeirloomStatus ->
             let

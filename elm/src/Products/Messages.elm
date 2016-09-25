@@ -16,6 +16,7 @@ type Msg
     | ToggleAllSKUs
     | VisitProduct ProductId
     | VisitCategory CategoryId
+    | AddProduct
     | FormNameChange String
     | FormDescriptionChange String
     | FormCategoryChange String

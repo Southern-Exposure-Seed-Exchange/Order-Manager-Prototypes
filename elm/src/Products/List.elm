@@ -14,7 +14,7 @@ view : ProductData -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Products" ]
-        , button [ class "btn-sm" ] [ text "New Product" ]
+        , button [ class "btn-sm", onClick AddProduct ] [ text "New Product" ]
         , text " "
         , button [ onClick ToggleAllSKUs, class "btn-sm" ] [ text "Toggle SKUs" ]
         , prodTable model
