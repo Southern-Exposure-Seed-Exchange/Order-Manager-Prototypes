@@ -67,6 +67,7 @@ nav
     +span-columns(3 of 12)
   +media($mobile)
     height: auto
+    position: relative
     +span-columns(12 of 12)
   #site-name
     padding-bottom: 10px
@@ -142,8 +143,10 @@ content
   +span-columns(9.5)
   +media($tablet)
     +span-columns(8.5 of 12)
+    +shift(3.5)
   +media($mobile)
-    +span-columns(12 of 12)
+    +span-columns(11 of 12)
+    +shift(1)
   a
     text-decoration: underline
 span.form-error
