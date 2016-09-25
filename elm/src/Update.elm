@@ -1,6 +1,5 @@
 module Update exposing (..)
 
-import Navigation
 import Categories.Models exposing (makeCategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
@@ -41,7 +40,10 @@ update msg model =
                         |> Products.Update.update subMsg
 
                 updatedUI =
-                    ProductList { showSKUs = updatedModel.showSKUs }
+                    Products
+                        { showSKUs = updatedModel.showSKUs
+                        , productForm = updatedModel.productForm
+                        }
             in
                 ( { model
                     | products = updatedModel.products

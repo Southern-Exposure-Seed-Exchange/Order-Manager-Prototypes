@@ -10,6 +10,7 @@ import Categories.List
 import Messages exposing (Msg(..))
 import Models exposing (Model)
 import NavBar
+import Products.Add
 import Products.Detail
 import Products.List
 import Products.Models exposing (makeProductData)
@@ -58,6 +59,11 @@ page model =
         ProductsRoute ->
             makeProductData model
                 |> Products.List.view
+                |> Html.App.map ProductsMsg
+
+        ProductAddRoute ->
+            makeProductData model
+                |> Products.Add.view
                 |> Html.App.map ProductsMsg
 
         ProductRoute productId ->

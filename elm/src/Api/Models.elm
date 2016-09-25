@@ -34,6 +34,19 @@ type alias Product =
     }
 
 
+initialProduct : Product
+initialProduct =
+    { id = 0
+    , name = ""
+    , description = ""
+    , category = 0
+    , isActive = True
+    , isOrganic = False
+    , isHeirloom = False
+    , isSouthEast = False
+    }
+
+
 type alias ProductVariantId =
     Int
 

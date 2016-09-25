@@ -10,7 +10,19 @@ type Msg
     | FetchAllFail (HttpBuilder.Error String)
     | FetchOneDone ProductData
     | FetchOneFail (HttpBuilder.Error String)
+    | CreateOneDone Product
+    | CreateOneFail (HttpBuilder.Error String)
     | ToggleSKUs ProductId
     | ToggleAllSKUs
     | VisitProduct ProductId
     | VisitCategory CategoryId
+    | FormNameChange String
+    | FormDescriptionChange String
+    | FormCategoryChange String
+    | FormActiveChange Bool
+    | FormOrganicChange Bool
+    | FormHeirloomChange Bool
+    | FormSouthEastChange Bool
+    | SaveForm
+    | ResetForm
+    | CancelForm

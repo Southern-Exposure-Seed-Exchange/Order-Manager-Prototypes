@@ -11,6 +11,7 @@ import Utils exposing (onClickNoDefault)
 type Msg
     = Dashboard
     | Products
+    | AddProduct
     | Categories
     | AddCategory
 
@@ -24,6 +25,9 @@ update msg model =
         Products ->
             ( model, Navigation.newUrl "#products" )
 
+        AddProduct ->
+            ( model, Navigation.newUrl "#products/add" )
+
         Categories ->
             ( model, Navigation.newUrl "#categories" )
 
@@ -31,6 +35,7 @@ update msg model =
             ( model, Navigation.newUrl "#categories/add" )
 
 
+msgToRoute : Msg -> Route
 msgToRoute msg =
     case msg of
         Dashboard ->
@@ -38,6 +43,9 @@ msgToRoute msg =
 
         Products ->
             ProductsRoute
+
+        AddProduct ->
+            ProductAddRoute
 
         Categories ->
             CategoriesRoute
@@ -64,7 +72,9 @@ view currentRoute =
                 |> Maybe.withDefault False
 
         childRoutes =
-            [ ( Categories, [ AddCategory ] ) ]
+            [ ( Categories, [ AddCategory ] )
+            , ( Products, [ AddProduct ] )
+            ]
                 |> List.map (\( msg, ms ) -> ( toString msg, List.map msgToRoute ms ))
                 |> Dict.fromList
 
@@ -100,7 +110,9 @@ view currentRoute =
                 , rootItem Products
                     "#products"
                     "Products"
-                    [ emptyItem "Add", emptyItem "Reports" ]
+                    [ li [] [ navLink AddProduct "#products/add" "Add" ]
+                    , emptyItem "Reports"
+                    ]
                 , rootItem Categories
                     "#categories"
                     "Categories"
