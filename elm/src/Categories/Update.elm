@@ -3,10 +3,11 @@ module Categories.Update exposing (..)
 import Navigation
 import String
 import Api.Models exposing (CategoryId, initialCategory)
-import Categories.Commands exposing (createOne, updateOne, deleteOne)
+import Categories.Commands exposing (deleteOne)
+import Categories.Form
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
-import Utils exposing (replaceBy, replaceAllById, getById)
+import Utils exposing (replaceAllById, getById)
 
 
 update : Msg -> CategoryData -> ( CategoryData, Cmd Msg )
@@ -24,22 +25,6 @@ update msg model =
             )
 
         FetchOneFail _ ->
-            ( model, Cmd.none )
-
-        UpdateOneDone categoryId newCategory ->
-            ( { model | categories = replaceBy .id newCategory model.categories }
-            , Navigation.newUrl <| "#categories/" ++ toString categoryId
-            )
-
-        UpdateOneFail _ ->
-            ( model, Cmd.none )
-
-        CreateOneDone newCategory ->
-            ( { model | categories = newCategory :: model.categories }
-            , Navigation.newUrl <| "#categories/" ++ toString newCategory.id
-            )
-
-        CreateOneFail _ ->
             ( model, Cmd.none )
 
         DeleteOneDone id ->
@@ -67,59 +52,13 @@ update msg model =
         VisitProduct id ->
             ( model, Navigation.newUrl <| "#products/" ++ toString id )
 
-        FormNameChange newName ->
+        FormMessage subMsg ->
             let
-                categoryForm =
-                    model.categoryForm
-
-                updatedForm =
-                    { categoryForm | name = newName }
+                ( updatedForm, updatedCategories, cmd ) =
+                    Categories.Form.update subMsg model.categoryForm model.categories
             in
-                ( { model | categoryForm = updatedForm }, Cmd.none )
-
-        FormDescriptionChange newDescription ->
-            let
-                categoryForm =
-                    model.categoryForm
-
-                updatedForm =
-                    { categoryForm | description = newDescription }
-            in
-                ( { model | categoryForm = updatedForm }, Cmd.none )
-
-        FormParentChange newParent ->
-            let
-                categoryForm =
-                    model.categoryForm
-
-                updatedForm =
-                    { categoryForm | parent = String.toInt newParent |> Result.toMaybe }
-            in
-                ( { model | categoryForm = updatedForm }, Cmd.none )
-
-        SaveForm ->
-            let
-                saveCommand =
-                    if model.categoryForm.id == 0 then
-                        createOne
-                    else
-                        updateOne
-            in
-                ( model, saveCommand model.categoryForm )
-
-        ResetForm ->
-            ( setCategoryForm model.categoryForm.id model, Cmd.none )
-
-        CancelForm ->
-            let
-                categoryUrl =
-                    if model.categoryForm.id == 0 then
-                        ""
-                    else
-                        toString model.categoryForm.id
-            in
-                ( setCategoryForm model.categoryForm.id model
-                , Navigation.newUrl <| "#categories/" ++ categoryUrl
+                ( { model | categoryForm = updatedForm, categories = updatedCategories }
+                , Cmd.map FormMessage cmd
                 )
 
 
