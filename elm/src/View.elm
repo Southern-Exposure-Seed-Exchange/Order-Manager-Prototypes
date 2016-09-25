@@ -12,6 +12,7 @@ import Models exposing (Model)
 import NavBar
 import Products.Add
 import Products.Detail
+import Products.Edit
 import Products.List
 import Products.Models exposing (makeProductData)
 import Routing exposing (Route(..))
@@ -71,6 +72,13 @@ page model =
                 model.products
                 (makeProductData model)
                 Products.Detail.view
+                ProductsMsg
+
+        ProductsEditRoute productId ->
+            itemViewOr404 productId
+                model.products
+                (makeProductData model)
+                Products.Edit.view
                 ProductsMsg
 
         NotFoundRoute ->

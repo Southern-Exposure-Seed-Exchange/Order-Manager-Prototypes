@@ -2,6 +2,7 @@ module Products.Detail exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (href, class)
+import Html.Events exposing (onClick)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Models exposing (ProductData)
 import Products.Messages exposing (Msg(..))
@@ -33,7 +34,8 @@ view product model =
                 , Maybe.map categoryLink maybeCategory |> Maybe.withDefault (text "")
                 ]
             , p []
-                [ button [ class "btn-sm" ] [ text "Edit Product" ]
+                [ button [ class "btn-sm", onClick (EditProduct product.id) ]
+                    [ text "Edit Product" ]
                 , text " "
                 , button [ class "btn-sm danger" ] [ text "Delete" ]
                 ]

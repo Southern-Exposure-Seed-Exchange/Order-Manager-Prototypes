@@ -1,7 +1,6 @@
 module Categories.Update exposing (..)
 
 import Navigation
-import String
 import Api.Models exposing (CategoryId, initialCategory)
 import Categories.Commands exposing (deleteOne)
 import Categories.Form

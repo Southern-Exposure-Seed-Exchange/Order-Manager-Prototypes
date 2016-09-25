@@ -33,6 +33,12 @@ fetchForRoute route =
         ProductAddRoute ->
             Cmd.map CategoriesMsg Categories.Commands.fetchAll
 
+        ProductsEditRoute id ->
+            Cmd.batch
+                [ Cmd.map CategoriesMsg (Categories.Commands.fetchAll)
+                , Cmd.map ProductsMsg (Products.Commands.fetchOne id)
+                ]
+
         ProductRoute id ->
             Cmd.map ProductsMsg (Products.Commands.fetchOne id)
 

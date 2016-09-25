@@ -15,6 +15,7 @@ type Route
     | ProductAddRoute
     | ProductsRoute
     | ProductRoute ProductId
+    | ProductsEditRoute ProductId
     | NotFoundRoute
 
 
@@ -27,6 +28,7 @@ matchers =
         , format CategoryRoute (s "categories" </> int)
         , format CategoryAddRoute (s "categories" </> s "add")
         , format CategoriesRoute (s "categories")
+        , format ProductsEditRoute (s "products" </> int </> s "edit")
         , format ProductRoute (s "products" </> int)
         , format ProductAddRoute (s "products" </> s "add")
         , format ProductsRoute (s "products")

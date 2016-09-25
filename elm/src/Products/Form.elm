@@ -8,13 +8,12 @@ import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import Navigation
 import String
-import Api.Models exposing (Category, Product, initialProduct)
 import Api.Decoders exposing (productDecoder)
 import Api.Encoders exposing (productEncoder)
 import Api.Http exposing (..)
-import Api.Models exposing (initialProduct)
+import Api.Models exposing (Category, Product, ProductId, initialProduct)
 import Products.Models exposing (ProductData)
-import Utils exposing (onChange)
+import Utils exposing (getById, onChange, replaceBy)
 
 
 type Msg
@@ -30,13 +29,18 @@ type Msg
     | CancelForm
     | CreateOneDone Product
     | CreateOneFail (HttpBuilder.Error String)
+    | UpdateOneDone ProductId Product
+    | UpdateOneFail (HttpBuilder.Error String)
 
 
 update : Msg -> Product -> ProductData -> ( Product, List Product, Cmd Msg )
 update msg form model =
     let
-        changeForm form =
-            ( form, model.products, Cmd.none )
+        changeForm newForm =
+            ( newForm, model.products, Cmd.none )
+
+        setForm id products =
+            getById products id |> Maybe.withDefault initialProduct
     in
         case msg of
             CreateOneDone newProduct ->
@@ -46,6 +50,15 @@ update msg form model =
                 )
 
             CreateOneFail _ ->
+                ( form, model.products, Cmd.none )
+
+            UpdateOneDone productId newProduct ->
+                ( initialProduct
+                , replaceBy .id newProduct model.products
+                , Navigation.newUrl <| "#products/" ++ toString productId
+                )
+
+            UpdateOneFail _ ->
                 ( form, model.products, Cmd.none )
 
             NameChange newName ->
@@ -70,16 +83,30 @@ update msg form model =
                 changeForm { form | isSouthEast = newSouthEastStatus }
 
             SaveForm ->
-                ( initialProduct, model.products, createOne form )
+                let
+                    saveCommand =
+                        if form.id == 0 then
+                            createOne
+                        else
+                            updateOne
+                in
+                    ( form, model.products, saveCommand form )
 
             ResetForm ->
-                ( initialProduct, model.products, Cmd.none )
+                changeForm <| setForm form.id model.products
 
             CancelForm ->
-                ( initialProduct
-                , model.products
-                , Navigation.newUrl "#products"
-                )
+                let
+                    url =
+                        if form.id == 0 then
+                            ""
+                        else
+                            toString form.id
+                in
+                    ( setForm form.id model.products
+                    , model.products
+                    , Navigation.newUrl <| "#products/" ++ url
+                    )
 
 
 createOne : Product -> Cmd Msg
@@ -91,15 +118,24 @@ createOne product =
         CreateOneDone
 
 
+updateOne : Product -> Cmd Msg
+updateOne product =
+    put (ProductEndpoint product.id)
+        (productsEncoder product)
+        ("product" := productDecoder)
+        UpdateOneFail
+        (UpdateOneDone product.id)
+
+
 productsEncoder : Product -> Encode.Value
 productsEncoder product =
     Encode.object [ ( "product", productEncoder product ) ]
 
 
+view : Product -> List Category -> Html Msg
 view form categories =
     div []
-        [ h1 [] [ text "Add Product" ]
-        , label []
+        [ label []
             [ text "Name: "
             , input
                 [ type' "text"
