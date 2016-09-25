@@ -3,7 +3,7 @@ module Update exposing (..)
 import Categories.Models exposing (makeCategoryData)
 import Categories.Update
 import Messages exposing (Msg(..))
-import Models exposing (Model, UIState(..))
+import Models exposing (Model, UIState)
 import NavBar
 import Products.Models exposing (makeProductData)
 import Products.Update
@@ -22,8 +22,14 @@ update msg model =
                     makeCategoryData model
                         |> Categories.Update.update subMsg
 
+                categoryUI =
+                    { categoryForm = updatedModel.categoryForm }
+
+                ui =
+                    model.uiState
+
                 updatedUI =
-                    Categories { categoryForm = updatedModel.categoryForm }
+                    { ui | categories = categoryUI }
             in
                 ( { model
                     | categories = updatedModel.categories
@@ -39,11 +45,16 @@ update msg model =
                     makeProductData model
                         |> Products.Update.update subMsg
 
+                productsUI =
+                    { showSKUs = updatedModel.showSKUs
+                    , productForm = updatedModel.productForm
+                    }
+
+                ui =
+                    model.uiState
+
                 updatedUI =
-                    Products
-                        { showSKUs = updatedModel.showSKUs
-                        , productForm = updatedModel.productForm
-                        }
+                    { ui | products = productsUI }
             in
                 ( { model
                     | products = updatedModel.products

@@ -1,7 +1,7 @@
 module Categories.Models exposing (..)
 
 import Api.Models exposing (Category, Product, initialCategory)
-import Models exposing (Model, UIState(..))
+import Models exposing (Model)
 
 
 type alias CategoryData =
@@ -13,16 +13,7 @@ type alias CategoryData =
 
 makeCategoryData : Model -> CategoryData
 makeCategoryData model =
-    let
-        categoryForm =
-            case model.uiState of
-                Categories ui ->
-                    ui.categoryForm
-
-                _ ->
-                    initialCategory
-    in
-        { categories = model.categories
-        , products = model.products
-        , categoryForm = categoryForm
-        }
+    { categories = model.categories
+    , products = model.products
+    , categoryForm = model.uiState.categories.categoryForm
+    }

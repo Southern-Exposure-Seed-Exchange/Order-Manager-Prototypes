@@ -1,10 +1,9 @@
 module Main exposing (..)
 
 import Navigation
-import Api.Models exposing (initialCategory)
 import Commands exposing (fetchForRoute)
 import Messages exposing (Msg)
-import Models exposing (Model, initialModel, UIState(..))
+import Models exposing (Model, initialModel, UIState, initialUIState)
 import Routing exposing (Route(..))
 import Update exposing (update)
 import View exposing (view)
@@ -25,15 +24,20 @@ urlUpdate result model =
         updatedModel =
             { model | route = Routing.routeFromResult result }
 
-        updateUI model =
-            case model.route of
+        updatedUI =
+            case updatedModel.route of
                 CategoryAddRoute ->
-                    { model | uiState = Categories { categoryForm = initialCategory } }
+                    initialUIState
+
+                ProductAddRoute ->
+                    initialUIState
 
                 _ ->
-                    model
+                    model.uiState
     in
-        ( updateUI updatedModel, fetchForRoute updatedModel.route )
+        ( { updatedModel | uiState = updatedUI }
+        , fetchForRoute updatedModel.route
+        )
 
 
 subscriptions : Model -> Sub Msg
