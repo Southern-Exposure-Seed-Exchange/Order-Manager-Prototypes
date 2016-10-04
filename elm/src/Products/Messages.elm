@@ -11,10 +11,13 @@ type Msg
     | FetchAllFail (HttpBuilder.Error String)
     | FetchOneDone ProductId ProductData
     | FetchOneFail (HttpBuilder.Error String)
+    | DeleteOneDone ProductId
+    | DeleteOneFail (HttpBuilder.Error String)
     | ToggleSKUs ProductId
     | ToggleAllSKUs
     | VisitProduct ProductId
     | VisitCategory CategoryId
     | AddProduct
     | EditProduct ProductId
+    | DeleteProduct ProductId
     | FormMessage Products.Form.Msg

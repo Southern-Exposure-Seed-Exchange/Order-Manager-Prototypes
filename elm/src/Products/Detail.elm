@@ -37,7 +37,8 @@ view product model =
                 [ button [ class "btn-sm", onClick (EditProduct product.id) ]
                     [ text "Edit Product" ]
                 , text " "
-                , button [ class "btn-sm danger" ] [ text "Delete" ]
+                , button [ class "btn-sm danger", onClick (DeleteProduct product.id) ]
+                    [ text "Delete" ]
                 ]
             , p [] [ text product.description ]
             , h4 [] [ text "Product Variants" ]

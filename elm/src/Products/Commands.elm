@@ -19,6 +19,11 @@ fetchOne id =
     get (ProductEndpoint id) productsDecoder FetchOneFail (FetchOneDone id)
 
 
+deleteOne : ProductId -> Cmd Msg
+deleteOne id =
+    delete (ProductEndpoint id) (Decode.succeed id) DeleteOneFail DeleteOneDone
+
+
 productsDecoder : Decode.Decoder ProductData
 productsDecoder =
     Decode.object5 ProductData

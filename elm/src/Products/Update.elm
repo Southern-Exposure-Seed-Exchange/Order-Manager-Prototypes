@@ -3,6 +3,7 @@ module Products.Update exposing (..)
 import Dict
 import Navigation
 import Api.Models exposing (ProductId, initialProduct)
+import Products.Commands exposing (deleteOne)
 import Products.Form
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
@@ -26,6 +27,18 @@ update msg model =
         FetchOneFail _ ->
             ( model, Cmd.none )
 
+        DeleteOneDone id ->
+            let
+                updatedProducts =
+                    List.filter (\p -> p.id /= id) model.products
+            in
+                ( { model | products = updatedProducts }
+                , Navigation.newUrl "#products"
+                )
+
+        DeleteOneFail _ ->
+            ( model, Cmd.none )
+
         ToggleSKUs productId ->
             ( { model | showSKUs = toggleSKU model.showSKUs productId }, Cmd.none )
 
@@ -45,6 +58,9 @@ update msg model =
             ( setProductForm id model
             , Navigation.newUrl <| "#products/" ++ toString id ++ "/edit"
             )
+
+        DeleteProduct id ->
+            ( model, deleteOne id )
 
         FormMessage subMsg ->
             let
