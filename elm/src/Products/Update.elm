@@ -94,6 +94,7 @@ toggleAllSKUs model =
             Dict.values model.showSKUs
                 |> List.all (\v -> v == True)
                 |> (&&) (not <| Dict.isEmpty model.showSKUs)
+                |> (&&) (Dict.size model.showSKUs == List.length model.products)
     in
         if allShown then
             Dict.map (\_ _ -> False) model.showSKUs
