@@ -1,0 +1,26 @@
+{
+  "name": "om-purescript",
+  "version": "0.1.0",
+  "description": "An Order Manager Prototype Frontend Written in Purescript",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "purescript",
+    "erp",
+    "crm",
+    "order",
+    "management",
+    "manager"
+  ],
+  "author": "Pavan Rikhi",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  }
+}
