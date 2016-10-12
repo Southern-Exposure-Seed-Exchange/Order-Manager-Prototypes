@@ -7,7 +7,7 @@ import Data.Maybe (maybe)
 import Pux.Html (Html, td, text, tr, tbody, th, thead, table, h1, div, button)
 import Pux.Html.Events (onClick)
 
-import Api.Models (Category(..), Product)
+import Api.Models (Category(..), Product(..))
 import Categories.Messages (Msg(..))
 import Model (Model)
 
@@ -50,4 +50,4 @@ childCount (Category category) =
 
 productCount :: Category -> List Product -> Int
 productCount (Category category) =
-    length <<< filter (\prod -> prod.category == category.id)
+    length <<< filter (\(Product prod) -> prod.category == category.id)

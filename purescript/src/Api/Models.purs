@@ -29,7 +29,7 @@ instance decodeJsonCategory :: DecodeJson Category where
 type ProductId = Int
 
 
-type Product =
+data Product = Product
     { id :: ProductId
     , name :: String
     , description :: String
@@ -39,3 +39,18 @@ type Product =
     , isHeirloom :: Boolean
     , isSouthEast :: Boolean
     }
+
+
+instance decodeJsonProduct :: DecodeJson Product where
+    decodeJson json = do
+        obj <- decodeJson json
+        id <- obj .? "id"
+        name <- obj .? "name"
+        description <- obj .? "description"
+        category <- obj .? "category"
+        isActive <- obj .? "isActive"
+        isOrganic <- obj .? "isOrganic"
+        isHeirloom <- obj .? "isHeirloom"
+        isSouthEast <- obj .? "isSouthEast"
+        pure $ Product { id, name, description, category
+                       , isActive, isOrganic, isHeirloom, isSouthEast }

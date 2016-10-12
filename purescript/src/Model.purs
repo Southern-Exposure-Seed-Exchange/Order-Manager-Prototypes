@@ -16,3 +16,8 @@ init =
     { categories: Nil
     , products: Nil
     }
+
+
+class SubModel a where
+    updateModel :: Model -> a -> Model
+    fromModel :: Model -> a
