@@ -22,6 +22,11 @@ module.exports = {
         loader: 'purs-loader',
         query: {
           psc: 'psa',
+          pscArgs: {
+            'stash': null,
+            'censor-lib': null,
+            'source-maps': null,
+          },
           pscIde: true,
           warnings: true,
         }
@@ -34,7 +39,7 @@ module.exports = {
 
   devServer: {
     inline: true,
-    stats: { 
+    stats: {
       colors: true,
       chunks: false,
     },
