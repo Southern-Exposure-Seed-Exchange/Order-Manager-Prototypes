@@ -90,14 +90,9 @@ ember serve --proxy 'http://localhost:3000'
 
 ```
 cd purescript
-npm i -g psvm
-psvm install v0.9.3
-psvm use v0.9.3
-export PATH=~/.psvm/current/bin:$PATH
 bower i
 npm i
-pulp browserify --to dist/index.js
-open dist/index.html
+npm run dev
 ```
 
 ### Vue

@@ -7,7 +7,9 @@
     "output"
   ],
   "dependencies": {
-    "purescript-pux": "~6.0.1"
+    "purescript-pux": "~6.0.1",
+    "purescript-argonaut": "^1.0.0",
+    "purescript-affjax": "^2.0.1"
   },
   "devDependencies": {
     "purescript-psci-support": "~1.0"
