@@ -9,7 +9,7 @@ import Categories.Messages (Msg(..))
 import Categories.Commands (fetchCategories)
 import Categories.Models (CategoryData)
 
-update :: Msg -> CategoryData -> EffModel CategoryData Msg (ajax :: AJAX)
+update :: forall e. Msg -> CategoryData -> EffModel CategoryData Msg (ajax :: AJAX | e)
 update FetchCategories model =
     { state: model, effects: [ fetchCategories ] }
 update (ReceiveCategories (Left _)) model =
