@@ -2,3 +2,5 @@ Django>=1.9,<1.10
 djangorestframework>=3.3,<4
 psycopg2>=2.6,<3
 django_extensions>=1.6,<2
+djangorestframework-jsonapi>=2.0.0-beta.2
+django-cors-headers>=1.1,<2
