@@ -43,10 +43,10 @@ module.exports = {
       chunks: false,
     },
     proxy: {
-      '*': {
-        target: 'http://localhost:3000/',
-        secure: false,
+      '/api/*': {
+        target: 'http://localhost:3000',
         changeOrigin: true,
+        pathRewrite: { "^/api/": "" },
       }
     }
   },

@@ -17,13 +17,13 @@ endpointToUrl : Endpoint -> String
 endpointToUrl endpoint =
     case endpoint of
         CategoriesEndpoint ->
-            "/categories/"
+            "/api/categories/"
 
         CategoryEndpoint id ->
             endpointToUrl CategoriesEndpoint ++ toString id
 
         ProductsEndpoint ->
-            "/products/"
+            "/api/products/"
 
         ProductEndpoint id ->
             endpointToUrl ProductsEndpoint ++ toString id
