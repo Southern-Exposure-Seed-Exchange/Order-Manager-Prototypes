@@ -1,8 +1,8 @@
 module Utils where
 
-import Prelude (($), bind, (==))
+import Prelude (($), bind, (==), compare, class Ord)
 import Data.Foldable (foldl)
-import Data.List (List, findIndex, updateAt, (:))
+import Data.List (List, findIndex, updateAt, (:), sortBy)
 import Data.Maybe (fromMaybe)
 
 import Classes (class HasId, toId)
@@ -18,3 +18,8 @@ replaceById list elem =
     fromMaybe (elem : list) $ do
         index <- findIndex (\e -> toId e == toId elem) list
         updateAt index elem list
+
+
+sortByField :: forall a b. Ord b => (a -> b) -> List a -> List a
+sortByField selector =
+    sortBy (\a1 a2 -> compare (selector a1) (selector a2))
