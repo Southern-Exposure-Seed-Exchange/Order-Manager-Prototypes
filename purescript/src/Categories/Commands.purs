@@ -5,9 +5,9 @@ import Control.Monad.Aff (Aff, attempt)
 import Data.Argonaut.Core (Json)
 import Data.Argonaut.Decode (decodeJson, (.?))
 import Data.Either (Either(..), either)
-import Network.HTTP.Affjax (AJAX, AffjaxResponse)
+import Network.HTTP.Affjax (AJAX, AffjaxResponse, Affjax)
 
-import Api.Http (get)
+import Api.Http (delete, get)
 import Categories.Messages (Msg(..))
 import Categories.Models (CategoryData(..))
 
@@ -24,6 +24,13 @@ fetchCategory id =
     do response <- attempt $ get $ "/api/categories/" <> show id
        let categoryData = either (Left <<< show) decodeCategoryData response
        pure $ ReceiveCategory categoryData
+
+
+deleteCategory :: forall e. Int -> Aff ( ajax :: AJAX | e ) Msg
+deleteCategory id =
+    do response <- attempt $ delete ("/api/categories/" <> show id) :: forall e1. Affjax e1 Json
+       let responseData = either (Left <<< show) (const $ Right id) response
+       pure $ DeletedCategory (Right id)
 
 
 decodeCategoryData :: AffjaxResponse Json -> Either String CategoryData

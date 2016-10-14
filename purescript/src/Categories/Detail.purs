@@ -1,16 +1,17 @@
 module Categories.Detail where
 
-import Prelude ((==), ($), show, map, (<<<), (<>))
+import Prelude ((==), ($), show, map, (<<<), (<>), const)
 import Data.Array (fromFoldable)
 import Data.List (List, head, filter, null)
 import Data.Maybe (Maybe(..), maybe)
 import Pux.Html ( Html, div, h1, h2, text, button, table, tbody, thead, tr
                 , td, th, small, p)
+import Pux.Html.Events (onClick)
 import Pux.Router (link)
 
 import Api.Models (Category(..), Product(..))
 import Categories.List (catTable)
-import Categories.Messages (Msg)
+import Categories.Messages (Msg(DeleteCategory))
 import Model (Model)
 import Router (Route(CategoryDetail), reverse)
 
@@ -23,7 +24,7 @@ view (Category category) model =
             , parentCategory
             ]
         , button [] [ text "Edit" ]
-        , button [] [ text "Delete" ]
+        , button [ onClick <<< const $ DeleteCategory category.id] [ text "Delete" ]
         , subCategoryTable
         , subProductTable
         ]
