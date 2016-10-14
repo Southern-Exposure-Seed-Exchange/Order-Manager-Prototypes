@@ -10,6 +10,7 @@ data Route
     = Home
     | Categories
     | CategoryDetail Int
+    | Products
     | NotFound
 
 
@@ -20,6 +21,8 @@ match url = fromMaybe NotFound $ router url $
     Categories <$ (lit "categories") <* end
     <|>
     CategoryDetail <$> (lit "categories" *> int) <* end
+    <|>
+    Products <$ (lit "products") <* end
 
 
 reverse :: Route -> String
@@ -31,5 +34,7 @@ reverse route =
             "/categories"
         CategoryDetail id ->
             "/categories/" <> show id
+        Products ->
+            "/products"
         NotFound ->
             "/404"

@@ -8,12 +8,12 @@ import Pux.Html (Html, td, text, tr, tbody, th, thead, table, h1, div)
 import Pux.Router (link)
 
 import Api.Models (Category(..), Product(..))
+import Categories.Models (CategoryData(..))
 import Categories.Messages (Msg)
-import Model (Model)
 import Router (Route(CategoryDetail), reverse)
 
-view :: Model -> Html Msg
-view model =
+view :: CategoryData -> Html Msg
+view (CategoryData model) =
     div []
         [ h1 [] [ text "Categories" ]
         , catTable model.categories model.products

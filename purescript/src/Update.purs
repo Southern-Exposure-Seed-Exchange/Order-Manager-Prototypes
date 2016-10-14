@@ -10,6 +10,8 @@ import Categories.Update as CatUpdate
 import Classes (updateModel, fromModel, class SubModel)
 import Messages (Msg(..))
 import Model (Model)
+import Products.Commands (fetchProducts)
+import Products.Update as ProdUpdate
 import Router (Route(..))
 
 
@@ -18,6 +20,8 @@ update (PageView route) model =
     commandForRoute $ model { route = route }
 update (CategoriesMsg subMsg) model =
     callNestedUpdate CategoriesMsg subMsg model CatUpdate.update
+update (ProductsMsg subMsg) model =
+    callNestedUpdate ProductsMsg subMsg model ProdUpdate.update
 
 
 callNestedUpdate :: forall a b eff. SubModel a
@@ -34,6 +38,8 @@ commandForRoute model =
             mapEffects CategoriesMsg $ onlyEffects model [ fetchCategories ]
         CategoryDetail id ->
             mapEffects CategoriesMsg $ onlyEffects model [ fetchCategory id ]
+        Products ->
+            mapEffects ProductsMsg $ onlyEffects model [ fetchProducts ]
         Home ->
             noEffects model
         NotFound ->

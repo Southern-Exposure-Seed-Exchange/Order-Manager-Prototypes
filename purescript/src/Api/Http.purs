@@ -15,6 +15,7 @@ import Api.Models (CategoryId)
 data Endpoint
     = CategoriesEndpoint
     | CategoryEndpoint CategoryId
+    | ProductsEndpoint
 
 
 -- | Convert an `Endpoint` into a string containing the correct URL for the
@@ -26,6 +27,8 @@ endpointToUrl endpoint =
             "/api/categories/"
         CategoryEndpoint id ->
             endpointToUrl CategoriesEndpoint <> show id
+        ProductsEndpoint ->
+            "/api/products/"
 
 
 apiRequest :: Method -> String -> AffjaxRequest Unit

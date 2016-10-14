@@ -1,23 +1,22 @@
 module Categories.Detail where
 
-import Prelude ((==), ($), show, map, (<<<), (<>), const)
-import Data.Array (fromFoldable)
-import Data.List (List, head, filter, null)
+import Prelude ((==), ($), (<<<), (<>), const)
+import Data.List (head, filter, null)
 import Data.Maybe (Maybe(..), maybe)
-import Pux.Html ( Html, div, h1, h2, text, button, table, tbody, thead, tr
-                , td, th, small, p)
+import Pux.Html ( Html, div, h1, h2, text, button, small, p)
 import Pux.Html.Events (onClick)
 import Pux.Router (link)
 
 import Api.Models (Category(..), Product(..))
 import Categories.List (catTable)
 import Categories.Messages (Msg(DeleteCategory))
-import Model (Model)
+import Categories.Models (CategoryData(..))
+import Products.List (productsTable)
 import Router (Route(CategoryDetail), reverse)
 
 
-view :: Category -> Model -> Html Msg
-view (Category category) model =
+view :: Category -> CategoryData -> Html Msg
+view (Category category) (CategoryData model) =
     div []
         [ h1 []
             [ text $ category.name
@@ -64,29 +63,3 @@ view (Category category) model =
                     ]
         subProducts =
             filter (\(Product p) -> p.category == category.id) model.products
-
-productsTable :: List Product -> Html Msg
-productsTable products =
-    table []
-        [ thead []
-            [ tr []
-                [ th [] [ text "Name" ]
-                , th [] [ text "Organic" ]
-                , th [] [ text "Heirloom" ]
-                , th [] [ text "SouthEast" ]
-                , th [] [ text "Active" ]
-                ]
-            ]
-        , tbody [] <<< fromFoldable $ map prodRow products
-        ]
-
-
-prodRow :: Product -> Html Msg
-prodRow (Product product) =
-    tr []
-        [ td [] [ text product.name ]
-        , td [ ] [ text $ show product.isOrganic ]
-        , td [ ] [ text $ show product.isHeirloom ]
-        , td [ ] [ text $ show product.isSouthEast ]
-        , td [ ] [ text $ show product.isActive ]
-        ]

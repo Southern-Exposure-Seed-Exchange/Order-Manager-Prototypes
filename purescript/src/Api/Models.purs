@@ -54,3 +54,28 @@ instance decodeJsonProduct :: DecodeJson Product where
         isSouthEast <- obj .? "isSouthEast"
         pure $ Product { id, name, description, category
                        , isActive, isOrganic, isHeirloom, isSouthEast }
+
+
+type ProductVariantId = Int
+
+
+data ProductVariant = ProductVariant
+    { id :: ProductVariantId
+    , sku :: String
+    , product :: ProductId
+    , price :: Int
+    , quantity :: Int
+    , weight :: Int
+    }
+
+
+instance decodeJsonProductVariant :: DecodeJson ProductVariant where
+    decodeJson json = do
+        obj <- decodeJson json
+        id <- obj .? "id"
+        sku <- obj .? "sku"
+        product <- obj .? "product"
+        price <- obj .? "price"
+        quantity <- obj .? "quantity"
+        weight <- obj .? "weight"
+        pure $ ProductVariant { id, sku, product, price, quantity, weight }

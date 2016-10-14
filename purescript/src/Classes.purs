@@ -1,7 +1,7 @@
 module Classes where
 
 import Model (Model)
-import Api.Models (Category(..), Product(..))
+import Api.Models (Category(..), Product(..), ProductVariant(..))
 
 
 -- | The `SubModel` typeclass is used to convert the global `Model` into a
@@ -24,3 +24,7 @@ instance hasIdCategory :: HasId Category where
 
 instance hasIdProduct :: HasId Product where
     toId (Product p) = p.id
+
+
+instance hasIdProductVariant :: HasId ProductVariant where
+    toId (ProductVariant pv) = pv.id

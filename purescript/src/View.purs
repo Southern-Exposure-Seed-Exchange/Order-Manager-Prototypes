@@ -1,6 +1,6 @@
 module View where
 
-import Prelude (map, ($), (==))
+import Prelude (map, ($), (==), (<<<))
 import Data.List (head, filter)
 import Data.Maybe (Maybe(..))
 import Pux.Html (Html, div, h1, text, ul, li)
@@ -9,9 +9,11 @@ import Pux.Router (link)
 import Api.Models (Category(..))
 import Categories.Detail as CatDetail
 import Categories.List as CatList
+import Classes (fromModel)
 import Messages (Msg(..))
-import Router (Route(..), reverse)
 import Model (Model)
+import Products.List as ProdList
+import Router (Route(..), reverse)
 
 
 view :: Model -> Html Msg
@@ -27,6 +29,7 @@ nav =
     ul []
         [ li [] [ link (reverse Home) [] [text "Home" ] ]
         , li [] [ link (reverse Categories) [] [text "Categories" ] ]
+        , li [] [ link (reverse Products) [] [text "Products" ] ]
         ]
 
 
@@ -36,7 +39,7 @@ page model =
         Home ->
             div [] [ h1 [] [ text "Home" ] ]
         Categories ->
-            map CategoriesMsg $ CatList.view model
+            map CategoriesMsg <<< CatList.view $ fromModel model
         CategoryDetail id ->
             let maybeCategory =
                     head $ filter (\(Category c) -> c.id == id) model.categories
@@ -44,7 +47,10 @@ page model =
                     Nothing ->
                         notFoundView
                     Just category ->
-                        map CategoriesMsg $ CatDetail.view category model
+                        map CategoriesMsg <<< CatDetail.view category $
+                        fromModel model
+        Products ->
+            map ProductsMsg <<< ProdList.view $ fromModel model
         NotFound ->
             notFoundView
 
