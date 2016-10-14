@@ -3,7 +3,8 @@ module Categories.Models where
 import Data.List (List)
 
 import Api.Models (Category, Product)
-import Model (class SubModel)
+import Classes (class SubModel)
+import Utils (replaceAll)
 
 
 data CategoryData = CategoryData
@@ -14,6 +15,7 @@ data CategoryData = CategoryData
 
 instance submodelCategoryData :: SubModel CategoryData where
     updateModel model (CategoryData { categories, products }) =
-        model { categories = categories, products = products }
+        model { categories = replaceAll model.categories categories
+              , products = replaceAll model.products products }
     fromModel { categories, products } =
         CategoryData { categories, products }

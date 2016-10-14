@@ -6,22 +6,24 @@ import Data.List (List, length, filter)
 import Data.Maybe (maybe)
 import Pux.Html (Html, td, text, tr, tbody, th, thead, table, h1, div, button)
 import Pux.Html.Events (onClick)
+import Pux.Router (link)
 
 import Api.Models (Category(..), Product(..))
 import Categories.Messages (Msg(..))
 import Model (Model)
+import Router (Route(CategoryDetail), reverse)
 
 view :: Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Categories" ]
-        , catTable model
+        , catTable model.categories model.products
         , button [onClick (const FetchCategories)] [ text "Fetch" ]
         ]
 
 
-catTable :: Model -> Html Msg
-catTable model =
+catTable :: List Category -> List Product -> Html Msg
+catTable categories products =
     table []
         [ thead []
             [ tr []
@@ -30,16 +32,16 @@ catTable model =
                 , th [] [ text "Products" ]
                 ]
             ]
-        , tbody [] <<< fromFoldable $ map (catRow model) model.categories
+        , tbody [] <<< fromFoldable $ map (catRow categories products) categories
         ]
 
 
-catRow :: Model -> Category -> Html Msg
-catRow model category@(Category {name}) =
+catRow :: List Category -> List Product -> Category -> Html Msg
+catRow categories products category@(Category {id, name}) =
     tr []
-        [ td [] [ text name ]
-        , td [] [ text <<< show $ childCount category model.categories ]
-        , td [] [ text <<< show $ productCount category model.products ]
+        [ td [] [ link (reverse $ CategoryDetail id) [] [ text name ] ]
+        , td [] [ text <<< show $ childCount category categories ]
+        , td [] [ text <<< show $ productCount category products ]
         ]
 
 

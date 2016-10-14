@@ -19,8 +19,3 @@ init =
     , products: Nil
     , route: Home
     }
-
-
-class SubModel a where
-    updateModel :: Model -> a -> Model
-    fromModel :: Model -> a

@@ -4,10 +4,11 @@ import Prelude
 import Network.HTTP.Affjax (AJAX)
 import Pux (EffModel, mapEffects, mapState, noEffects, onlyEffects)
 
-import Categories.Commands (fetchCategories)
+import Categories.Commands (fetchCategories, fetchCategory)
 import Categories.Update as CatUpdate
+import Classes (updateModel, fromModel, class SubModel)
 import Messages (Msg(..))
-import Model (Model, updateModel, fromModel, class SubModel)
+import Model (Model)
 import Router (Route(..))
 
 
@@ -24,10 +25,13 @@ callNestedUpdate :: forall a b eff. SubModel a
 callNestedUpdate parentMsg msg model updateFunc =
     mapState (updateModel model) <<< mapEffects parentMsg <<< updateFunc msg $ fromModel model
 
+
 commandForRoute :: forall e. Model -> EffModel Model Msg (ajax :: AJAX | e)
 commandForRoute model =
     case model.route of
         Categories ->
-            mapEffects CategoriesMsg $ onlyEffects model [fetchCategories]
+            mapEffects CategoriesMsg $ onlyEffects model [ fetchCategories ]
+        CategoryDetail id ->
+            mapEffects CategoriesMsg $ onlyEffects model [ fetchCategory id ]
         _ ->
             noEffects model

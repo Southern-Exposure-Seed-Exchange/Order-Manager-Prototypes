@@ -1,9 +1,13 @@
 module View where
 
-import Prelude (map, ($))
+import Prelude (map, ($), (==))
+import Data.List (head, filter)
+import Data.Maybe (Maybe(..))
 import Pux.Html (Html, div, h1, text, ul, li)
 import Pux.Router (link)
 
+import Api.Models (Category(..))
+import Categories.Detail as CatDetail
 import Categories.List as CatList
 import Messages (Msg(..))
 import Router (Route(..), reverse)
@@ -33,5 +37,18 @@ page model =
             div [] [ h1 [] [ text "Home" ] ]
         Categories ->
             map CategoriesMsg $ CatList.view model
+        CategoryDetail id ->
+            let maybeCategory =
+                    head $ filter (\(Category c) -> c.id == id) model.categories
+             in case maybeCategory of
+                    Nothing ->
+                        notFoundView
+                    Just category ->
+                        map CategoriesMsg $ CatDetail.view category model
         NotFound ->
-            div [] [ h1 [] [ text "404 - Not Found" ] ]
+            notFoundView
+
+
+notFoundView :: forall msg. Html msg
+notFoundView =
+    div [] [ h1 [] [ text "404 - Not Found" ] ]

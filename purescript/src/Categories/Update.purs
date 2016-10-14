@@ -16,3 +16,7 @@ update (ReceiveCategories (Left _)) model =
     noEffects model
 update (ReceiveCategories (Right newData)) _ =
     noEffects newData
+update (ReceiveCategory (Left _)) model =
+    noEffects model
+update (ReceiveCategory (Right newData)) _ =
+    noEffects newData
