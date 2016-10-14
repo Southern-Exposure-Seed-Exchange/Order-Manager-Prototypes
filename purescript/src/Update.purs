@@ -33,5 +33,7 @@ commandForRoute model =
             mapEffects CategoriesMsg $ onlyEffects model [ fetchCategories ]
         CategoryDetail id ->
             mapEffects CategoriesMsg $ onlyEffects model [ fetchCategory id ]
-        _ ->
+        Home ->
+            noEffects model
+        NotFound ->
             noEffects model
