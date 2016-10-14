@@ -5,11 +5,10 @@ import Data.Array (fromFoldable)
 import Data.List (List, length, filter)
 import Data.Maybe (maybe)
 import Pux.Html (Html, td, text, tr, tbody, th, thead, table, h1, div)
-import Pux.Html.Events (onClick)
 import Pux.Router (link)
 
 import Api.Models (Category(..), Product(..))
-import Categories.Messages (Msg(..))
+import Categories.Messages (Msg)
 import Model (Model)
 import Router (Route(CategoryDetail), reverse)
 
