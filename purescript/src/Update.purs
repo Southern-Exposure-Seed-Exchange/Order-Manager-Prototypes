@@ -1,6 +1,7 @@
 module Update where
 
 import Prelude
+import DOM (DOM)
 import Network.HTTP.Affjax (AJAX)
 import Pux (EffModel, mapEffects, mapState, noEffects, onlyEffects)
 
@@ -12,7 +13,7 @@ import Model (Model)
 import Router (Route(..))
 
 
-update :: forall e. Msg -> Model -> EffModel Model Msg (ajax :: AJAX | e)
+update :: Msg -> Model -> EffModel Model Msg ( ajax :: AJAX, dom :: DOM )
 update (PageView route) model =
     commandForRoute $ model { route = route }
 update (CategoriesMsg subMsg) model =

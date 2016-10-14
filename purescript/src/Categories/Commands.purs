@@ -7,28 +7,28 @@ import Data.Argonaut.Decode (decodeJson, (.?))
 import Data.Either (Either(..), either)
 import Network.HTTP.Affjax (AJAX, AffjaxResponse, Affjax)
 
-import Api.Http (delete, get)
+import Api.Http (delete, get, Endpoint(..))
 import Categories.Messages (Msg(..))
 import Categories.Models (CategoryData(..))
 
 
 fetchCategories :: forall e. Aff ( ajax :: AJAX | e ) Msg
 fetchCategories =
-    do response <- attempt $ get "/api/categories"
+    do response <- attempt $ get CategoriesEndpoint
        let categoryData = either (Left <<< show) decodeCategoryData response
        pure $ ReceiveCategories categoryData
 
 
 fetchCategory :: forall e. Int -> Aff ( ajax :: AJAX | e ) Msg
 fetchCategory id =
-    do response <- attempt $ get $ "/api/categories/" <> show id
+    do response <- attempt <<< get $ CategoryEndpoint id
        let categoryData = either (Left <<< show) decodeCategoryData response
        pure $ ReceiveCategory categoryData
 
 
 deleteCategory :: forall e. Int -> Aff ( ajax :: AJAX | e ) Msg
 deleteCategory id =
-    do response <- attempt $ delete ("/api/categories/" <> show id) :: forall e1. Affjax e1 Json
+    do response <- attempt $ delete (CategoryEndpoint id) :: forall e1. Affjax e1 Json
        let responseData = either (Left <<< show) (const $ Right id) response
        pure $ DeletedCategory (Right id)
 
