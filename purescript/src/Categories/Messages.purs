@@ -6,6 +6,5 @@ import Categories.Models (CategoryData)
 
 
 data Msg
-    = FetchCategories
-    | ReceiveCategories (Either String CategoryData)
+    = ReceiveCategories (Either String CategoryData)
     | ReceiveCategory (Either String CategoryData)
