@@ -2,8 +2,8 @@
 
 This repository contains very rough prototypes of various web frontends and
 backends for an ERP/Order Manager. Prototypes for Django Rest Framework,
-Ember.js, Elm, Servant, Spock & Yesod exist. A Purescript prototype is planned,
-and others may be included.
+Ember.js, Elm, Purescript Pux, Servant, Spock & Yesod exist. A Purescript
+Halogen prototype is planned, and others may be included.
 
 ## Implemented
 
@@ -86,10 +86,10 @@ bower install
 ember serve --proxy 'http://localhost:3000'
 ```
 
-### Purescript
+### Purescript Pux
 
 ```
-cd purescript
+cd pux
 bower i
 npm i
 npm run dev
