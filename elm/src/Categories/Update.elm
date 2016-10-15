@@ -53,10 +53,19 @@ update msg model =
 
         FormMessage subMsg ->
             let
-                ( updatedForm, updatedCategories, cmd ) =
-                    Categories.Form.update subMsg model.categoryForm model.categories
+                ( updatedForm, cmd ) =
+                    Categories.Form.update subMsg
+                        { form = model.categoryForm
+                        , categories = model.categories
+                        , errors = model.formErrors
+                        }
             in
-                ( { model | categoryForm = updatedForm, categories = updatedCategories }
+                ( { model
+                    | categoryForm = updatedForm.form
+                    , categories =
+                        updatedForm.categories
+                    , formErrors = updatedForm.errors
+                  }
                 , Cmd.map FormMessage cmd
                 )
 

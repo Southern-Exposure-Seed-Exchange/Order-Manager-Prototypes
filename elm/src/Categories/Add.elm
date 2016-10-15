@@ -11,6 +11,10 @@ view : CategoryData -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Add Category" ]
-        , Categories.Form.view model.categoryForm model.categories
+        , Categories.Form.view
+            { form = model.categoryForm
+            , categories = model.categories
+            , errors = model.formErrors
+            }
             |> Html.App.map FormMessage
         ]

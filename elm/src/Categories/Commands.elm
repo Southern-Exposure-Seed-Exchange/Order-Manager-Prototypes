@@ -4,6 +4,7 @@ import Json.Decode as Decode exposing ((:=))
 import Api.Decoders exposing (categoryDecoder, productDecoder)
 import Api.Http exposing (..)
 import Api.Models exposing (CategoryId, Category, Product, initialCategory)
+import Categories.Form exposing (initialErrors)
 import Categories.Messages exposing (..)
 import Categories.Models exposing (CategoryData)
 
@@ -25,7 +26,8 @@ deleteOne categoryId =
 
 categoriesDecoder : Decode.Decoder CategoryData
 categoriesDecoder =
-    Decode.object3 CategoryData
+    Decode.object4 CategoryData
         ("category" := Decode.list categoryDecoder)
         ("product" := Decode.list productDecoder)
         (Decode.succeed initialCategory)
+        (Decode.succeed initialErrors)

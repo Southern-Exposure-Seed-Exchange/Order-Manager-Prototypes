@@ -8,6 +8,7 @@ import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import Navigation
 import String
+import Validate exposing (ifBlank)
 import Api.Decoders exposing (categoryDecoder, productDecoder)
 import Api.Encoders exposing (categoryEncoder)
 import Api.Http exposing (..)
@@ -28,33 +29,78 @@ type Msg
     | CreateOneFail (HttpBuilder.Error String)
 
 
-update : Msg -> Category -> List Category -> ( Category, List Category, Cmd Msg )
-update msg form categories =
+type alias FormErrors =
+    { name : String
+    }
+
+
+initialErrors : FormErrors
+initialErrors =
+    { name = ""
+    }
+
+
+type alias Model =
+    { categories : List Category
+    , form : Category
+    , errors : FormErrors
+    }
+
+
+validateCategory : Category -> FormErrors
+validateCategory =
+    let
+        convert ( fieldName, error ) errors =
+            case fieldName of
+                "name" ->
+                    { errors | name = error }
+
+                _ ->
+                    errors
+    in
+        Validate.all [ .name >> ifBlank ( "name", "A name is required." ) ]
+            >> List.foldl convert initialErrors
+            >> Debug.log "validate"
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg ({ categories, form } as model) =
     let
         setCategoryForm id categories =
             getById categories id |> Maybe.withDefault initialCategory
 
         changeForm newForm =
-            ( newForm, categories, Cmd.none )
+            ( { model
+                | form = newForm
+                , errors = validateCategory newForm
+              }
+            , Cmd.none
+            )
     in
         case msg of
             CreateOneDone newCategory ->
-                ( initialCategory
-                , newCategory :: categories
+                ( { model
+                    | form = initialCategory
+                    , categories = newCategory :: categories
+                    , errors = initialErrors
+                  }
                 , Navigation.newUrl <| "#categories/" ++ toString newCategory.id
                 )
 
             CreateOneFail _ ->
-                ( form, categories, Cmd.none )
+                ( model, Cmd.none )
 
             UpdateOneDone categoryId newCategory ->
-                ( initialCategory
-                , replaceBy .id newCategory categories
+                ( { model
+                    | form = initialCategory
+                    , categories = replaceBy .id newCategory categories
+                    , errors = initialErrors
+                  }
                 , Navigation.newUrl <| "#categories/" ++ toString categoryId
                 )
 
             UpdateOneFail _ ->
-                ( form, categories, Cmd.none )
+                ( model, Cmd.none )
 
             FormNameChange newName ->
                 changeForm { form | name = newName }
@@ -67,16 +113,30 @@ update msg form categories =
 
             SaveForm ->
                 let
+                    validation =
+                        validateCategory model.form
+
+                    isValid =
+                        validation == initialErrors
+
                     saveCommand =
                         if form.id == 0 then
                             createOne
                         else
                             updateOne
                 in
-                    ( form, categories, saveCommand form )
+                    if isValid then
+                        ( model, saveCommand form )
+                    else
+                        ( { model | errors = validation }, Cmd.none )
 
             ResetForm ->
-                changeForm <| setCategoryForm form.id categories
+                ( { model
+                    | form = setCategoryForm form.id categories
+                    , errors = initialErrors
+                  }
+                , Cmd.none
+                )
 
             CancelForm ->
                 let
@@ -86,8 +146,7 @@ update msg form categories =
                         else
                             toString form.id
                 in
-                    ( setCategoryForm form.id categories
-                    , categories
+                    ( { model | form = setCategoryForm form.id categories }
                     , Navigation.newUrl <| "#categories/" ++ categoryUrl
                     )
 
@@ -116,27 +175,31 @@ categoriesEncoder category =
         [ ( "category", categoryEncoder category ) ]
 
 
-view : Category -> List Category -> Html Msg
-view categoryForm categories =
+view : Model -> Html Msg
+view { form, categories, errors } =
     let
         otherCategories =
-            List.filter (\c -> c.id /= categoryForm.id) categories
+            List.filter (\c -> c.id /= form.id) categories
 
         parentOptions =
-            option [] [ text "None" ] :: List.map (parentOption categoryForm) otherCategories
+            option [] [ text "None" ] :: List.map (parentOption form) otherCategories
     in
         div []
             [ label []
                 [ text "Name: "
                 , input
-                    [ type' "text", value categoryForm.name, onInput FormNameChange ]
+                    [ type' "text", value form.name, onInput FormNameChange ]
                     []
+                , if String.isEmpty errors.name then
+                    text ""
+                  else
+                    p [ class "form-error" ] [ text errors.name ]
                 ]
             , br [] []
             , label []
                 [ text "Description: "
                 , textarea
-                    [ value categoryForm.description, onInput FormDescriptionChange ]
+                    [ value form.description, onInput FormDescriptionChange ]
                     []
                 ]
             , br [] []

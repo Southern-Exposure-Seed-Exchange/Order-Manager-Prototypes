@@ -2,6 +2,7 @@ module Models exposing (..)
 
 import Dict
 import Api.Models exposing (Category, Product, ProductVariant, ProductId, initialProduct, initialCategory)
+import Categories.Form
 import Routing
 
 
@@ -16,14 +17,20 @@ type alias Model =
 
 type alias UIState =
     { products : { showSKUs : Dict.Dict ProductId Bool, productForm : Product }
-    , categories : { categoryForm : Category }
+    , categories :
+        { categoryForm : Category
+        , formErrors : Categories.Form.FormErrors
+        }
     }
 
 
 initialUIState : UIState
 initialUIState =
     { products = { showSKUs = Dict.empty, productForm = initialProduct }
-    , categories = { categoryForm = initialCategory }
+    , categories =
+        { categoryForm = initialCategory
+        , formErrors = Categories.Form.initialErrors
+        }
     }
 
 

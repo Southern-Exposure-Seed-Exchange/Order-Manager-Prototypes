@@ -23,7 +23,9 @@ update msg model =
                         |> Categories.Update.update subMsg
 
                 categoryUI =
-                    { categoryForm = updatedModel.categoryForm }
+                    { categoryForm = updatedModel.categoryForm
+                    , formErrors = updatedModel.formErrors
+                    }
 
                 ui =
                     model.uiState
