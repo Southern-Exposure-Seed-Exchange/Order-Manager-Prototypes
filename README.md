@@ -95,6 +95,16 @@ npm i
 npm run dev
 ```
 
+### Purescript Halogen
+
+```
+cd halogen
+bower i
+npm i
+npm run watch
+open dist/index.html
+```
+
 ### Vue
 
 ```
