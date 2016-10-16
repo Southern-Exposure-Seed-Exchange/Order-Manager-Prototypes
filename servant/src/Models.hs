@@ -22,6 +22,7 @@ import Database.Persist
 import Database.Persist.Postgresql  (SqlBackend(..), runMigration)
 import Database.Persist.TH          ( share, mkPersist, sqlSettings, mkMigrate
                                     , persistLowerCase)
+import Database.Persist.Types       (SelectOpt(..))
 import qualified Data.Text       as T
 import qualified Data.HashMap.Strict    as HM
 
@@ -120,7 +121,7 @@ class (ToJSON a, Named a) => Sideload a where
 -- | Categories sideload their Products.
 instance Sideload (Entity Category) where
         sideload cs =
-            do prods <- runDB $ selectList [ProductCategory <-. catIds] []
+            do prods <- runDB $ selectList [ProductCategory <-. catIds] [defaultOrdering]
                parents <- runDB $ selectList [CategoryId <-. parentIds] []
                children <- runDB $ selectList [CategoryParent <-. map Just catIds] []
                return $ Sideloaded (JSONList (nub $ cs ++ parents ++ children),
@@ -130,15 +131,15 @@ instance Sideload (Entity Category) where
 -- | Products sideload their Categories, & Variants.
 instance Sideload (Entity Product) where
         sideload ps = do
-            cats <- runDB $ selectList [CategoryId <-. catIds] []
-            vars <- runDB $ selectList [ProductVariantProduct <-. prodIds] []
+            cats <- runDB $ selectList [CategoryId <-. catIds] [defaultOrdering]
+            vars <- runDB $ selectList [ProductVariantProduct <-. prodIds] [defaultOrdering]
             return $ Sideloaded (JSONList ps, mergeObjects (JSONList cats) (JSONList vars))
             where catIds = nub $ map (\(Entity _ prod) -> productCategory prod) ps
                   prodIds = nub $ map (\(Entity i _) -> i) ps
 -- | Product Variants sideload their Products.
 instance Sideload (Entity ProductVariant) where
         sideload pvs = do
-            prods <- runDB $ selectList [ProductId <-. prodIds] []
+            prods <- runDB $ selectList [ProductId <-. prodIds] [defaultOrdering]
             return $ Sideloaded (JSONList pvs, toJSON $ JSONList prods)
             where prodIds = nub $ map (\(Entity _ pv) -> productVariantProduct pv) pvs
 
@@ -149,3 +150,21 @@ mergeObjects :: (ToJSON a, ToJSON b) => a -> b -> Value
 mergeObjects obj1 obj2 = case (toJSON obj1, toJSON obj2) of
         (Object o1, Object o2) -> Object $ HM.union o1 o2
         (x, _)                 -> x
+
+
+-- | The `DefaultOrdering a` type represents the default sorting field that
+-- should be used when fetching data from the database.
+class DefaultOrdering a where
+        defaultOrdering :: SelectOpt a
+
+-- | Categories are ordered by their Name.
+instance DefaultOrdering Category where
+        defaultOrdering = Asc CategoryName
+
+-- | Products are ordered by their Name.
+instance DefaultOrdering Product where
+        defaultOrdering = Asc ProductName
+
+-- | ProductVariants are ordered by their SKU
+instance DefaultOrdering ProductVariant where
+        defaultOrdering = Asc ProductVariantSku

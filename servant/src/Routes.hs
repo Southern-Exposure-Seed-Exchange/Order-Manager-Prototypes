@@ -36,8 +36,8 @@ type CRUDRoutes resource =
     :<|> ((PKey resource -> JSONObject resource -> AppM (JSONObject (Entity resource)))
     :<|> (PKey resource -> AppM ()))))
 
-crudRoutes :: (PersistEntityBackend r ~ SqlBackend,
-               ToBackendKey SqlBackend r, Sideload (Entity r), Validation r)
+crudRoutes :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r,
+               Sideload (Entity r), Validation r, DefaultOrdering r)
            => CRUDRoutes r
 crudRoutes =    listRoute
            :<|> createRoute
@@ -48,9 +48,9 @@ crudRoutes =    listRoute
 -- | The `listRoute` returns a JSON Array of Persistent Entities, along
 -- with any sideloaded Entities.
 listRoute :: (PersistEntityBackend r ~ SqlBackend, PersistEntity r,
-              Sideload (Entity r))
+              Sideload (Entity r), DefaultOrdering r)
           => AppM (Sideloaded (Entity r))
-listRoute = runDB (selectList [] []) >>= sideload
+listRoute = runDB (selectList [] [defaultOrdering]) >>= sideload
 
 -- | The `createRoute` parses a JSON request body & inserts the value into
 -- the database if it is valid.
