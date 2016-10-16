@@ -95,7 +95,7 @@ instance Validation Product where
                            , ("A Product with this name already exists.", sameName)
                            ])
                 , ("category", [ ("A Category is required.", not categoryIsPositive)
-                               , ("The Category does not exist.", categoryIsZero && invalidCategory)
+                               , ("The Category does not exist.", categoryIsPositive && invalidCategory)
                                ])
                 ]
 
