@@ -11,7 +11,7 @@ import Data.Maybe                   (isJust, fromJust, fromMaybe)
 import Database.Persist             ( selectFirst, (!=.), (==.), Key
                                     , EntityField, PersistEntityBackend
                                     , PersistField, PersistEntity)
-import Database.Persist.Sql         (SqlBackend)
+import Database.Persist.Sql         (SqlBackend, fromSqlKey)
 import Servant
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text           as T
@@ -87,13 +87,15 @@ instance Validation Product where
         validate key prod = do
             let prodName = productName prod
                 catId = productCategory prod
+                categoryIsPositive  = fromSqlKey catId > 0
             sameName <- fieldValueExists ProductId key ProductName prodName
             invalidCategory <- not <$> modelExists CategoryId catId
             run prod
                 [ ("name", [ ("The Name cannot be blank.", T.null prodName)
                            , ("A Product with this name already exists.", sameName)
                            ])
-                , ("category", [ ("The Category does not exist.", invalidCategory)
+                , ("category", [ ("A Category is required.", not categoryIsPositive)
+                               , ("The Category does not exist.", categoryIsZero && invalidCategory)
                                ])
                 ]
 
