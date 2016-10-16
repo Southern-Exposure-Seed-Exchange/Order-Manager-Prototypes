@@ -60,7 +60,6 @@ validateCategory =
     in
         Validate.all [ .name >> ifBlank ( "name", "A name is required." ) ]
             >> List.foldl convert initialErrors
-            >> Debug.log "validate"
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
