@@ -4,7 +4,7 @@ import Dict
 import Navigation
 import Api.Models exposing (ProductId, initialProduct)
 import Products.Commands exposing (deleteOne)
-import Products.Form
+import Products.Form exposing (initialErrors)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
 import Utils exposing (getById, replaceAllById)
@@ -64,10 +64,20 @@ update msg model =
 
         FormMessage subMsg ->
             let
-                ( updatedForm, updatedProducts, cmd ) =
-                    Products.Form.update subMsg model.productForm model
+                ( updatedForm, cmd ) =
+                    Products.Form.update subMsg
+                        { form = model.productForm
+                        , errors = model.formErrors
+                        , products = model.products
+                        , categories = model.categories
+                        }
             in
-                ( { model | productForm = updatedForm, products = updatedProducts }
+                ( { model
+                    | productForm = updatedForm.form
+                    , formErrors = updatedForm.errors
+                    , products = updatedForm.products
+                    , categories = updatedForm.categories
+                  }
                 , Cmd.map FormMessage cmd
                 )
 
@@ -79,7 +89,10 @@ setProductForm id model =
             getById model.products id
                 |> Maybe.withDefault initialProduct
     in
-        { model | productForm = productForm }
+        { model
+            | productForm = productForm
+            , formErrors = initialErrors
+        }
 
 
 updateModel : ProductData -> ProductData -> ProductData

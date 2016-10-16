@@ -2,9 +2,10 @@ module Products.Commands exposing (..)
 
 import Dict
 import Json.Decode as Decode exposing ((:=))
-import Api.Models exposing (Product, ProductId, initialProduct)
 import Api.Decoders exposing (categoryDecoder, productDecoder, productVariantDecoder)
 import Api.Http exposing (..)
+import Api.Models exposing (Product, ProductId, initialProduct)
+import Products.Form exposing (initialErrors)
 import Products.Messages exposing (..)
 import Products.Models exposing (ProductData)
 
@@ -26,9 +27,10 @@ deleteOne id =
 
 productsDecoder : Decode.Decoder ProductData
 productsDecoder =
-    Decode.object5 ProductData
+    Decode.object6 ProductData
         ("product" := Decode.list productDecoder)
         ("productVariant" := Decode.list productVariantDecoder)
         ("category" := Decode.list categoryDecoder)
         (Decode.succeed Dict.empty)
         (Decode.succeed initialProduct)
+        (Decode.succeed initialErrors)

@@ -12,6 +12,11 @@ view : Product -> ProductData -> Html Msg
 view product model =
     div []
         [ h1 [] [ text <| "Editing Product - " ++ product.name ]
-        , Products.Form.view model.productForm model.categories
+        , Products.Form.view
+            { form = model.productForm
+            , products = model.products
+            , errors = model.formErrors
+            , categories = model.categories
+            }
             |> Html.App.map FormMessage
         ]

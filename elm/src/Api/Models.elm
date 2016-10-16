@@ -1,6 +1,12 @@
 module Api.Models exposing (..)
 
 
+type alias ApiError =
+    { source : String
+    , detail : String
+    }
+
+
 type alias CategoryId =
     Int
 

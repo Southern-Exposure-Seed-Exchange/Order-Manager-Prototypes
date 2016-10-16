@@ -50,6 +50,7 @@ update msg model =
                 productsUI =
                     { showSKUs = updatedModel.showSKUs
                     , productForm = updatedModel.productForm
+                    , formErrors = updatedModel.formErrors
                     }
 
                 ui =

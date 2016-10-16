@@ -3,6 +3,7 @@ module Products.Models exposing (..)
 import Dict
 import Api.Models exposing (Category, Product, ProductVariant, ProductId, initialProduct)
 import Models exposing (Model, UIState)
+import Products.Form exposing (FormErrors)
 
 
 type alias ProductData =
@@ -11,6 +12,7 @@ type alias ProductData =
     , categories : List Category
     , showSKUs : Dict.Dict ProductId Bool
     , productForm : Product
+    , formErrors : FormErrors
     }
 
 
@@ -25,4 +27,5 @@ makeProductData model =
         , categories = model.categories
         , showSKUs = ui.showSKUs
         , productForm = ui.productForm
+        , formErrors = ui.formErrors
         }

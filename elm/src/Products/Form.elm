@@ -3,16 +3,15 @@ module Products.Form exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (type', class, value, selected, checked)
 import Html.Events exposing (onCheck, onClick, onInput)
-import HttpBuilder
-import Json.Decode as Decode exposing ((:=))
+import HttpBuilder exposing (Error(..))
+import Json.Decode as Decode exposing ((:=), decodeString)
 import Json.Encode as Encode
 import Navigation
 import String
-import Api.Decoders exposing (productDecoder)
+import Api.Decoders exposing (productDecoder, apiErrorDecoder)
 import Api.Encoders exposing (productEncoder)
 import Api.Http exposing (..)
 import Api.Models exposing (Category, Product, ProductId, initialProduct)
-import Products.Models exposing (ProductData)
 import Utils exposing (getById, onChange, replaceBy)
 
 
@@ -28,38 +27,88 @@ type Msg
     | ResetForm
     | CancelForm
     | CreateOneDone Product
-    | CreateOneFail (HttpBuilder.Error String)
     | UpdateOneDone ProductId Product
-    | UpdateOneFail (HttpBuilder.Error String)
+    | SaveFail (HttpBuilder.Error String)
 
 
-update : Msg -> Product -> ProductData -> ( Product, List Product, Cmd Msg )
-update msg form model =
+type alias Model =
+    { form : Product
+    , errors : FormErrors
+    , products : List Product
+    , categories : List Category
+    }
+
+
+type alias FormErrors =
+    { name : String
+    , category : String
+    }
+
+
+initialErrors : FormErrors
+initialErrors =
+    { name = ""
+    , category = ""
+    }
+
+
+validateErrors : String -> FormErrors
+validateErrors data =
+    let
+        decoded =
+            decodeString apiErrorDecoder data
+
+        assignErrors { source, detail } errors =
+            case source of
+                "name" ->
+                    { errors | name = detail }
+
+                "category" ->
+                    { errors | category = detail }
+
+                _ ->
+                    errors
+    in
+        case decoded of
+            Ok apiErrors ->
+                List.foldl assignErrors initialErrors apiErrors
+
+            Err _ ->
+                initialErrors
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg ({ form } as model) =
     let
         changeForm newForm =
-            ( newForm, model.products, Cmd.none )
+            ( { model | form = newForm }, Cmd.none )
 
         setForm id products =
             getById products id |> Maybe.withDefault initialProduct
     in
         case msg of
             CreateOneDone newProduct ->
-                ( form
-                , newProduct :: model.products
+                ( { model | products = newProduct :: model.products }
                 , Navigation.newUrl <| "#products/" ++ toString newProduct.id
                 )
 
-            CreateOneFail _ ->
-                ( form, model.products, Cmd.none )
-
             UpdateOneDone productId newProduct ->
-                ( initialProduct
-                , replaceBy .id newProduct model.products
+                ( { model
+                    | form = initialProduct
+                    , products = replaceBy .id newProduct model.products
+                  }
                 , Navigation.newUrl <| "#products/" ++ toString productId
                 )
 
-            UpdateOneFail _ ->
-                ( form, model.products, Cmd.none )
+            SaveFail error ->
+                case error of
+                    BadResponse resp ->
+                        ( { model | errors = validateErrors resp.data }
+                        , Cmd.none
+                        )
+
+                    _ ->
+                        ( model, Cmd.none )
 
             NameChange newName ->
                 changeForm { form | name = newName }
@@ -90,10 +139,12 @@ update msg form model =
                         else
                             updateOne
                 in
-                    ( form, model.products, saveCommand form )
+                    ( model, saveCommand form )
 
             ResetForm ->
-                changeForm <| setForm form.id model.products
+                ( { model | form = setForm form.id model.products, errors = initialErrors }
+                , Cmd.none
+                )
 
             CancelForm ->
                 let
@@ -103,8 +154,10 @@ update msg form model =
                         else
                             toString form.id
                 in
-                    ( setForm form.id model.products
-                    , model.products
+                    ( { model
+                        | form = setForm form.id model.products
+                        , errors = initialErrors
+                      }
                     , Navigation.newUrl <| "#products/" ++ url
                     )
 
@@ -114,7 +167,7 @@ createOne product =
     post ProductsEndpoint
         (productsEncoder product)
         ("product" := productDecoder)
-        CreateOneFail
+        SaveFail
         CreateOneDone
 
 
@@ -123,7 +176,7 @@ updateOne product =
     put (ProductEndpoint product.id)
         (productsEncoder product)
         ("product" := productDecoder)
-        UpdateOneFail
+        SaveFail
         (UpdateOneDone product.id)
 
 
@@ -132,8 +185,16 @@ productsEncoder product =
     Encode.object [ ( "product", productEncoder product ) ]
 
 
-view : Product -> List Category -> Html Msg
-view form categories =
+showError : String -> Html msg
+showError error =
+    if String.isEmpty error then
+        text ""
+    else
+        p [ class "form-error" ] [ text error ]
+
+
+view : Model -> Html Msg
+view ({ form, categories } as model) =
     div []
         [ label []
             [ text "Name: "
@@ -143,6 +204,7 @@ view form categories =
                 , onInput NameChange
                 ]
                 []
+            , showError model.errors.name
             ]
         , label []
             [ text "Description:"
@@ -155,7 +217,16 @@ view form categories =
         , label []
             [ text "Category:"
             , select [ onChange CategoryChange ] <|
-                List.map (categoryOption form) categories
+                [ option
+                    (if form.id == 0 then
+                        [ selected True ]
+                     else
+                        []
+                    )
+                    [ text "Select a Category" ]
+                ]
+                    ++ List.map (categoryOption form) categories
+            , showError model.errors.category
             ]
         , label []
             [ text "Is Active:"
