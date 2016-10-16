@@ -6,14 +6,19 @@ import Categories.Commands exposing (deleteOne)
 import Categories.Form
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
-import Utils exposing (replaceAllById, getById)
+import Utils exposing (getById, replaceAllById)
 
 
 update : Msg -> CategoryData -> ( CategoryData, Cmd Msg )
 update msg model =
     case msg of
         FetchAllDone newModel ->
-            ( updateModel model newModel, Cmd.none )
+            ( { model
+                | products = newModel.products
+                , categories = newModel.categories
+              }
+            , Cmd.none
+            )
 
         FetchAllFail _ ->
             ( model, Cmd.none )
@@ -87,6 +92,6 @@ updateModel model newData =
             replaceAllById model newData
     in
         { model
-            | categories = List.sortBy .name <| updateAttribute .categories
-            , products = List.sortBy .name <| updateAttribute .products
+            | categories = updateAttribute .categories
+            , products = updateAttribute .products
         }

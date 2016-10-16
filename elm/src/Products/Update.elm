@@ -14,7 +14,13 @@ update : Msg -> ProductData -> ( ProductData, Cmd Msg )
 update msg model =
     case msg of
         FetchAllDone newModel ->
-            ( updateModel model newModel, Cmd.none )
+            ( { model
+                | products = newModel.products
+                , productVariants = newModel.productVariants
+                , categories = replaceAllById model newModel .categories
+              }
+            , Cmd.none
+            )
 
         FetchAllFail _ ->
             ( model, Cmd.none )
@@ -102,9 +108,9 @@ updateModel model newData =
             replaceAllById model newData
     in
         { model
-            | categories = List.sortBy .name <| updateAttribute .categories
-            , products = List.sortBy .name <| updateAttribute .products
-            , productVariants = List.sortBy .sku <| updateAttribute .productVariants
+            | categories = updateAttribute .categories
+            , products = updateAttribute .products
+            , productVariants = updateAttribute .productVariants
         }
 
 
