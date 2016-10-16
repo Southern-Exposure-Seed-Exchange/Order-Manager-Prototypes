@@ -2,7 +2,7 @@ server: build
 	stack exec om-servant-exe
 
 watch: build
-	stack build --pedantic --file-watch
+	stack -j 4 build --pedantic --file-watch
 
 clean:
 	stack clean
@@ -13,7 +13,7 @@ maintainer-clean:
 
 
 build: install ./src/** ./app/** om-servant.cabal Setup.hs
-	stack build --pedantic
+	stack -j 4 build --pedantic
 
 install: om-servant.cabal
-	stack install --only-dependencies
+	stack -j 4 install --only-dependencies
