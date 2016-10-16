@@ -4,12 +4,13 @@ import Html exposing (..)
 import Html.Attributes exposing (type', class, value, selected, checked)
 import Html.Events exposing (onCheck, onClick, onInput)
 import HttpBuilder exposing (Error(..))
-import Json.Decode as Decode exposing ((:=), decodeString)
+import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import Navigation
 import String
-import Api.Decoders exposing (productDecoder, apiErrorDecoder)
+import Api.Decoders exposing (productDecoder)
 import Api.Encoders exposing (productEncoder)
+import Api.Errors exposing (parseErrors)
 import Api.Http exposing (..)
 import Api.Models exposing (Category, Product, ProductId, initialProduct)
 import Utils exposing (getById, onChange, replaceBy)
@@ -52,12 +53,9 @@ initialErrors =
     }
 
 
-validateErrors : String -> FormErrors
-validateErrors data =
+getErrors : String -> FormErrors
+getErrors data =
     let
-        decoded =
-            decodeString apiErrorDecoder data
-
         assignErrors { source, detail } errors =
             case source of
                 "name" ->
@@ -69,12 +67,7 @@ validateErrors data =
                 _ ->
                     errors
     in
-        case decoded of
-            Ok apiErrors ->
-                List.foldl assignErrors initialErrors apiErrors
-
-            Err _ ->
-                initialErrors
+        parseErrors assignErrors initialErrors data
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -103,7 +96,7 @@ update msg ({ form } as model) =
             SaveFail error ->
                 case error of
                     BadResponse resp ->
-                        ( { model | errors = validateErrors resp.data }
+                        ( { model | errors = getErrors resp.data }
                         , Cmd.none
                         )
 

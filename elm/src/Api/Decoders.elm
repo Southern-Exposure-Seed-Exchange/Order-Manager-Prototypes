@@ -1,18 +1,7 @@
 module Api.Decoders exposing (..)
 
 import Json.Decode as Decode exposing ((:=))
-import Api.Models exposing (ApiError, Category, Product, ProductVariant)
-
-
-apiErrorDecoder : Decode.Decoder (List ApiError)
-apiErrorDecoder =
-    let
-        errorDecoder =
-            Decode.object2 ApiError
-                ("source" := Decode.string)
-                ("detail" := Decode.string)
-    in
-        "errors" := Decode.list errorDecoder
+import Api.Models exposing (Category, Product, ProductVariant)
 
 
 categoryDecoder : Decode.Decoder Category

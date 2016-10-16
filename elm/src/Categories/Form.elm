@@ -3,14 +3,14 @@ module Categories.Form exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (type', value, name, for, selected, class)
 import Html.Events exposing (onInput, onClick)
-import HttpBuilder
+import HttpBuilder exposing (Error(..))
 import Json.Decode as Decode exposing ((:=))
 import Json.Encode as Encode
 import Navigation
 import String
-import Validate exposing (ifBlank)
 import Api.Decoders exposing (categoryDecoder, productDecoder)
 import Api.Encoders exposing (categoryEncoder)
+import Api.Errors exposing (parseErrors)
 import Api.Http exposing (..)
 import Api.Models exposing (CategoryId, Category, Product, initialCategory)
 import Utils exposing (getById, onChange, replaceBy)
@@ -24,9 +24,8 @@ type Msg
     | ResetForm
     | CancelForm
     | UpdateOneDone CategoryId Category
-    | UpdateOneFail (HttpBuilder.Error String)
     | CreateOneDone Category
-    | CreateOneFail (HttpBuilder.Error String)
+    | SaveFail (HttpBuilder.Error String)
 
 
 type alias FormErrors =
@@ -47,19 +46,18 @@ type alias Model =
     }
 
 
-validateCategory : Category -> FormErrors
-validateCategory =
+getErrors : String -> FormErrors
+getErrors data =
     let
-        convert ( fieldName, error ) errors =
-            case fieldName of
+        assignErrors { source, detail } errors =
+            case source of
                 "name" ->
-                    { errors | name = error }
+                    { errors | name = detail }
 
                 _ ->
                     errors
     in
-        Validate.all [ .name >> ifBlank ( "name", "A name is required." ) ]
-            >> List.foldl convert initialErrors
+        parseErrors assignErrors initialErrors data
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -69,12 +67,7 @@ update msg ({ categories, form } as model) =
             getById categories id |> Maybe.withDefault initialCategory
 
         changeForm newForm =
-            ( { model
-                | form = newForm
-                , errors = validateCategory newForm
-              }
-            , Cmd.none
-            )
+            ( { model | form = newForm }, Cmd.none )
     in
         case msg of
             CreateOneDone newCategory ->
@@ -86,9 +79,6 @@ update msg ({ categories, form } as model) =
                 , Navigation.newUrl <| "#categories/" ++ toString newCategory.id
                 )
 
-            CreateOneFail _ ->
-                ( model, Cmd.none )
-
             UpdateOneDone categoryId newCategory ->
                 ( { model
                     | form = initialCategory
@@ -98,8 +88,15 @@ update msg ({ categories, form } as model) =
                 , Navigation.newUrl <| "#categories/" ++ toString categoryId
                 )
 
-            UpdateOneFail _ ->
-                ( model, Cmd.none )
+            SaveFail error ->
+                case error of
+                    BadResponse resp ->
+                        ( { model | errors = getErrors resp.data }
+                        , Cmd.none
+                        )
+
+                    _ ->
+                        ( model, Cmd.none )
 
             FormNameChange newName ->
                 changeForm { form | name = newName }
@@ -112,22 +109,13 @@ update msg ({ categories, form } as model) =
 
             SaveForm ->
                 let
-                    validation =
-                        validateCategory model.form
-
-                    isValid =
-                        validation == initialErrors
-
                     saveCommand =
                         if form.id == 0 then
                             createOne
                         else
                             updateOne
                 in
-                    if isValid then
-                        ( model, saveCommand form )
-                    else
-                        ( { model | errors = validation }, Cmd.none )
+                    ( model, saveCommand form )
 
             ResetForm ->
                 ( { model
@@ -155,7 +143,7 @@ updateOne category =
     put (CategoryEndpoint category.id)
         (categoriesEncoder category)
         ("category" := categoryDecoder)
-        UpdateOneFail
+        SaveFail
         (UpdateOneDone category.id)
 
 
@@ -164,7 +152,7 @@ createOne category =
     post CategoriesEndpoint
         (categoriesEncoder category)
         ("category" := categoryDecoder)
-        CreateOneFail
+        SaveFail
         CreateOneDone
 
 
