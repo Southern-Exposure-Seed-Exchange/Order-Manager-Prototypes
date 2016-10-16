@@ -65,8 +65,7 @@ class Validation a where
                   -- a single field.
                   fieldError :: FieldName -> ErrorMessage -> Value
                   fieldError field detail =
-                    let pointer = if T.null field then "/data" else "/data/attributes/" `T.append` field
-                    in object [ "detail" .= detail, "source" .= object ["pointer" .= pointer] ]
+                    object [ "detail" .= detail, "source" .= field ]
 
 
 -- | A valid category should have a unique, non-empty name, and cannot be
