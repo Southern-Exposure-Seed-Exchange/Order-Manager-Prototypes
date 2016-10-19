@@ -1,9 +1,12 @@
-module Commands exposing (..)
+port module Commands exposing (..)
 
 import Categories.Commands
 import Messages exposing (Msg(..))
 import Routing exposing (Route(..))
 import Products.Commands
+
+
+port setTitle : String -> Cmd msg
 
 
 fetchForRoute : Route -> Cmd Msg
@@ -44,3 +47,38 @@ fetchForRoute route =
 
         NotFoundRoute ->
             Cmd.none
+
+
+setPageTitle : Route -> Cmd msg
+setPageTitle route =
+    setTitle <|
+        case route of
+            DashboardRoute ->
+                "Dashboard"
+
+            CategoriesRoute ->
+                "Categories"
+
+            CategoryAddRoute ->
+                "Add Category"
+
+            CategoryRoute _ ->
+                "View Category"
+
+            CategoryEditRoute _ ->
+                "Edit Category"
+
+            ProductsRoute ->
+                "Products"
+
+            ProductAddRoute ->
+                "Add Product"
+
+            ProductRoute _ ->
+                "View Product"
+
+            ProductsEditRoute _ ->
+                "Edit Product"
+
+            NotFoundRoute ->
+                "404 Not Found"

@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Navigation
-import Commands exposing (fetchForRoute)
+import Commands exposing (fetchForRoute, setPageTitle)
 import Messages exposing (Msg)
 import Models exposing (Model, initialModel, UIState, initialUIState)
 import Routing exposing (Route(..))
@@ -15,7 +15,12 @@ init result =
         currentRoute =
             Routing.routeFromResult result
     in
-        ( initialModel currentRoute, fetchForRoute currentRoute )
+        ( initialModel currentRoute
+        , Cmd.batch
+            [ setPageTitle currentRoute
+            , fetchForRoute currentRoute
+            ]
+        )
 
 
 urlUpdate : Result String Route -> Model -> ( Model, Cmd Msg )
@@ -36,7 +41,10 @@ urlUpdate result model =
                     model.uiState
     in
         ( { updatedModel | uiState = updatedUI }
-        , fetchForRoute updatedModel.route
+        , Cmd.batch
+            [ fetchForRoute updatedModel.route
+            , setPageTitle updatedModel.route
+            ]
         )
 
 
