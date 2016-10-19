@@ -5,7 +5,7 @@ import Commands exposing (fetchForRoute, setPageTitle)
 import Messages exposing (Msg)
 import Models exposing (Model, initialModel, UIState, initialUIState)
 import Routing exposing (Route(..))
-import Update exposing (update)
+import Update exposing (update, updateUI)
 import View exposing (view)
 
 
@@ -28,19 +28,10 @@ urlUpdate result model =
     let
         updatedModel =
             { model | route = Routing.routeFromResult result }
-
-        updatedUI =
-            case updatedModel.route of
-                CategoryAddRoute ->
-                    initialUIState
-
-                ProductAddRoute ->
-                    initialUIState
-
-                _ ->
-                    model.uiState
     in
-        ( { updatedModel | uiState = updatedUI }
+        ( { updatedModel
+            | uiState = updateUI updatedModel.route model.uiState
+          }
         , Cmd.batch
             [ fetchForRoute updatedModel.route
             , setPageTitle updatedModel.route
