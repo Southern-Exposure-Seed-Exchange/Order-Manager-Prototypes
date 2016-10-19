@@ -54,6 +54,40 @@ msgToRoute msg =
             CategoryAddRoute
 
 
+routeIsChildOfMsg : Route -> Msg -> Bool
+routeIsChildOfMsg route msg =
+    case ( msg, route ) of
+        ( Dashboard, DashboardRoute ) ->
+            True
+
+        ( Categories, CategoryAddRoute ) ->
+            True
+
+        ( Categories, CategoriesRoute ) ->
+            True
+
+        ( Categories, CategoryRoute _ ) ->
+            True
+
+        ( Categories, CategoryEditRoute _ ) ->
+            True
+
+        ( Products, ProductAddRoute ) ->
+            True
+
+        ( Products, ProductsRoute ) ->
+            True
+
+        ( Products, ProductRoute _ ) ->
+            True
+
+        ( Products, ProductsEditRoute _ ) ->
+            True
+
+        ( _, _ ) ->
+            False
+
+
 view : Route -> Html Msg
 view currentRoute =
     let
@@ -64,19 +98,7 @@ view currentRoute =
                 []
 
         isActive msg =
-            currentRoute == (msgToRoute msg) || isChildRoute msg
-
-        isChildRoute msg =
-            Dict.get (toString msg) childRoutes
-                |> Maybe.map (\rs -> List.member currentRoute rs)
-                |> Maybe.withDefault False
-
-        childRoutes =
-            [ ( Categories, [ AddCategory ] )
-            , ( Products, [ AddProduct ] )
-            ]
-                |> List.map (\( msg, ms ) -> ( toString msg, List.map msgToRoute ms ))
-                |> Dict.fromList
+            currentRoute == msgToRoute msg || routeIsChildOfMsg currentRoute msg
 
         nav =
             node "nav" []
