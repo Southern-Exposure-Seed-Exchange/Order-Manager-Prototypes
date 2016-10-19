@@ -86,8 +86,14 @@ prodTable products =
 
 prodRow : Product -> Html Msg
 prodRow product =
-    tr [ onClick (VisitProduct product.id) ]
-        [ td [] [ text product.name ]
+    tr []
+        [ td []
+            [ a
+                [ onClickNoDefault <| VisitProduct product.id
+                , href <| "#/products/" ++ toString product.id
+                ]
+                [ text product.name ]
+            ]
         , td [] [ text <| toString product.isOrganic ]
         , td [] [ text <| toString product.isHeirloom ]
         , td [] [ text <| toString product.isSouthEast ]

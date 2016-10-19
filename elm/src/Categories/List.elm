@@ -1,13 +1,13 @@
 module Categories.List exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
 import Maybe
 import Api.Models exposing (Category, Product)
 import Categories.Messages exposing (..)
 import Categories.Models exposing (CategoryData)
-import Utils exposing (filterBy)
+import Utils exposing (filterBy, onClickNoDefault)
 
 
 view : CategoryData -> Html Msg
@@ -47,8 +47,14 @@ catTable model categories =
 
 catRow : CategoryData -> Category -> Html Msg
 catRow model category =
-    tr [ onClick <| VisitCategory category.id ]
-        [ td [] [ text category.name ]
+    tr []
+        [ td []
+            [ a
+                [ onClickNoDefault <| VisitCategory category.id
+                , href <| "#categories/" ++ toString category.id
+                ]
+                [ text category.name ]
+            ]
         , td [] [ text (childCount model.categories category |> toString) ]
         , td [] [ text (productCount model.products category |> toString) ]
         ]

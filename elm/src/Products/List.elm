@@ -2,12 +2,12 @@ module Products.List exposing (..)
 
 import Dict
 import Html exposing (..)
-import Html.Attributes exposing (colspan, hidden, class)
+import Html.Attributes exposing (colspan, hidden, class, href)
 import Html.Events exposing (onClick)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
-import Utils exposing (filterBy)
+import Utils exposing (filterBy, onClickNoDefault)
 
 
 view : ProductData -> Html Msg
@@ -58,7 +58,13 @@ prodRow model product =
                 ++ List.map (skuRow showSKUs) variants
     in
         [ tr [ onClick (ToggleSKUs product.id) ]
-            [ td [ onClick (VisitProduct product.id) ] [ text product.name ]
+            [ td []
+                [ a
+                    [ onClickNoDefault <| VisitProduct product.id
+                    , href <| "#products/" ++ toString product.id
+                    ]
+                    [ text product.name ]
+                ]
             , td [] [ text <| toString product.isOrganic ]
             , td [] [ text <| toString product.isHeirloom ]
             , td [] [ text <| toString product.isSouthEast ]
