@@ -12,6 +12,7 @@
     "node-bourbon": "^4.2.8",
     "node-neat": "^1.7.2",
     "node-sass": "^3.10.0",
+    "npm-watch": "^0.1.6",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
@@ -21,8 +22,20 @@
   "devDependencies": {},
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch --hot",
-    "dev": "webpack-dev-server --port 7000 --hot"
+    "build-server": "webpack --watch --hot",
+    "test-runner": "npm-watch",
+    "dev": "webpack-dev-server --port 7000 --hot",
+    "test": "elm test"
+  },
+  "watch": {
+    "test": {
+      "patterns": [
+        "src",
+        "tests"
+      ],
+      "extensions": "elm",
+      "quiet": true
+    }
   },
   "author": "Pavan Rikhi",
   "license": "GPL-3.0"

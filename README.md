@@ -77,6 +77,12 @@ npm i
 npm run dev
 ```
 
+Test Runner:
+````
+npm i -g elm-test
+npm run -s test-runner
+```
+
 ### Ember
 
 ```
