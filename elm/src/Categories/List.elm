@@ -7,20 +7,12 @@ import Maybe
 import Api.Models exposing (Category, Product)
 import Categories.Messages exposing (..)
 import Categories.Models exposing (CategoryData)
-import Utils exposing (filterBy, onClickNoDefault)
+import Utils exposing (isNothing, filterById, onClickNoDefault)
 
 
 view : CategoryData -> Html Msg
 view model =
     let
-        isNothing maybe =
-            case maybe of
-                Nothing ->
-                    True
-
-                Just _ ->
-                    False
-
         rootCategories =
             List.filter (.parent >> isNothing) model.categories
     in
@@ -62,10 +54,10 @@ catRow model category =
 
 childCount : List Category -> Category -> Int
 childCount categories category =
-    filterBy (.parent >> Maybe.withDefault 0) category.id categories
+    filterById (.parent >> Maybe.withDefault 0) category categories
         |> List.length
 
 
 productCount : List Product -> Category -> Int
 productCount products category =
-    filterBy .category category.id products |> List.length
+    filterById .category category products |> List.length

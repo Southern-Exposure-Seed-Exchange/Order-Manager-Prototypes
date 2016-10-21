@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Models exposing (ProductData)
 import Products.Messages exposing (Msg(..))
-import Utils exposing (getById, filterBy, onClickNoDefault)
+import Utils exposing (getById, filterById, onClickNoDefault)
 
 
 view : Product -> ProductData -> Html Msg
@@ -16,7 +16,7 @@ view product model =
             getById model.categories product.category
 
         productVariants =
-            filterBy .product product.id model.productVariants
+            filterById .product product model.productVariants
 
         categoryLink category =
             small []

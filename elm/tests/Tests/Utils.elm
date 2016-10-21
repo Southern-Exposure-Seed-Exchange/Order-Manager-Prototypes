@@ -1,17 +1,33 @@
 module Tests.Utils exposing (tests)
 
-import Test exposing (Test, describe, test)
 import Expect
-import Utils exposing (filterBy, getById, replaceBy, replaceAllById)
+import Test exposing (Test, describe, test)
+import Utils exposing (filterBy, filterById, getById, isNothing, replaceBy, replaceAllById)
 
 
 tests : Test
 tests =
     describe "Utils"
-        [ filterByTests
-        , getByIdTests
+        [ isNothingTests
         , replaceByTests
         , replaceAllByIdTests
+        , filterByTests
+        , filterByIdTests
+        , getByIdTests
+        ]
+
+
+isNothingTests : Test
+isNothingTests =
+    describe "isNothing"
+        [ test "Nothing values return true" <|
+            \_ ->
+                isNothing Nothing
+                    |> Expect.true "Expected value to be Nothing."
+        , test "Just values return false" <|
+            \_ ->
+                isNothing (Just 42)
+                    |> Expect.false "Expected value to be Just."
         ]
 
 
@@ -67,6 +83,15 @@ filterByTests =
             \_ -> Expect.equal (filterBy identity 2 [ 2, 3, 5 ]) [ 2 ]
         , test "list with repeated value contains all matches" <|
             \_ -> Expect.equal (filterBy identity 2 [ 2, 2, 2 ]) [ 2, 2, 2 ]
+        ]
+
+
+filterByIdTests : Test
+filterByIdTests =
+    describe "filterById"
+        [ test "filters by id of value" <|
+            \_ ->
+                Expect.equal (filterById identity { id = 2 } [ 2, 3, 4 ]) [ 2 ]
         ]
 
 

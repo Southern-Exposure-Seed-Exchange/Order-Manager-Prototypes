@@ -1,6 +1,5 @@
 module NavBar exposing (..)
 
-import Dict
 import Html exposing (..)
 import Html.Attributes exposing (href, class, id)
 import Navigation

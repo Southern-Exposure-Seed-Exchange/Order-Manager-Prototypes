@@ -7,7 +7,7 @@ import Html.Events exposing (onClick)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
-import Utils exposing (filterBy, onClickNoDefault)
+import Utils exposing (filterById, onClickNoDefault)
 
 
 view : ProductData -> Html Msg
@@ -45,7 +45,7 @@ prodRow model product =
                 |> Maybe.withDefault False
 
         variants =
-            filterBy .product product.id model.productVariants
+            filterById .product product model.productVariants
 
         extraRows =
             [ tr [ hidden <| not showSKUs, class "variant-header" ]
