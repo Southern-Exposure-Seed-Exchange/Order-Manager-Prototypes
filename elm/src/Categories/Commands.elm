@@ -1,4 +1,4 @@
-module Categories.Commands exposing (..)
+port module Categories.Commands exposing (..)
 
 import Json.Decode as Decode exposing ((:=))
 import Api.Decoders exposing (categoryDecoder, productDecoder)
@@ -7,6 +7,12 @@ import Api.Models exposing (CategoryId, Category, Product, initialCategory)
 import Categories.Form exposing (initialErrors)
 import Categories.Messages exposing (..)
 import Categories.Models exposing (CategoryData)
+
+
+port confirmCategoryDeletion : ( CategoryId, String ) -> Cmd msg
+
+
+port categoryDeleteWasConfirmed : (CategoryId -> msg) -> Sub msg
 
 
 fetchAll : Cmd Msg

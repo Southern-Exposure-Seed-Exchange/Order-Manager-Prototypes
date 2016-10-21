@@ -3,7 +3,7 @@ module Main exposing (..)
 {-| This is the entry point of the Elm application, it combines an initial
 module with the view and update functions to create a `Program`.
 
-@docs init, urlUpdate, subscriptions, main
+@docs init, urlUpdate, main
 
 -}
 
@@ -11,7 +11,8 @@ import Navigation
 import Commands exposing (fetchForRoute, setPageTitle)
 import Messages exposing (Msg)
 import Models exposing (Model, initialModel, UIState, initialUIState)
-import Routing exposing (Route(..))
+import Routing exposing (Route)
+import Subscriptions exposing (subscriptions)
 import Update exposing (update, updateUI)
 import View exposing (view)
 
@@ -50,13 +51,6 @@ urlUpdate result model =
             , setPageTitle updatedModel.route
             ]
         )
-
-
-{-| No subscriptions are used at the moment.
--}
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
 
 
 {-| The `main` function assembles the initial `Model`, `View.view`, and

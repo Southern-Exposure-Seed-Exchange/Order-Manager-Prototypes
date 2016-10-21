@@ -2,7 +2,7 @@ module Categories.Update exposing (..)
 
 import Navigation
 import Api.Models exposing (CategoryId, initialCategory)
-import Categories.Commands exposing (deleteOne)
+import Categories.Commands exposing (deleteOne, confirmCategoryDeletion)
 import Categories.Form
 import Categories.Messages exposing (Msg(..))
 import Categories.Models exposing (CategoryData)
@@ -51,6 +51,14 @@ update msg model =
             )
 
         DeleteCategory id ->
+            ( model
+            , confirmCategoryDeletion
+                ( id
+                , "Are you sure you want to delete this Category? This is irreversible!"
+                )
+            )
+
+        CategoryDeletionConfirmed id ->
             ( model, deleteOne id )
 
         VisitProduct id ->

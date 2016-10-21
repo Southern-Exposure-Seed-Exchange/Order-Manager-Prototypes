@@ -10,6 +10,7 @@
         "Main",
         "Api.Models",
         "Routing",
+        "Subscriptions",
         "Utils"
     ],
     "dependencies": {

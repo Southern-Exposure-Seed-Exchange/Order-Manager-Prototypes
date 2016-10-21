@@ -3,7 +3,7 @@ module Products.Update exposing (..)
 import Dict
 import Navigation
 import Api.Models exposing (ProductId, initialProduct)
-import Products.Commands exposing (deleteOne)
+import Products.Commands exposing (deleteOne, confirmProductDeletion)
 import Products.Form exposing (initialErrors)
 import Products.Messages exposing (Msg(..))
 import Products.Models exposing (ProductData)
@@ -66,6 +66,14 @@ update msg model =
             )
 
         DeleteProduct id ->
+            ( model
+            , confirmProductDeletion
+                ( id
+                , "Are you sure you want to delete this Product? This is irreversible!"
+                )
+            )
+
+        ProductDeletionConfirmed id ->
             ( model, deleteOne id )
 
         FormMessage subMsg ->

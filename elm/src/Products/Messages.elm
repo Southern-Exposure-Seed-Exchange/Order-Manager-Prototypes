@@ -20,4 +20,5 @@ type Msg
     | AddProduct
     | EditProduct ProductId
     | DeleteProduct ProductId
+    | ProductDeletionConfirmed ProductId
     | FormMessage Products.Form.Msg

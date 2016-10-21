@@ -1,4 +1,4 @@
-module Products.Commands exposing (..)
+port module Products.Commands exposing (..)
 
 import Dict
 import Json.Decode as Decode exposing ((:=))
@@ -8,6 +8,12 @@ import Api.Models exposing (Product, ProductId, initialProduct)
 import Products.Form exposing (initialErrors)
 import Products.Messages exposing (..)
 import Products.Models exposing (ProductData)
+
+
+port confirmProductDeletion : ( ProductId, String ) -> Cmd msg
+
+
+port productDeleteWasConfirmed : (ProductId -> msg) -> Sub msg
 
 
 fetchAll : Cmd Msg

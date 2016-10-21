@@ -17,5 +17,6 @@ type Msg
     | VisitCategory CategoryId
     | EditCategory CategoryId
     | DeleteCategory CategoryId
+    | CategoryDeletionConfirmed CategoryId
     | VisitProduct ProductId
     | FormMessage Categories.Form.Msg
