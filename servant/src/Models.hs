@@ -81,22 +81,33 @@ instance Named ProductVariant where name _ = "productVariant"
 instance Named a => Named (Entity a) where
         name _ = name (Proxy :: Proxy a)
 
+-- | A `JSONList a` is a list of JSON encodable/decodable items.
 data JSONList a = JSONList [a]
+
+-- | `JSONList` types with `FromJSON` and `Named` instances are decoded
+-- using their `Named.named` key.
 instance (FromJSON a, Named a) => FromJSON (JSONList a) where
         parseJSON (Object o) = do
             named <- o .: name (Proxy :: Proxy a) >>= parseJSON
             return $ JSONList [named]
         parseJSON _          = mzero
+-- | `JSONList` types with `ToJSON` and `Named` instances are encoded using
+-- their `Named.named` key.
 instance (ToJSON a, Named a) => ToJSON (JSONList a) where
         toJSON (JSONList l)  = object
             [name (Proxy :: Proxy a) .= map toJSON l]
 
+-- | A `JSONObject a` is a single JSON encodable/decodable item.
 data JSONObject a = JSONObject a
+-- | `JSONObject` types with `FromJSON` and `Named` instances are decoded
+-- using their `Named.named` key.
 instance (FromJSON a, Named a) => FromJSON (JSONObject a) where
         parseJSON (Object o) = do
             named <- o .: name (Proxy :: Proxy a) >>= parseJSON
             return $ JSONObject named
         parseJSON _          = mzero
+-- | `JSONObject` types with `ToJSON` and `Named` instances nest the
+-- encoded object under their `Named.named` key.
 instance (ToJSON a, Named a) => ToJSON (JSONObject a) where
         toJSON (JSONObject a)  = object
             [name (Proxy :: Proxy a) .= toJSON a]
@@ -165,6 +176,6 @@ instance DefaultOrdering Category where
 instance DefaultOrdering Product where
         defaultOrdering = Asc ProductName
 
--- | ProductVariants are ordered by their SKU
+-- | ProductVariants are ordered by their SKU.
 instance DefaultOrdering ProductVariant where
         defaultOrdering = Asc ProductVariantSku

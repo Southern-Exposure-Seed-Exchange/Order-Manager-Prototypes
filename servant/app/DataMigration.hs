@@ -4,7 +4,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE OverloadedStrings #-}
--- | This script imports previous data from the Stone Edge Order Manager
+-- | This script clears out the current database & imports previous data
+-- from the Stone Edge Order Manager.
 module DataMigration where
 
 import Control.Monad                (liftM)

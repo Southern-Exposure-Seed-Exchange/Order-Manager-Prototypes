@@ -16,7 +16,9 @@ import Models
 import Types
 import Validation                   (Validation(..))
 
-
+-- | The URL schema for standard JSON REST routes - List/Create routes for
+-- GET/POST requests to the root URL, View/Update/Delete routes for
+-- GET/PUT/DELETE requests to the root URL plus the ID.
 type CRUD resource =
         Get '[JSON] (Sideloaded (Entity resource))
    :<|> ReqBody '[JSON] (JSONObject resource)
@@ -29,6 +31,8 @@ type CRUD resource =
    :<|> Capture "id" (PKey resource)
         :> Delete '[JSON] ()
 
+-- | CRUDRoutes represent the classic REST routes for a Model - List,
+-- Create, View, Update, & Delete.
 type CRUDRoutes resource =
          AppM (Sideloaded (Entity resource))
     :<|> ((JSONObject resource -> AppM (JSONObject (Entity resource)))
@@ -36,6 +40,9 @@ type CRUDRoutes resource =
     :<|> ((PKey resource -> JSONObject resource -> AppM (JSONObject (Entity resource)))
     :<|> (PKey resource -> AppM ()))))
 
+-- | A generalized set of REST routes - List, Create, View, Update,
+-- & Delete - relying on the `Sideload`, `Validation`, and
+-- `DefaultOrdering` type classes to generate the routes.
 crudRoutes :: (PersistEntityBackend r ~ SqlBackend, ToBackendKey SqlBackend r,
                Sideload (Entity r), Validation r, DefaultOrdering r)
            => CRUDRoutes r
