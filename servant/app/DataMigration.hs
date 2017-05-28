@@ -109,4 +109,4 @@ prodToVariant csvp = do
         where maybeCenti :: (Num a) => Maybe a -> a
               maybeCenti  = maybe 0 (* 100)
               stripDollar = T.replace "$" ""
-              readCenti   = maybeCenti . readMaybe
+              readCenti   = round . maybeCenti . (readMaybe :: (Read a, Fractional a) => String -> Maybe a)
