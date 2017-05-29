@@ -40,7 +40,7 @@ docsReaderServer cfg = enter (readerToEither cfg) Api.server :<|> serveDocs
                 respond $ responseLBS ok200 [("Content-Type", "text/html")] docsBS
 
 docsBS :: ByteString
-docsBS = encodeUtf8 . renderMarkdown . pack . markdown $ docsWithIntros [intro] api
+docsBS = encodeUtf8 . renderMarkdown . pack . markdown . docsWithIntros [intro] $ pretty api
     where renderMarkdown = fromStrict . commonmarkToHtml [] . toStrict
           intro = DocIntro "OM Backend Docs"
             [ "This is the Servant REST API Documentation for OM, the " <>
