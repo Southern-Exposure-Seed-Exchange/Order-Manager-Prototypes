@@ -48,6 +48,9 @@ docsBS = encodeUtf8 . renderMarkdown . pack . markdown $ docsWithIntros [intro] 
             , "Enjoy!"
             ]
 
+instance ToSample (()) where
+        toSamples _ = noSamples
+
 
 -- Path Documentation
 

@@ -1,7 +1,7 @@
 server: build
 	stack exec om-servant-exe
 
-watch: build
+watch: install
 	stack -j 4 build --pedantic --file-watch
 
 clean:
