@@ -16,21 +16,41 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.html$/,
         exclude: /node_modules/,
-        loader: 'file?name=[name].[ext]',
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+          },
+        },
       },
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/,],
-        loader: 'elm-hot!elm-webpack?warn=true',
+        use: [
+          { loader: 'elm-hot-loader' },
+          { loader: 'elm-webpack-loader',
+            options: {
+              warn: true
+            },
+          },
+        ],
       },
       {
         test: /\.sass$/,
-        loaders: ['style', 'css', 'sass']
-      }
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader',
+            options: {
+              includePaths: bourbon.concat(neat)
+            }
+          },
+        ],
+      },
     ],
 
     noParse: /\.elm$/,
@@ -38,6 +58,8 @@ module.exports = {
 
   devServer: {
     inline: true,
+    host: "0.0.0.0",
+    disableHostCheck: true,
     stats: {
       colors: true,
       chunks: false,
@@ -51,9 +73,6 @@ module.exports = {
     }
   },
 
-  sassLoader: {
-    includePaths: bourbon.concat(neat)
-  },
 
   plugins: [
     new CleanWebpackPlugin('elm-stuff/build-artifacts/0.17.1/user'),
