@@ -47,9 +47,9 @@ docsBS = encodeUtf8 . renderMarkdown . pack . markdown . docsWithIntros [intro] 
               "Enlightened Order Manager."
             , "Enjoy!"
             ]
-
-instance ToSample (()) where
+instance ToSample () where
         toSamples _ = noSamples
+
 
 
 -- Path Documentation
@@ -73,19 +73,19 @@ instance ToCapture (Capture "id" (PKey ProductVariant)) where
 cat1 :: Category
 cat1 = Category  "TV Shows" "Stuff thats around X-Files quality." Nothing
 cat2 :: Category
-cat2 = Category  "Vegetables" "Tables that like to vege." (Just $ toSqlKey 99)
+cat2 = Category  "Vegetables" "Tables that like to vege." (Just $ toSqlKey 96)
 instance ToSample (JSONObject (Entity Category)) where
         toSamples _ = singleSample . JSONObject $ Entity (toSqlKey 42) cat1
 instance ToSample (JSONObject Category) where
         toSamples _ = singleSample $ JSONObject cat1
 instance ToSample (Sideloaded (Entity Category)) where
         toSamples _ = singleSample $ Sideloaded
-            ( JSONList [Entity (toSqlKey 42) cat1, Entity (toSqlKey 96) cat2]
+            ( JSONList [Entity (toSqlKey 96) cat1, Entity (toSqlKey 42) cat2]
             , toJSON $ JSONList [Entity (toSqlKey 22) prod1, Entity (toSqlKey 11) prod2]
             )
 
 prod1 :: Product
-prod1 = Product "Scully's Fire Peppers" "They look like little red alian babys."
+prod1 = Product "Scully's Fire Peppers" "They look like little red alien babys."
                (toSqlKey 96) True False True True
 prod2 :: Product
 prod2 = Product "Mulder's Mad Mushrooms" "Eat enough and everyone will call you 'Spooky'."
@@ -96,20 +96,22 @@ instance ToSample (JSONObject Product) where
         toSamples _ = singleSample $ JSONObject prod1
 instance ToSample (Sideloaded (Entity Product)) where
         toSamples _ = singleSample $ Sideloaded
-            ( JSONList [Entity (toSqlKey 42) prod1, Entity (toSqlKey 89) prod2]
-            , toJSON $ JSONList [Entity (toSqlKey 96) cat1]
+            ( JSONList [Entity (toSqlKey 42) prod1]
+            , mergeObjects (JSONList [Entity (toSqlKey 96) cat1])
+                (JSONList [ Entity (toSqlKey 1337) variant1
+                          , Entity (toSqlKey 9001) variant2])
             )
 
 variant1 :: ProductVariant
 variant1 = ProductVariant (toSqlKey 42) "1001A" 2500 250 30
 variant2 :: ProductVariant
-variant2 = ProductVariant (toSqlKey 24) "4224C" 125 750 20
+variant2 = ProductVariant (toSqlKey 42) "1001B" 125 750 20
 instance ToSample (JSONObject ProductVariant) where
         toSamples _ = singleSample $ JSONObject variant1
 instance ToSample (JSONObject (Entity ProductVariant)) where
         toSamples _ = singleSample . JSONObject $ Entity (toSqlKey 69) variant1
 instance ToSample (Sideloaded (Entity ProductVariant)) where
         toSamples _ = singleSample $ Sideloaded
-            ( JSONList [Entity (toSqlKey 77) variant1, Entity (toSqlKey 33) variant2]
-            , toJSON $ JSONList [Entity (toSqlKey 42) prod1, Entity (toSqlKey 24) prod2]
+            ( JSONList [Entity (toSqlKey 77) variant1]
+            , toJSON $ JSONList [Entity (toSqlKey 42) prod1]
             )
