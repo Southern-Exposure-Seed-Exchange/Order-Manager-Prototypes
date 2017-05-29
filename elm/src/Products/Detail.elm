@@ -6,7 +6,7 @@ import Html.Events exposing (onClick)
 import Api.Models exposing (Product, ProductVariant)
 import Products.Models exposing (ProductData)
 import Products.Messages exposing (Msg(..))
-import Utils exposing (getById, filterById, onClickNoDefault)
+import Utils exposing (getById, filterById, onClickNoDefault, toDollars)
 
 
 view : Product -> ProductData -> Html Msg
@@ -65,5 +65,5 @@ variantRow productVariant =
     tr [ class "variant-row" ]
         [ td [] [ text productVariant.sku ]
         , td [] [ text <| toString productVariant.weight ]
-        , td [] [ text <| toString productVariant.price ]
+        , td [] [ text <| "$" ++ toDollars productVariant.price ]
         ]

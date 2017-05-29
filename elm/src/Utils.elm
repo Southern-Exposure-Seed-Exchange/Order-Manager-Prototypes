@@ -12,8 +12,12 @@ the application.
 # Html Events
 @docs onChange, onClickNoDefault
 
+# Currency
+@docs toDollars
+
 -}
 
+import Data.Decimal as Decimal
 import Html
 import Html.Events exposing (defaultOptions)
 import Json.Decode
@@ -88,3 +92,18 @@ onClickNoDefault msg =
     Html.Events.onWithOptions "click"
         { defaultOptions | preventDefault = True }
         (Json.Decode.succeed msg)
+
+{-| Convert an Integer representing Cents to a String representing Dollars.
+-}
+toDollars : Int -> String
+toDollars =
+    let
+        oneHundreth =
+            case Decimal.fromString "0.01" of
+                Nothing ->
+                    Debug.crash "Utils.toDollars: Error Converting 1/100 to Decimal."
+                Just x ->
+                    x
+
+    in
+        Decimal.fromInt >> Decimal.mul oneHundreth >> Decimal.toString
